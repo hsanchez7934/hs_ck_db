@@ -1,5 +1,4 @@
-import './styles.css'
-import SideBar from '../sidebar/SideBar';
+import SideBar from '../../components/sidebar/SideBar';
 
 const Layout: React.FC = () => {
 	return <div className='full layout'><SideBar></SideBar></div>
