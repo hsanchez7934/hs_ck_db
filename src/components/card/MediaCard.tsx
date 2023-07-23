@@ -29,36 +29,80 @@ const MediaCard = (props: any) => {
 				style={{
 					display: 'flex',
 					justifyContent: 'space-between',
-					marginBottom: '5px'
+					marginBottom: '2px'
 				}}
 				key={id}
 			>
-				<Typography variant="body2" color="text.secondary" sx={{marginRight: '5px'}}>
+				<Typography
+					variant="body2"
+					color="text.secondary"
+					sx={{marginRight: '5px', fontFamily: 'Josefin Sans, sans-serif'}}
+				>
 					{name}
 				</Typography>
-				<Typography variant="body2" color="text.secondary">
+				<Typography
+					variant="body2"
+					color="text.secondary"
+					sx={{fontFamily: 'Josefin Sans, sans-serif'}}
+				>
 					{amount}
 				</Typography>
 			</div>
 		)
 	})
 
+	const glass = (
+		<Typography
+			variant="h6"
+			color="text.secondary"
+			sx={{marginTop: '10px', fontFamily: 'Josefin Sans, sans-serif'}}
+		>
+			{drink.strGlass}
+		</Typography>
+	)
+
 	return (
-		<Card sx={{width: '100%', display: 'flex', height: '500px', marginBottom: '10px'}}>
+		<Card
+			sx={{
+				width: '100%',
+				display: 'flex',
+				height: '500px',
+				marginBottom: '10px',
+				padding: '15px 15px 15px 10px'
+			}}
+		>
 			<CardContent sx={{width: '60%', overflow: 'auto'}}>
-				<Typography gutterBottom variant="h5" component="div">
+				<Typography
+					gutterBottom
+					variant="h4"
+					component="div"
+					sx={{fontFamily: 'EB Garamond, serif'}}
+				>
 					{drink.strDrink}
 				</Typography>
+				{drink.strDrink && glass}
 				<Divider />
-				<Typography variant="h6" color="text.secondary" sx={{marginTop: '10px'}}>
+				<Typography
+					variant="h6"
+					color="text.secondary"
+					sx={{marginTop: '10px', fontFamily: 'Josefin Sans, sans-serif'}}
+				>
 					Ingredients
 				</Typography>
 				<div style={{marginBottom: '20px'}}>{renderedIngredients}</div>
 				<Divider />
-				<Typography variant="h6" color="text.secondary">
+				<Typography
+					variant="h6"
+					color="text.secondary"
+					sx={{fontFamily: 'Josefin Sans, sans-serif', marginTop: '10px'}}
+				>
 					Instructions
 				</Typography>
-				<Typography variant="body2" color="text.secondary">
+				<Typography
+					variant="body2"
+					color="text.secondary"
+					sx={{fontFamily: 'Josefin Sans, sans-serif'}}
+				>
 					{drink.strInstructions}
 				</Typography>
 			</CardContent>

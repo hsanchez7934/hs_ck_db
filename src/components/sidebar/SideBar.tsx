@@ -1,21 +1,20 @@
-import {Link, Outlet} from 'react-router-dom'
 import * as React from 'react'
+import {Link, Outlet} from 'react-router-dom'
+import {FaCocktail} from 'react-icons/fa'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
 import IconButton from '@mui/material/IconButton'
-// import InboxIcon from '@mui/icons-material/MoveToInbox'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
-// import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-// import MailIcon from '@mui/icons-material/Mail'
 import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
+import {primary, secondary} from '../../colors/colors'
 
 const drawerWidth = 240
 
@@ -32,16 +31,37 @@ const SideBar: React.FC = (props: Props) => {
 	}
 
 	const drawer = (
-		<div>
-			<Toolbar />
+		<div style={{backgroundColor: secondary, height: '100%'}}>
+			<Toolbar
+				sx={{
+					backgroundColor: '#fff',
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					fontSize: '35px',
+					color: primary
+				}}
+			>
+				<FaCocktail />
+			</Toolbar>
 			<Divider />
 			<List>
-				{[{path: '/', text: 'Home'}].map((link, index) => (
-					<Link to="/" key={link.text}>
+				{[{path: '/', text: 'The Classics'}].map((link, index) => (
+					<Link to="/" key={link.text} style={{color: '#fff', textDecoration: 'none'}}>
 						<ListItem key={link.text} disablePadding>
 							<ListItemButton>
 								{/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-								<ListItemText primary={link.text} />
+								<ListItemText>
+									<p
+										style={{
+											fontFamily: 'Josefin Sans, sans-serif',
+											margin: '5px 0',
+											fontSize: '20px'
+										}}
+									>
+										{link.text}
+									</p>
+								</ListItemText>
 							</ListItemButton>
 						</ListItem>
 					</Link>
@@ -62,7 +82,7 @@ const SideBar: React.FC = (props: Props) => {
 					ml: {sm: `${drawerWidth}px`}
 				}}
 			>
-				<Toolbar>
+				<Toolbar sx={{backgroundColor: primary}}>
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
@@ -72,9 +92,9 @@ const SideBar: React.FC = (props: Props) => {
 					>
 						<MenuIcon />
 					</IconButton>
-					{/* <Typography variant="h6" noWrap component="div">
-						Cocktails DB
-					</Typography> */}
+					<Typography variant="h6" noWrap component="div">
+						Render the name of the page that you're on here
+					</Typography>
 				</Toolbar>
 			</AppBar>
 			<Box
@@ -115,7 +135,7 @@ const SideBar: React.FC = (props: Props) => {
 					p: 3,
 					width: {sm: `calc(100% - ${drawerWidth}px)`},
 					height: '100vh',
-					backgroundColor: '#e6e5e3',
+					backgroundColor: '#ECECEC',
 					overflow: 'auto'
 				}}
 			>
