@@ -1,8 +1,8 @@
-import {useFetchRandomDrinksQuery, useFetchPopularDrinksQuery} from '../../../store'
+import {useFetchPopularDrinksQuery} from '../../../store'
 import MediaCard from '../../../components/card/MediaCard'
 
 const PopularDrinksPage = () => {
-	const {data, error, isFetching} = useFetchPopularDrinksQuery(null)
+	const {data, error, isFetching} = useFetchPopularDrinksQuery()
 	console.log(data)
 	
 	let content
@@ -11,7 +11,7 @@ const PopularDrinksPage = () => {
 	} else if (error) {
 		content = <div>error...</div>
 	} else {
-		content = data.drinks.map((drink) => {
+		content = data?.drinks.map((drink) => {
 			return <MediaCard key={drink.idDrink} drink={drink} />
 		})
 	}
