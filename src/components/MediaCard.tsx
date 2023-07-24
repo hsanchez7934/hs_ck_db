@@ -6,10 +6,9 @@ import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
-import generateUUID from '../../uuid'
+import generateUUID from '../uuid'
 
 const MediaCard = (props: any) => {
-	// console.log(props.drink)
 	const {drink} = props
 
 	let counter = 1

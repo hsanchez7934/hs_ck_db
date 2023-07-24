@@ -1,13 +1,14 @@
-import {useFetchPopularDrinksQuery} from '../../../store'
-import MediaCard from '../../../components/card/MediaCard'
+import {useFetchPopularDrinksQuery} from '../store'
+import MediaCard from '../components/MediaCard'
+import SkeletonLoader from '../components/Skeleton'
 
-const PopularDrinksPage = () => {
+const TheClassicsPage = () => {
 	const {data, error, isFetching} = useFetchPopularDrinksQuery()
 	console.log(data)
 	
 	let content
 	if (isFetching) {
-		content = <div>is fetching...</div>
+		content = <SkeletonLoader />
 	} else if (error) {
 		content = <div>error...</div>
 	} else {
@@ -19,4 +20,4 @@ const PopularDrinksPage = () => {
 	return <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>{content}</div>
 }
 
-export default PopularDrinksPage
+export default TheClassicsPage

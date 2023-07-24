@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Link, Outlet} from 'react-router-dom'
+import {Link, Outlet, useLocation} from 'react-router-dom'
 import {FaCocktail} from 'react-icons/fa'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -14,24 +14,59 @@ import ListItemText from '@mui/material/ListItemText'
 import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import {primary, secondary} from '../../colors/colors'
-
-const drawerWidth = 240
+import {primary, secondary, active} from '../colors/colors'
 
 interface Props {
 	window?: () => Window
 }
 
+const drawerWidth = 240
+const paths = [
+	{path: '/', text: 'Home'},
+	{path: '/classics', text: 'The Classics'}
+]
+
 const SideBar: React.FC = (props: Props) => {
 	const {window} = props
+	const container = window !== undefined ? () => window().document.body : undefined
+
 	const [mobileOpen, setMobileOpen] = React.useState(false)
+	const [currentPath, setCurrentPath] = React.useState('')
+
+	let location = useLocation()
+	React.useEffect(() => {
+		setCurrentPath(location.pathname)
+	}, [location])
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen)
 	}
 
+	const renderedNavLinks = paths.map((link, index) => {
+		const isActivePath = currentPath.split(' ')[0] === link.path ? active : '#fff'
+		return (
+			<Link to={link.path} key={link.text} style={{color: isActivePath, textDecoration: 'none'}}>
+				<ListItem key={link.text} disablePadding>
+					<ListItemButton>
+						<ListItemText>
+							<p
+								style={{
+									fontFamily: 'Josefin Sans, sans-serif',
+									margin: '5px 0',
+									fontSize: '20px'
+								}}
+							>
+								{link.text}
+							</p>
+						</ListItemText>
+					</ListItemButton>
+				</ListItem>
+			</Link>
+		)
+	})
+
 	const drawer = (
-		<div style={{backgroundColor: secondary, height: '100%'}}>
+		<div style={{backgroundColor: primary, height: '100%'}}>
 			<Toolbar
 				sx={{
 					backgroundColor: '#fff',
@@ -39,38 +74,15 @@ const SideBar: React.FC = (props: Props) => {
 					justifyContent: 'center',
 					alignItems: 'center',
 					fontSize: '35px',
-					color: primary
+					color: secondary
 				}}
 			>
 				<FaCocktail />
 			</Toolbar>
 			<Divider />
-			<List>
-				{[{path: '/', text: 'The Classics'}].map((link, index) => (
-					<Link to="/" key={link.text} style={{color: '#fff', textDecoration: 'none'}}>
-						<ListItem key={link.text} disablePadding>
-							<ListItemButton>
-								{/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-								<ListItemText>
-									<p
-										style={{
-											fontFamily: 'Josefin Sans, sans-serif',
-											margin: '5px 0',
-											fontSize: '20px'
-										}}
-									>
-										{link.text}
-									</p>
-								</ListItemText>
-							</ListItemButton>
-						</ListItem>
-					</Link>
-				))}
-			</List>
+			<List>{renderedNavLinks}</List>
 		</div>
 	)
-
-	const container = window !== undefined ? () => window().document.body : undefined
 
 	return (
 		<Box sx={{display: 'flex'}}>
