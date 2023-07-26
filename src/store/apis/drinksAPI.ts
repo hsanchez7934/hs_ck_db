@@ -24,10 +24,20 @@ const drinksAPI = createApi({
 						method: 'GET'
 					}
 				}
+			}),
+			fetchDrinkByName: builder.query({
+				query: (letter) => {
+					return {
+						url: '/search.php',
+						params: {
+							f: letter
+						}
+					}
+				}
 			})
 		}
 	}
 })
 
 export {drinksAPI}
-export const {useFetchRandomDrinksQuery, useFetchPopularDrinksQuery} = drinksAPI
+export const {useFetchRandomDrinksQuery, useFetchPopularDrinksQuery, useFetchDrinkByNameQuery} = drinksAPI
