@@ -15,6 +15,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import {primary, active} from '../colors/colors'
+import {secondaryFont} from '../fonts/fonts'
 
 interface Props {
 	window?: () => Window
@@ -23,7 +24,8 @@ interface Props {
 const drawerWidth = 240
 const paths = [
 	{path: '/', text: 'Home'},
-	{path: '/classics', text: 'The Classics'}
+	{path: '/classics', text: 'The Classics'},
+	{path: '/search', text: 'Search'}
 ]
 
 const SideBar: React.FC = (props: Props) => {
@@ -51,7 +53,7 @@ const SideBar: React.FC = (props: Props) => {
 						<ListItemText>
 							<p
 								style={{
-									fontFamily: 'Josefin Sans, sans-serif',
+									fontFamily: secondaryFont,
 									margin: '5px 0',
 									fontSize: '20px'
 								}}

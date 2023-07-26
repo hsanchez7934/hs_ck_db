@@ -8,7 +8,8 @@ import Divider from '@mui/material/Divider'
 import DrinkTags from './DrinkTags'
 import Typography from '@mui/material/Typography'
 import generateUUID from '../uuid'
-import { DrinkDataPoint } from '../types'
+import {DrinkDataPoint} from '../types'
+import {primaryFont, secondaryFont} from '../fonts/fonts'
 
 type Props = {drink: DrinkDataPoint}
 
@@ -39,15 +40,11 @@ const DrinkCard = (props: Props) => {
 				<Typography
 					variant="body2"
 					color="text.secondary"
-					sx={{marginRight: '5px', fontFamily: 'Josefin Sans, sans-serif'}}
+					sx={{marginRight: '5px', fontFamily: secondaryFont}}
 				>
 					{name}
 				</Typography>
-				<Typography
-					variant="body2"
-					color="text.secondary"
-					sx={{fontFamily: 'Josefin Sans, sans-serif'}}
-				>
+				<Typography variant="body2" color="text.secondary" sx={{fontFamily: secondaryFont}}>
 					{amount}
 				</Typography>
 			</div>
@@ -58,13 +55,18 @@ const DrinkCard = (props: Props) => {
 		<Typography
 			variant="h6"
 			color="text.secondary"
-			sx={{marginTop: '10px', fontFamily: 'Josefin Sans, sans-serif'}}
+			sx={{marginTop: '10px', fontFamily: secondaryFont}}
 		>
 			{drink.strGlass}
 		</Typography>
 	)
 
-	const renderedTags = drink.strTags && drink?.strTags.length > 0 ? <DrinkTags tags={drink.strTags.split(',')} /> : <></>
+	const renderedTags =
+		drink.strTags && drink?.strTags.length > 0 ? (
+			<DrinkTags tags={drink.strTags.split(',')} />
+		) : (
+			<></>
+		)
 
 	return (
 		<Card
@@ -77,12 +79,7 @@ const DrinkCard = (props: Props) => {
 			}}
 		>
 			<CardContent sx={{width: '60%', overflow: 'auto'}}>
-				<Typography
-					gutterBottom
-					variant="h4"
-					component="div"
-					sx={{fontFamily: 'EB Garamond, serif'}}
-				>
+				<Typography gutterBottom variant="h4" component="div" sx={{fontFamily: primaryFont}}>
 					{drink.strDrink}
 				</Typography>
 				{drink.strDrink && glass}
@@ -90,7 +87,7 @@ const DrinkCard = (props: Props) => {
 				<Typography
 					variant="h6"
 					color="text.secondary"
-					sx={{marginTop: '10px', fontFamily: 'Josefin Sans, sans-serif'}}
+					sx={{marginTop: '10px', fontFamily: secondaryFont}}
 				>
 					Ingredients
 				</Typography>
@@ -99,15 +96,11 @@ const DrinkCard = (props: Props) => {
 				<Typography
 					variant="h6"
 					color="text.secondary"
-					sx={{fontFamily: 'Josefin Sans, sans-serif', marginTop: '10px'}}
+					sx={{fontFamily: secondaryFont, marginTop: '10px'}}
 				>
 					Instructions
 				</Typography>
-				<Typography
-					variant="body2"
-					color="text.secondary"
-					sx={{fontFamily: 'Josefin Sans, sans-serif'}}
-				>
+				<Typography variant="body2" color="text.secondary" sx={{fontFamily: secondaryFont}}>
 					{drink.strInstructions}
 				</Typography>
 				{renderedTags}

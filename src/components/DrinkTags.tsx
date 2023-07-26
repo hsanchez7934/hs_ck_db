@@ -11,7 +11,7 @@ const DrinkTags = ({tags}: TagsList) => {
 					<Chip
 						key={text}
 						label={text}
-						sx={{backgroundColor: secondary, marginRight: '10px', marginTop: '10px', color: '#FFF'}}
+						sx={{backgroundColor: secondary, margin: '10px 10px 0 0', color: '#FFF'}}
 					/>
 				)
 			})}

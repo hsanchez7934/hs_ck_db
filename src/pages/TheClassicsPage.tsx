@@ -9,14 +9,25 @@ const TheClassicsPage = () => {
 	if (isFetching) {
 		content = <SkeletonLoader />
 	} else if (error) {
-		content = <div>error...</div>
+		content = <div>Oh no! Looks like an error has occured. Please refresh this page.</div>
 	} else {
 		content = data?.drinks.map((drink) => {
 			return <DrinkCard key={drink.idDrink} drink={drink} />
 		})
 	}
 
-	return <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>{content}</div>
+	return (
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center'
+			}}
+		>
+			{content}
+		</div>
+	)
 }
 
 export default TheClassicsPage
