@@ -14,7 +14,7 @@ import ListItemText from '@mui/material/ListItemText'
 import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import {primary, secondary, active} from '../colors/colors'
+import {primary, active} from '../colors/colors'
 
 interface Props {
 	window?: () => Window
@@ -43,7 +43,7 @@ const SideBar: React.FC = (props: Props) => {
 	}
 
 	const renderedNavLinks = paths.map((link, index) => {
-		const isActivePath = currentPath.split(' ')[0] === link.path ? active : '#fff'
+		const isActivePath = currentPath.split(' ')[0] === link.path ? active : '#FFF'
 		return (
 			<Link to={link.path} key={link.text} style={{color: isActivePath, textDecoration: 'none'}}>
 				<ListItem key={link.text} disablePadding>
@@ -74,7 +74,7 @@ const SideBar: React.FC = (props: Props) => {
 					justifyContent: 'center',
 					alignItems: 'center',
 					fontSize: '35px',
-					color: secondary
+					color: primary
 				}}
 			>
 				<FaCocktail />

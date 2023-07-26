@@ -1,4 +1,4 @@
-interface DrinkDataPoint {
+export interface DrinkDataPoint extends Record<string, any> {
 	idDrink: string | null
 	strDrink: string | null
 	strDrinkAlternate: string | null

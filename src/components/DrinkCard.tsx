@@ -1,22 +1,26 @@
 import * as React from 'react'
-import Button from '@mui/material/Button'
+// import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
+// import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Divider from '@mui/material/Divider'
+import DrinkTags from './DrinkTags'
 import Typography from '@mui/material/Typography'
 import generateUUID from '../uuid'
+import { DrinkDataPoint } from '../types'
 
-const MediaCard = (props: any) => {
+type Props = {drink: DrinkDataPoint}
+
+const DrinkCard = (props: Props) => {
 	const {drink} = props
-
 	let counter = 1
 	const ingredients = []
-	while (drink[`strIngredient${counter}`]) {
+
+	while (drink[`strIngredient${counter}`] as keyof DrinkDataPoint) {
 		ingredients.push({
-			name: drink[`strIngredient${counter}`],
-			amount: drink[`strMeasure${counter}`],
+			name: drink[`strIngredient${counter}` as keyof DrinkDataPoint],
+			amount: drink[`strMeasure${counter}` as keyof DrinkDataPoint],
 			id: generateUUID()
 		})
 		counter = counter + 1
@@ -59,6 +63,8 @@ const MediaCard = (props: any) => {
 			{drink.strGlass}
 		</Typography>
 	)
+
+	const renderedTags = drink.strTags && drink?.strTags.length > 0 ? <DrinkTags tags={drink.strTags.split(',')} /> : <></>
 
 	return (
 		<Card
@@ -104,10 +110,11 @@ const MediaCard = (props: any) => {
 				>
 					{drink.strInstructions}
 				</Typography>
+				{renderedTags}
 			</CardContent>
 			<CardMedia
 				sx={{height: '100%', width: '40%'}}
-				image={drink.strDrinkThumb}
+				image={drink.strDrinkThumb || undefined}
 				title="green iguana"
 			/>
 			{/* <CardActions>
@@ -118,4 +125,4 @@ const MediaCard = (props: any) => {
 	)
 }
 
-export default MediaCard
+export default DrinkCard
