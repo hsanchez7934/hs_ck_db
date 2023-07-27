@@ -1,13 +1,20 @@
 import './styles.css'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {FaCircle} from 'react-icons/fa'
 import {secondary} from '../../colors/colors'
-import { useFetchDrinkByNameQuery } from '../../store'
+import {useFetchDrinkByNameQuery} from '../../store'
+import {
+	updateSearchDrinks,
+	isFetchingSearchDrinkData,
+	isErrorFetchingSearchDrinksData
+} from '../../store'
+import {useAppDispatch} from '../../store/hooks'
 
 const AlphtabetPicker = () => {
 	const [searchLetter, setSearchLetter] = useState('a')
 	const {data, error, isFetching} = useFetchDrinkByNameQuery(searchLetter)
-	console.log(data)
+	const dispatch = useAppDispatch()
+
 	const alphabet = [
 		'A',
 		'B',
@@ -37,9 +44,18 @@ const AlphtabetPicker = () => {
 		'Z'
 	]
 
+	useEffect(() => {
+		dispatch(isFetchingSearchDrinkData(isFetching))
+		if (error) {
+			dispatch(isErrorFetchingSearchDrinksData(error))
+		}
+		if (!isFetching && !error) {
+			dispatch(updateSearchDrinks(data))
+		}
+	}, [dispatch, data, error, isFetching])
+
 	const handleClick = (event: any) => {
 		const letter = event.target.dataset.value.toLowerCase()
-		console.log(letter)
 		setSearchLetter(letter)
 	}
 

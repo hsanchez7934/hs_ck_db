@@ -25,7 +25,7 @@ const drinksAPI = createApi({
 					}
 				}
 			}),
-			fetchDrinkByName: builder.query({
+			fetchDrinkByName: builder.query<DrinksDataResponse, string>({
 				query: (letter) => {
 					return {
 						url: '/search.php',
