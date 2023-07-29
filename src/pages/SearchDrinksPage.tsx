@@ -18,6 +18,7 @@ const SearchDrinksPage = () => {
 	} else {
 		if (drinks.length > 0) {
 			content = drinks.map((drink) => {
+				//@ts-expect-error
 				return <DrinkCard key={drink.idDrink} drink={drink} />
 			})
 		} else {

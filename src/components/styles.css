@@ -1,0 +1,36 @@
+img {
+	position: relative;
+}
+
+.overlay-photo {
+	height: 100%;
+	width: 100%;
+	background-color: black;
+	position: absolute;
+	top: 0;
+	opacity: 0;
+	transition: 0.5s ease;
+}
+
+.overlay-photo:hover {
+	opacity: 0.7;
+	cursor: pointer;
+}
+
+.overlay-photo-text {
+	color: white;
+	font-size: 20px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	text-align: center;
+	font-family:
+		EB Garamond,
+		serif;
+	font-size: 1.9em;
+	padding: 5px;
+	width: '90';
+}
