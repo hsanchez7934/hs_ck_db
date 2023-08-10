@@ -1,9 +1,9 @@
 import {useFetchPopularDrinksQuery} from '../store'
 import DrinkCard from '../components/DrinkCard'
 import SkeletonLoader from '../components/Skeleton'
-import MasonryImageList from '../components/ImageList'
+import DrinkImageList from '../components/DrinksImageList/DrinksImageList'
 
-const TheClassicsPage = () => {
+const PopularDrinksPage = () => {
 	const {data, error, isFetching} = useFetchPopularDrinksQuery()
 
 	let content
@@ -13,19 +13,8 @@ const TheClassicsPage = () => {
 		content = <div>Oh no! Looks like an error has occured. Please refresh this page.</div>
 	} else {
 		const drinksData = data?.drinks || []
-		content = <MasonryImageList drinksData={drinksData} />
+		content = <DrinkImageList drinksData={drinksData} />
 	}
-
-	// let content
-	// if (isFetching) {
-	// 	content = <SkeletonLoader />
-	// } else if (error) {
-	// 	content = <div>Oh no! Looks like an error has occured. Please refresh this page.</div>
-	// } else {
-	// 	content = data?.drinks.map((drink) => {
-	// 		return <DrinkCard key={drink.idDrink} drink={drink} />
-	// 	})
-	// }
 
 	return (
 		<div
@@ -41,4 +30,4 @@ const TheClassicsPage = () => {
 	)
 }
 
-export default TheClassicsPage
+export default PopularDrinksPage

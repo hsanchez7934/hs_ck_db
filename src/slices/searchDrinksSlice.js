@@ -4,8 +4,8 @@ const searchDrinksSlice = createSlice({
 	name: 'searchDrinks',
 	initialState: {
 		searchDrinksData: {drinks: []},
-		isFetching: false,
-		error: null
+		isFetchingDrinks: false,
+		errorFetchingDrinks: null
 	},
 	reducers: {
 		updateSearchDrinks: (state, action) => {
@@ -13,10 +13,10 @@ const searchDrinksSlice = createSlice({
 			state.searchDrinksData = updatedState
 		},
 		isFetchingSearchDrinkData: (state, action) => {
-			state.isFetching = action.payload
+			state.isFetchingDrinks = action.payload
 		},
 		isErrorFetchingSearchDrinksData: (state, action) => {
-			state.error = action.payload
+			state.errorFetchingDrinks = action.payload
 		}
 	}
 })

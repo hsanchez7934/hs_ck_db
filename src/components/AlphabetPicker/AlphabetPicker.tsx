@@ -1,7 +1,5 @@
 import './styles.css'
 import {useState, useEffect} from 'react'
-import {FaCircle} from 'react-icons/fa'
-import {secondary} from '../../colors/colors'
 import {useFetchDrinkByNameQuery} from '../../store'
 import {
 	updateSearchDrinks,
@@ -10,7 +8,7 @@ import {
 } from '../../store'
 import {useAppDispatch} from '../../store/hooks'
 
-const AlphtabetPicker = () => {
+const AlphtabetPicker = (): JSX.Element => {
 	const [searchLetter, setSearchLetter] = useState('a')
 	const {data, error, isFetching} = useFetchDrinkByNameQuery(searchLetter)
 	const dispatch = useAppDispatch()
@@ -60,24 +58,27 @@ const AlphtabetPicker = () => {
 	}
 
 	return (
-		<div style={{backgroundColor: 'white'}}>
+		<div style={{backgroundColor: 'black'}}>
 			<ul
 				style={{
 					display: 'flex',
 					justifyContent: 'space-evenly',
 					listStyleType: 'none',
-					padding: '0'
+					padding: 0,
+					margin: 0
 				}}
 			>
 				{alphabet.map((letter, index) => {
 					return (
-						<li className="letter-list-item" key={letter} onClick={handleClick} data-value={letter}>
+						<li
+							className={`letter-list-item ${
+								searchLetter === letter.toLowerCase() ? 'letter-active' : ''
+							}`}
+							key={letter}
+							onClick={handleClick}
+							data-value={letter}
+						>
 							{letter}
-							{index !== alphabet.length - 1 ? (
-								<FaCircle style={{fontSize: '5px', marginLeft: '10px', color: secondary}} />
-							) : (
-								<></>
-							)}
 						</li>
 					)
 				})}

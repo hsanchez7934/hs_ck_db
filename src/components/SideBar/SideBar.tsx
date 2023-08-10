@@ -1,3 +1,4 @@
+import './styles.css'
 import * as React from 'react'
 import {Link, Outlet, useLocation} from 'react-router-dom'
 import {FaCocktail} from 'react-icons/fa'
@@ -14,8 +15,10 @@ import ListItemText from '@mui/material/ListItemText'
 import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import {primary, active} from '../colors/colors'
-import {secondaryFont} from '../fonts/fonts'
+import {primary, active} from '../../colors/colors'
+import {secondaryFont} from '../../fonts/fonts'
+import {FaCaretDown} from 'react-icons/fa6'
+import {FaCaretLeft} from 'react-icons/fa6'
 
 interface Props {
 	window?: () => Window
@@ -24,9 +27,10 @@ interface Props {
 const drawerWidth = 240
 const paths = [
 	{path: '/', text: 'Home'},
-	{path: '/classics', text: 'The Classics'},
 	{path: '/search', text: 'Search'}
 ]
+
+const searchPaths = [{path: '/search/populardrinks', text: 'Popular Drinks'}, {path: '/search/byname', text: 'By Name'}]
 
 const SideBar: React.FC = (props: Props) => {
 	const {window} = props
@@ -34,6 +38,11 @@ const SideBar: React.FC = (props: Props) => {
 
 	const [mobileOpen, setMobileOpen] = React.useState(false)
 	const [currentPath, setCurrentPath] = React.useState('')
+	const [showSearchLinks, setShowSearchLinks] = React.useState(false)
+
+	const handleSearchLinks = () => {
+		setShowSearchLinks(!showSearchLinks)
+	}
 
 	let location = useLocation()
 	React.useEffect(() => {
@@ -44,11 +53,66 @@ const SideBar: React.FC = (props: Props) => {
 		setMobileOpen(!mobileOpen)
 	}
 
-	const renderedNavLinks = paths.map((link, index) => {
+	const renderedSearchPaths = searchPaths.map((link) => {
+		return (
+			<Link to={link.path} key={link.text} style={{textDecoration: 'none'}}>
+				<ListItem disablePadding>
+					<ListItemButton>
+						<ListItemText>
+							<p
+								style={{
+									fontFamily: secondaryFont,
+									margin: '5px 0',
+									fontSize: '20px',
+									color: 'white'
+								}}
+							>
+								{link.text}
+							</p>
+						</ListItemText>
+					</ListItemButton>
+				</ListItem>
+			</Link>
+		)
+	})
+
+	const renderedNavLinks = paths.map((link) => {
+		const isActiveLink = showSearchLinks ? active : '#fff'
+		const caretStyles = {fontSize: '23px', color: isActiveLink}
+		if (link.text === 'Search') {
+			return (
+				<div>
+					<ListItem disablePadding onClick={handleSearchLinks}>
+						<ListItemButton>
+							<ListItemText>
+								<p
+									style={{
+										fontFamily: secondaryFont,
+										margin: '5px 0',
+										fontSize: '20px',
+										color: isActiveLink
+									}}
+								>
+									{link.text}
+								</p>
+							</ListItemText>
+							{showSearchLinks ? (
+							<FaCaretDown style={caretStyles} />
+						) : (
+							<FaCaretLeft style={caretStyles} />
+						)}
+						</ListItemButton>
+					</ListItem>
+					<div style={{paddingLeft: '20px'}} className={showSearchLinks ? 'visible' : 'hidden'}>
+						{renderedSearchPaths}
+					</div>
+				</div>
+			)
+		}
 		const isActivePath = currentPath.split(' ')[0] === link.path ? active : '#FFF'
 		return (
 			<Link to={link.path} key={link.text} style={{color: isActivePath, textDecoration: 'none'}}>
-				<ListItem key={link.text} disablePadding>
+				<ListItem disablePadding>
 					<ListItemButton>
 						<ListItemText>
 							<p
@@ -68,7 +132,15 @@ const SideBar: React.FC = (props: Props) => {
 	})
 
 	const drawer = (
-		<div style={{backgroundColor: primary, height: '100%'}}>
+		<div
+			style={{
+				backgroundImage: 'linear-gradient(to top, #434343 0%, black 100%)',
+				backgroundPosition: 'center',
+				backgroundSize: 'cover',
+				backgroundRepeat: 'no-repeat',
+				height: '100%'
+			}}
+		>
 			<Toolbar
 				sx={{
 					backgroundColor: '#fff',
@@ -87,7 +159,7 @@ const SideBar: React.FC = (props: Props) => {
 	)
 
 	return (
-		<Box sx={{display: 'flex'}}>
+		<Box sx={{display: 'flex', height: '100vh'}}>
 			<CssBaseline />
 			<AppBar
 				position="fixed"
@@ -96,7 +168,12 @@ const SideBar: React.FC = (props: Props) => {
 					ml: {sm: `${drawerWidth}px`}
 				}}
 			>
-				<Toolbar sx={{backgroundColor: primary}}>
+				<Toolbar
+					sx={{
+						backgroundImage: 'linear-gradient(to left, #434343 0%, black 100%)',
+						height: '100%'
+					}}
+				>
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
@@ -150,7 +227,8 @@ const SideBar: React.FC = (props: Props) => {
 					width: {sm: `calc(100% - ${drawerWidth}px)`},
 					height: '100vh',
 					backgroundColor: '#ECECEC',
-					overflow: 'auto'
+					overflow: 'auto',
+					padding: '0'
 				}}
 			>
 				<Toolbar />
