@@ -1,0 +1,28 @@
+.search-input-container {
+	height: 40px;
+	display: flex;
+}
+
+.search-input-container input {
+	height: 100%;
+	width: 300px;
+	opacity: 0.9;
+	border: 1px solid #ececec;
+	outline-color: #aaabb8;
+	outline-width: 1px;
+	background-color: inherit;
+	color: white;
+	font-size: 14px;
+}
+
+.search-input-container button {
+	width: 50px;
+	background-color: inherit;
+	border: 1px inset #ececec;
+	outline-color: #aaabb8;
+}
+
+.search-input-container button:hover {
+	cursor: pointer;
+	background-color: #ececec;
+}

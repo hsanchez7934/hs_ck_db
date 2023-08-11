@@ -1,6 +1,6 @@
 import './styles.css'
 import {useState, useEffect} from 'react'
-import {useFetchDrinkByNameQuery} from '../../store'
+import {useFetchDrinksByFirstLetterQuery} from '../../store'
 import {
 	updateSearchDrinks,
 	isFetchingSearchDrinkData,
@@ -10,7 +10,7 @@ import {useAppDispatch} from '../../store/hooks'
 
 const AlphtabetPicker = (): JSX.Element => {
 	const [searchLetter, setSearchLetter] = useState('a')
-	const {data, error, isFetching} = useFetchDrinkByNameQuery(searchLetter)
+	const {data, error, isFetching} = useFetchDrinksByFirstLetterQuery(searchLetter)
 	const dispatch = useAppDispatch()
 
 	const alphabet = [

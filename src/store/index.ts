@@ -23,7 +23,8 @@ setupListeners(store.dispatch)
 export {
 	useFetchRandomDrinksQuery,
 	useFetchPopularDrinksQuery,
-	useFetchDrinkByNameQuery
+	useFetchDrinksByFirstLetterQuery,
+	useFetchDrinksByKeywordQuery
 } from './apis/drinksAPI'
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>

@@ -25,7 +25,7 @@ const drinksAPI = createApi({
 					}
 				}
 			}),
-			fetchDrinkByName: builder.query<DrinksDataResponse, string>({
+			fetchDrinksByFirstLetter: builder.query<DrinksDataResponse, string>({
 				query: (letter) => {
 					return {
 						url: '/search.php',
@@ -34,10 +34,15 @@ const drinksAPI = createApi({
 						}
 					}
 				}
+			}),
+			fetchDrinksByKeyword: builder.query({
+				query: (keyword) => {
+					return {url: '/search.php', params: {s: keyword}}
+				}
 			})
 		}
 	}
 })
 
 export {drinksAPI}
-export const {useFetchRandomDrinksQuery, useFetchPopularDrinksQuery, useFetchDrinkByNameQuery} = drinksAPI
+export const {useFetchRandomDrinksQuery, useFetchPopularDrinksQuery, useFetchDrinksByFirstLetterQuery, useFetchDrinksByKeywordQuery} = drinksAPI

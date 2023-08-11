@@ -9,16 +9,14 @@ import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemText from '@mui/material/ListItemText'
 import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
+// import Typography from '@mui/material/Typography'
 import {primary, active} from '../../colors/colors'
-import {secondaryFont} from '../../fonts/fonts'
 import {FaCaretDown} from 'react-icons/fa6'
 import {FaCaretLeft} from 'react-icons/fa6'
+import SideBarListItem from '../SideBarListItem'
+import SearchInput from '../SearchInput/SearchInput'
 
 interface Props {
 	window?: () => Window
@@ -30,7 +28,10 @@ const paths = [
 	{path: '/search', text: 'Search'}
 ]
 
-const searchPaths = [{path: '/search/populardrinks', text: 'Popular Drinks'}, {path: '/search/byname', text: 'By Name'}]
+const searchPaths = [
+	{path: '/search/populardrinks', text: 'Popular Drinks'},
+	{path: '/search/byname', text: 'By Name'}
+]
 
 const SideBar: React.FC = (props: Props) => {
 	const {window} = props
@@ -54,55 +55,31 @@ const SideBar: React.FC = (props: Props) => {
 	}
 
 	const renderedSearchPaths = searchPaths.map((link) => {
+		const isActivePath = currentPath.split(' ')[0] === link.path ? active : '#FFF'
 		return (
-			<Link to={link.path} key={link.text} style={{textDecoration: 'none'}}>
-				<ListItem disablePadding>
-					<ListItemButton>
-						<ListItemText>
-							<p
-								style={{
-									fontFamily: secondaryFont,
-									margin: '5px 0',
-									fontSize: '20px',
-									color: 'white'
-								}}
-							>
-								{link.text}
-							</p>
-						</ListItemText>
-					</ListItemButton>
-				</ListItem>
+			<Link to={link.path} key={link.text} style={{textDecoration: 'none', color: isActivePath}}>
+				<SideBarListItem link={link} />
 			</Link>
 		)
 	})
 
 	const renderedNavLinks = paths.map((link) => {
-		const isActiveLink = showSearchLinks ? active : '#fff'
-		const caretStyles = {fontSize: '23px', color: isActiveLink}
+		const caretStyles = {fontSize: '23px', color: '#fff'}
 		if (link.text === 'Search') {
 			return (
 				<div>
-					<ListItem disablePadding onClick={handleSearchLinks}>
-						<ListItemButton>
-							<ListItemText>
-								<p
-									style={{
-										fontFamily: secondaryFont,
-										margin: '5px 0',
-										fontSize: '20px',
-										color: isActiveLink
-									}}
-								>
-									{link.text}
-								</p>
-							</ListItemText>
-							{showSearchLinks ? (
-							<FaCaretDown style={caretStyles} />
-						) : (
-							<FaCaretLeft style={caretStyles} />
-						)}
-						</ListItemButton>
-					</ListItem>
+					<SideBarListItem
+						link={link}
+						addedStyles={{color: '#fff'}}
+						caretIcons={
+							showSearchLinks ? (
+								<FaCaretDown style={caretStyles} />
+							) : (
+								<FaCaretLeft style={caretStyles} />
+							)
+						}
+						onClick={handleSearchLinks}
+					/>
 					<div style={{paddingLeft: '20px'}} className={showSearchLinks ? 'visible' : 'hidden'}>
 						{renderedSearchPaths}
 					</div>
@@ -112,21 +89,7 @@ const SideBar: React.FC = (props: Props) => {
 		const isActivePath = currentPath.split(' ')[0] === link.path ? active : '#FFF'
 		return (
 			<Link to={link.path} key={link.text} style={{color: isActivePath, textDecoration: 'none'}}>
-				<ListItem disablePadding>
-					<ListItemButton>
-						<ListItemText>
-							<p
-								style={{
-									fontFamily: secondaryFont,
-									margin: '5px 0',
-									fontSize: '20px'
-								}}
-							>
-								{link.text}
-							</p>
-						</ListItemText>
-					</ListItemButton>
-				</ListItem>
+				<SideBarListItem link={link} />
 			</Link>
 		)
 	})
@@ -183,9 +146,7 @@ const SideBar: React.FC = (props: Props) => {
 					>
 						<MenuIcon />
 					</IconButton>
-					<Typography variant="h6" noWrap component="div">
-						Render the name of the page that you're on here
-					</Typography>
+					{currentPath.split(' ')[0] === '/search/byname' && <SearchInput />}
 				</Toolbar>
 			</AppBar>
 			<Box

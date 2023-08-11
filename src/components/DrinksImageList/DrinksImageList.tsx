@@ -8,7 +8,7 @@ const DrinksImageList = (props: any) => {
 
 	return (
 		<Box sx={{width: '100%', height: '100%'}}>
-			<ImageList variant="masonry" cols={3} gap={8} sx={{margin: 0, padding: '7px'}}>
+			<ImageList variant="standard" cols={4} gap={8} sx={{margin: 0, padding: '7px'}}>
 				{drinksData.map((drink: any) => (
 					<ImageListItem key={drink.idDrink} className="image-container">
 						<img
