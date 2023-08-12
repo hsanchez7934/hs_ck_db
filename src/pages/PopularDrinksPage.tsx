@@ -18,12 +18,7 @@ const PopularDrinksPage = () => {
 
 	return (
 		<div
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'center',
-				alignItems: 'center'
-			}}
+			style={{overflow: 'auto', height: 'calc(100% - 64px)'}}
 		>
 			{content}
 		</div>

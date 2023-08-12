@@ -1,24 +1,23 @@
 import './styles.css'
 import * as React from 'react'
-import {Link, Outlet, useLocation} from 'react-router-dom'
+import {active} from '../../colors/colors'
+import {FaCaretDown, FaCaretLeft} from 'react-icons/fa6'
 import {FaCocktail} from 'react-icons/fa'
+import {Link, Outlet, useLocation} from 'react-router-dom'
+import {secondaryFont} from '../../fonts/fonts'
+import {useAppSelector} from '../../store/hooks'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
+import HeaderSearchInput from '../HeaderSearchInput'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import MenuIcon from '@mui/icons-material/Menu'
+import SideBarListItem from '../SideBarListItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import {primary, active} from '../../colors/colors'
-import {FaCaretDown} from 'react-icons/fa6'
-import {FaCaretLeft} from 'react-icons/fa6'
-import SideBarListItem from '../SideBarListItem'
-import HeaderSearchInput from '../HeaderSearchInput'
-import {useAppSelector} from '../../store/hooks'
-import {secondaryFont} from '../../fonts/fonts'
 
 interface Props {
 	window?: () => Window
@@ -32,7 +31,8 @@ const paths = [
 
 const searchPaths = [
 	{path: '/search/populardrinks', text: 'Popular Drinks'},
-	{path: '/search/byname', text: 'By Name'}
+	{path: '/search/byname', text: 'By Name'},
+	{path: '/search/byspirit', text: 'By Spirit'}
 ]
 
 const SideBar: React.FC = (props: Props) => {
@@ -203,9 +203,9 @@ const SideBar: React.FC = (props: Props) => {
 					flexGrow: 1,
 					p: 3,
 					width: {sm: `calc(100% - ${drawerWidth}px)`},
-					height: '100vh',
+					// height: '100vh',
 					backgroundColor: '#ECECEC',
-					overflow: 'auto',
+					// overflow: 'hidden',
 					padding: '0'
 				}}
 			>

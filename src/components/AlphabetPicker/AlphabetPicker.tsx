@@ -72,7 +72,7 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 	}
 
 	return (
-		<div style={{backgroundColor: 'black'}}>
+		<div style={{backgroundColor: 'black', height: '25px'}}>
 			<ul
 				style={{
 					display: 'flex',

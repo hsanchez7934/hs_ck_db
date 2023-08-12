@@ -1,8 +1,7 @@
-import * as React from 'react'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import DrinkCard from './DrinkCard'
-import {useNavigate, useParams} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import {useAppDispatch, useAppSelector} from '../store/hooks'
 import {updateIsModalOpen, updateModalDrink} from '../store'
 
@@ -22,8 +21,7 @@ const style = {
 const DrinkModal = (): JSX.Element => {
 	const dispatch = useAppDispatch()
 	const {isModalOpen, drink} = useAppSelector(({modalDrink}) => modalDrink)
-	let navigate = useNavigate()
-	// let {id} = useParams<'id'>()
+	const navigate = useNavigate()
 
 	const handleClose = () => {
 		dispatch(updateIsModalOpen(false))
@@ -36,8 +34,6 @@ const DrinkModal = (): JSX.Element => {
 			<Modal
 				open={isModalOpen}
 				onClose={handleClose}
-				aria-labelledby="modal-modal-title"
-				aria-describedby="modal-modal-description"
 			>
 				<Box sx={style}>
 					<DrinkCard drink={drink} />

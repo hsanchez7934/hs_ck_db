@@ -17,8 +17,8 @@ const DrinksImageList = (props: any) => {
 	}
 
 	return (
-		<Box sx={{width: '100%', height: '100%'}}>
-			<ImageList variant="standard" cols={4} gap={8} sx={{margin: 0, padding: '7px'}}>
+		<Box>
+			<ImageList variant="standard" cols={4} gap={8} sx={{margin: 0, padding: '7px', overflow: 'hidden'}}>
 				{drinksData.map((drink: any) => (
 					<Link
 						key={drink.idDrink}

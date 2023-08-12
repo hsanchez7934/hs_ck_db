@@ -1,14 +1,16 @@
 import './index.css'
 import {Routes, Route, useLocation} from 'react-router-dom'
-import Layout from './pages/Layout'
+import DrinkModal from './components/DrinkModal'
+import DrinkPage from './pages/DrinkPage'
 import HomePage from './pages/HomePage'
+import Layout from './pages/Layout'
+import NoMatchPage from './pages/NoMatchPages'
 import PopularDrinksPage from './pages/PopularDrinksPage'
 import SearchByNamePage from './pages/SearchByNamePage'
-import NoMatchPage from './pages/NoMatchPages'
-import DrinkPage from './pages/DrinkPage'
-import DrinkModal from './components/DrinkModal'
+import SearchBySpiritsPage from './pages/SearchBySpiritsPage'
 
 const App = (): JSX.Element => {
+
 	let location = useLocation()
 	let state = location.state as {backgroundLocation?: Location}
 
@@ -18,8 +20,9 @@ const App = (): JSX.Element => {
 				<Route path="/" element={<Layout />}>
 					<Route index element={<HomePage />} />
 					<Route path="/drink/:id" element={<DrinkPage />} />
-					<Route path="/search/byname" element={<SearchByNamePage />} />
 					<Route path="/search/populardrinks" element={<PopularDrinksPage />} />
+					<Route path="/search/byname" element={<SearchByNamePage />} />
+					<Route path="/search/byspirit" element={<SearchBySpiritsPage />} />
 					<Route path="*" element={<NoMatchPage />} />
 				</Route>
 			</Routes>

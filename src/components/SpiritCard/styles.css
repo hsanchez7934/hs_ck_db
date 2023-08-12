@@ -1,0 +1,19 @@
+.spirit-tab {
+	height: 100%;
+	width: 12.5%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-bottom: 5px solid #fff;
+	-moz-border-top-colors: 5px solid #fff;
+	border-right: 1px solid #c4c3c0;
+}
+
+.spirit-tab:hover {
+	cursor: pointer;
+	border-bottom: 5px solid #aaabb8;
+}
+
+.spirit-tab-active {
+	border-bottom: 5px solid #07f2ea;
+}
