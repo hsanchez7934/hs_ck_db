@@ -73,37 +73,38 @@ const DrinkCard = (props: Props) => {
 			sx={{
 				width: '100%',
 				display: 'flex',
-				height: '500px',
-				marginBottom: '10px',
+				height: '100%',
 				padding: '15px 15px 15px 10px'
 			}}
 		>
-			<CardContent sx={{width: '60%', overflow: 'auto'}}>
-				<Typography gutterBottom variant="h4" component="div" sx={{fontFamily: primaryFont}}>
+			<CardContent sx={{width: '60%'}}>
+				<Typography gutterBottom variant="h4" component="div" sx={{fontFamily: primaryFont, margin: '0'}}>
 					{drink.strDrink}
 				</Typography>
 				{drink.strDrink && glass}
 				<Divider />
-				<Typography
-					variant="h6"
-					color="text.secondary"
-					sx={{marginTop: '10px', fontFamily: secondaryFont}}
-				>
-					Ingredients
-				</Typography>
-				<div style={{marginBottom: '20px'}}>{renderedIngredients}</div>
-				<Divider />
-				<Typography
-					variant="h6"
-					color="text.secondary"
-					sx={{fontFamily: secondaryFont, marginTop: '10px'}}
-				>
-					Instructions
-				</Typography>
-				<Typography variant="body2" color="text.secondary" sx={{fontFamily: secondaryFont}}>
-					{drink.strInstructions}
-				</Typography>
-				{renderedTags}
+				<CardContent sx={{overflow: 'auto', height: '70%', padding: '7px 3px 0px 0px'}}>
+					<Typography
+						variant="h6"
+						color="text.secondary"
+						sx={{margin: '0', fontFamily: secondaryFont}}
+					>
+						Ingredients
+					</Typography>
+					<div style={{marginBottom: '20px'}}>{renderedIngredients}</div>
+					<Divider />
+					<Typography
+						variant="h6"
+						color="text.secondary"
+						sx={{fontFamily: secondaryFont, marginTop: '10px'}}
+					>
+						Instructions
+					</Typography>
+					<Typography variant="body2" color="text.secondary" sx={{fontFamily: secondaryFont}}>
+						{drink.strInstructions}
+					</Typography>
+					{renderedTags}
+				</CardContent>
 			</CardContent>
 			<CardMedia
 				sx={{height: '100%', width: '40%'}}

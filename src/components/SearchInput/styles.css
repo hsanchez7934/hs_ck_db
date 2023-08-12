@@ -5,7 +5,7 @@
 
 .search-input-container input {
 	height: 100%;
-	width: 300px;
+	width: 250px;
 	opacity: 0.9;
 	border: 1px solid #ececec;
 	outline-color: #aaabb8;
@@ -25,4 +25,9 @@
 .search-input-container button:hover {
 	cursor: pointer;
 	background-color: #ececec;
+}
+
+.search-input-container button:disabled {
+	cursor: not-allowed;
+	background-color: inherit;
 }

@@ -11,12 +11,14 @@ import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
-// import Typography from '@mui/material/Typography'
+import Typography from '@mui/material/Typography'
 import {primary, active} from '../../colors/colors'
 import {FaCaretDown} from 'react-icons/fa6'
 import {FaCaretLeft} from 'react-icons/fa6'
 import SideBarListItem from '../SideBarListItem'
-import SearchInput from '../SearchInput/SearchInput'
+import HeaderSearchInput from '../HeaderSearchInput'
+import {useAppSelector} from '../../store/hooks'
+import {secondaryFont} from '../../fonts/fonts'
 
 interface Props {
 	window?: () => Window
@@ -37,6 +39,8 @@ const SideBar: React.FC = (props: Props) => {
 	const {window} = props
 	const container = window !== undefined ? () => window().document.body : undefined
 
+	const {searchKeyword, isKeywordSearch} = useAppSelector(({searchDrinks}) => searchDrinks)
+
 	const [mobileOpen, setMobileOpen] = React.useState(false)
 	const [currentPath, setCurrentPath] = React.useState('')
 	const [showSearchLinks, setShowSearchLinks] = React.useState(false)
@@ -48,7 +52,10 @@ const SideBar: React.FC = (props: Props) => {
 	let location = useLocation()
 	React.useEffect(() => {
 		setCurrentPath(location.pathname)
-	}, [location])
+		if (currentPath.split(' ')[0].includes('search')) {
+			setShowSearchLinks(true)
+		}
+	}, [location, currentPath])
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen)
@@ -67,7 +74,7 @@ const SideBar: React.FC = (props: Props) => {
 		const caretStyles = {fontSize: '23px', color: '#fff'}
 		if (link.text === 'Search') {
 			return (
-				<div>
+				<div key={link.path}>
 					<SideBarListItem
 						link={link}
 						addedStyles={{color: '#fff'}}
@@ -121,6 +128,15 @@ const SideBar: React.FC = (props: Props) => {
 		</div>
 	)
 
+	const renderSearchText = isKeywordSearch && searchKeyword
+	const searchResultsText = renderSearchText && (
+		<Typography sx={{fontFamily: secondaryFont, marginLeft: '10px'}}>
+			Displaying search results for: "{searchKeyword}"
+		</Typography>
+	)
+
+	const isSearchByNamePath = currentPath.split(' ')[0] === '/search/byname'
+
 	return (
 		<Box sx={{display: 'flex', height: '100vh'}}>
 			<CssBaseline />
@@ -146,7 +162,8 @@ const SideBar: React.FC = (props: Props) => {
 					>
 						<MenuIcon />
 					</IconButton>
-					{currentPath.split(' ')[0] === '/search/byname' && <SearchInput />}
+					{isSearchByNamePath && <HeaderSearchInput isKeywordSearch={isKeywordSearch} />}
+					{isSearchByNamePath && searchResultsText}
 				</Toolbar>
 			</AppBar>
 			<Box

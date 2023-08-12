@@ -4,11 +4,18 @@ import {useFetchDrinksByFirstLetterQuery} from '../../store'
 import {
 	updateSearchDrinks,
 	isFetchingSearchDrinkData,
-	isErrorFetchingSearchDrinksData
+	isErrorFetchingSearchDrinksData,
+	updateIsKeywordSearch,
+	updateSearchKeyword
 } from '../../store'
 import {useAppDispatch} from '../../store/hooks'
 
-const AlphtabetPicker = (): JSX.Element => {
+interface Props {
+	isKeywordSearch: boolean
+}
+
+const AlphtabetPicker = (props: Props): JSX.Element => {
+	const {isKeywordSearch} = props
 	const [searchLetter, setSearchLetter] = useState('a')
 	const {data, error, isFetching} = useFetchDrinksByFirstLetterQuery(searchLetter)
 	const dispatch = useAppDispatch()
@@ -43,18 +50,25 @@ const AlphtabetPicker = (): JSX.Element => {
 	]
 
 	useEffect(() => {
-		dispatch(isFetchingSearchDrinkData(isFetching))
-		if (error) {
-			dispatch(isErrorFetchingSearchDrinksData(error))
+		if (!isKeywordSearch) {
+			dispatch(isFetchingSearchDrinkData(isFetching))
+			if (error) {
+				dispatch(isErrorFetchingSearchDrinksData(error))
+			}
+			if (!isFetching && !error) {
+				dispatch(updateSearchDrinks(data))
+			}
 		}
-		if (!isFetching && !error) {
-			dispatch(updateSearchDrinks(data))
-		}
-	}, [dispatch, data, error, isFetching])
+	}, [dispatch, data, error, isFetching, isKeywordSearch])
 
-	const handleClick = (event: any) => {
-		const letter = event.target.dataset.value.toLowerCase()
-		setSearchLetter(letter)
+	const handleClick = (event: MouseEvent | any) => {
+		const listItem = event.target as HTMLLIElement
+		const letter = listItem?.dataset?.value?.toLowerCase()
+		if (letter) {
+			setSearchLetter(letter)
+		}
+		dispatch(updateIsKeywordSearch(false))
+		dispatch(updateSearchKeyword(''))
 	}
 
 	return (
@@ -72,7 +86,7 @@ const AlphtabetPicker = (): JSX.Element => {
 					return (
 						<li
 							className={`letter-list-item ${
-								searchLetter === letter.toLowerCase() ? 'letter-active' : ''
+								searchLetter === letter.toLowerCase() && !isKeywordSearch ? 'letter-active' : ''
 							}`}
 							key={letter}
 							onClick={handleClick}

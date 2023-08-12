@@ -1,16 +1,29 @@
+import {useEffect} from 'react'
 import AlphtabetPicker from '../components/AlphabetPicker/AlphabetPicker'
-import {useAppSelector} from '../store/hooks'
+import {useAppSelector, useAppDispatch} from '../store/hooks'
 import SkeletonLoader from '../components/Skeleton'
 // import DrinkCard from '../components/DrinkCard'
 import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
 import NoDrinkDataNotice from '../components/NoDrinkData'
+import {updateIsKeywordSearch, updateSearchKeyword} from '../store'
 
 const SearchByNamePage = (): JSX.Element => {
+	const dispatch = useAppDispatch()
 	const {
 		searchDrinksData: {drinks},
 		isFetchingDrinks,
-		errorFetchingDrinks
+		errorFetchingDrinks,
+		isKeywordSearch
 	} = useAppSelector(({searchDrinks}) => searchDrinks)
+	console.log(drinks)
+
+	useEffect(() => {
+		const cleanup = () => {
+			dispatch(updateIsKeywordSearch(false))
+			dispatch(updateSearchKeyword(''))
+		}
+		return () => cleanup()
+	}, [dispatch])
 
 	let content
 	if (isFetchingDrinks) {
@@ -27,7 +40,7 @@ const SearchByNamePage = (): JSX.Element => {
 
 	return (
 		<div style={{backgroundColor: 'inherit', height: '85%'}}>
-			<AlphtabetPicker />
+			<AlphtabetPicker isKeywordSearch={isKeywordSearch} />
 			<div style={{overflow: 'auto', height: '100%'}}>{content}</div>
 		</div>
 	)

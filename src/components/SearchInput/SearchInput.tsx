@@ -1,31 +1,17 @@
 import './styles.css'
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import {FaSearch} from 'react-icons/fa'
-import {useFetchDrinksByKeywordQuery} from '../../store'
-import {useAppDispatch} from '../../store/hooks'
-import {
-	updateSearchDrinks,
-	isFetchingSearchDrinkData,
-	isErrorFetchingSearchDrinksData
-} from '../../store'
 
-const SearchInput = () => {
+interface Props {
+	handleOnClick: () => void,
+	handleOnInput: (event: React.FormEvent<HTMLInputElement>) => void,
+	inputValue: string;
+	isDisabled: boolean;
+}
+
+const SearchInput = (props: Props) => {
+	const {handleOnClick, handleOnInput, inputValue, isDisabled} = props
 	const [iconColor, setIconColor] = useState('#ececec')
-	const [inputValue, setInputValue] = useState('')
-	const [searchKeyword, setSearchKeyword] = useState('')
-	const dispatch = useAppDispatch()
-
-	const {data, error, isFetching} = useFetchDrinksByKeywordQuery(searchKeyword)
-
-	useEffect(() => {
-		dispatch(isFetchingSearchDrinkData(isFetching))
-		if (error) {
-			dispatch(isErrorFetchingSearchDrinksData(error))
-		}
-		if (!isFetching && !error) {
-			dispatch(updateSearchDrinks(data))
-		}
-	}, [dispatch, data, error, isFetching])
 
 	const handleOnMouseEnter = () => {
 		setIconColor('black')
@@ -33,16 +19,6 @@ const SearchInput = () => {
 
 	const handleOnMouseLeave = () => {
 		setIconColor('#ececec')
-	}
-
-	const handleOnClick = () => {
-		setSearchKeyword(inputValue)
-		setInputValue('')
-	}
-
-	const handleOnInput = (event: React.FormEvent<HTMLInputElement>) => {
-		const {value} = event.target as HTMLInputElement
-		setInputValue(value)
 	}
 
 	return (
@@ -57,6 +33,7 @@ const SearchInput = () => {
 				onMouseLeave={handleOnMouseLeave}
 				onMouseEnter={handleOnMouseEnter}
 				onClick={handleOnClick}
+				disabled={isDisabled}
 			>
 				<FaSearch style={{fontSize: '18px', color: iconColor}} />
 			</button>

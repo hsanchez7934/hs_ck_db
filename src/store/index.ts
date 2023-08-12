@@ -5,13 +5,17 @@ import {
 	searchDrinksReducer,
 	updateSearchDrinks,
 	isFetchingSearchDrinkData,
-	isErrorFetchingSearchDrinksData
+	isErrorFetchingSearchDrinksData,
+	updateIsKeywordSearch,
+	updateSearchKeyword
 } from '../slices/searchDrinksSlice'
+import {updateIsModalOpen, updateModalDrink, modalDrinkReducer} from '../slices/modalDrinkSlice'
 
 export const store = configureStore({
 	reducer: {
 		[drinksAPI.reducerPath]: drinksAPI.reducer,
-		searchDrinks: searchDrinksReducer
+		searchDrinks: searchDrinksReducer,
+		modalDrink: modalDrinkReducer
 	},
 	middleware: (getDefaultMiddleware) => {
 		return getDefaultMiddleware().concat(drinksAPI.middleware)
@@ -28,4 +32,12 @@ export {
 } from './apis/drinksAPI'
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
-export {updateSearchDrinks, isFetchingSearchDrinkData, isErrorFetchingSearchDrinksData}
+export {
+	updateSearchDrinks,
+	isFetchingSearchDrinkData,
+	isErrorFetchingSearchDrinksData,
+	updateIsKeywordSearch,
+	updateSearchKeyword,
+	updateIsModalOpen,
+	updateModalDrink
+}
