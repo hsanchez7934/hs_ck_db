@@ -118,7 +118,7 @@ const SideBar: React.FC = (props: Props) => {
 					justifyContent: 'center',
 					alignItems: 'center',
 					fontSize: '35px',
-					color: primary
+					color: '#434343'
 				}}
 			>
 				<FaCocktail />

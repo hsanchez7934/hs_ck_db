@@ -11,20 +11,22 @@ import generateUUID from '../uuid'
 import {DrinkDataPoint} from '../types'
 import {primaryFont, secondaryFont} from '../fonts/fonts'
 
-type Props = {drink: DrinkDataPoint}
+type Props = {drink: DrinkDataPoint | null}
 
 const DrinkCard = (props: Props) => {
 	const {drink} = props
 	let counter = 1
 	const ingredients = []
 
-	while (drink[`strIngredient${counter}`] as keyof DrinkDataPoint) {
-		ingredients.push({
-			name: drink[`strIngredient${counter}` as keyof DrinkDataPoint],
-			amount: drink[`strMeasure${counter}` as keyof DrinkDataPoint],
-			id: generateUUID()
-		})
-		counter = counter + 1
+	if (drink) {
+		while (drink[`strIngredient${counter}`] as keyof DrinkDataPoint) {
+			ingredients.push({
+				name: drink[`strIngredient${counter}` as keyof DrinkDataPoint],
+				amount: drink[`strMeasure${counter}` as keyof DrinkDataPoint],
+				id: generateUUID()
+			})
+			counter = counter + 1
+		}
 	}
 
 	const renderedIngredients = ingredients.map(({name, amount, id}) => {
@@ -57,13 +59,13 @@ const DrinkCard = (props: Props) => {
 			color="text.secondary"
 			sx={{marginTop: '10px', fontFamily: secondaryFont}}
 		>
-			{drink.strGlass}
+			{drink?.strGlass}
 		</Typography>
 	)
 
 	const renderedTags =
-		drink.strTags && drink?.strTags.length > 0 ? (
-			<DrinkTags tags={drink.strTags.split(',')} />
+		drink?.strTags && drink?.strTags.length > 0 ? (
+			<DrinkTags tags={drink?.strTags.split(',')} />
 		) : (
 			<></>
 		)
@@ -78,10 +80,15 @@ const DrinkCard = (props: Props) => {
 			}}
 		>
 			<CardContent sx={{width: '60%'}}>
-				<Typography gutterBottom variant="h4" component="div" sx={{fontFamily: primaryFont, margin: '0'}}>
-					{drink.strDrink}
+				<Typography
+					gutterBottom
+					variant="h4"
+					component="div"
+					sx={{fontFamily: primaryFont, margin: '0'}}
+				>
+					{drink?.strDrink}
 				</Typography>
-				{drink.strDrink && glass}
+				{drink?.strDrink && glass}
 				<Divider />
 				<CardContent sx={{overflow: 'auto', height: '70%', padding: '7px 3px 0px 0px'}}>
 					<Typography
@@ -101,14 +108,14 @@ const DrinkCard = (props: Props) => {
 						Instructions
 					</Typography>
 					<Typography variant="body2" color="text.secondary" sx={{fontFamily: secondaryFont}}>
-						{drink.strInstructions}
+						{drink?.strInstructions}
 					</Typography>
 					{renderedTags}
 				</CardContent>
 			</CardContent>
 			<CardMedia
 				sx={{height: '100%', width: '40%'}}
-				image={drink.strDrinkThumb || undefined}
+				image={drink?.strDrinkThumb || undefined}
 				title="green iguana"
 			/>
 			{/* <CardActions>

@@ -28,7 +28,8 @@ export {
 	useFetchRandomDrinksQuery,
 	useFetchPopularDrinksQuery,
 	useFetchDrinksByFirstLetterQuery,
-	useFetchDrinksByKeywordQuery
+	useFetchDrinksByKeywordQuery,
+	useFetchDrinkDataByIDQuery
 } from './apis/drinksAPI'
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>

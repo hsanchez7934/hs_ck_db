@@ -12,7 +12,7 @@ const style = {
 	left: '50%',
 	transform: 'translate(-50%, -50%)',
 	width: '70%',
-  height: '80%',
+	height: '80%',
 	bgcolor: 'background.paper',
 	border: '2px solid #000',
 	boxShadow: 24,
@@ -22,13 +22,13 @@ const style = {
 const DrinkModal = (): JSX.Element => {
 	const dispatch = useAppDispatch()
 	const {isModalOpen, drink} = useAppSelector(({modalDrink}) => modalDrink)
-	console.log(drink)
 	let navigate = useNavigate()
-	let {id} = useParams<'id'>()
+	// let {id} = useParams<'id'>()
 
 	const handleClose = () => {
 		dispatch(updateIsModalOpen(false))
 		dispatch(updateModalDrink(null))
+		navigate(-1)
 	}
 
 	return (
@@ -39,7 +39,9 @@ const DrinkModal = (): JSX.Element => {
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description"
 			>
-				<Box sx={style}><DrinkCard drink={drink} /></Box>
+				<Box sx={style}>
+					<DrinkCard drink={drink} />
+				</Box>
 			</Modal>
 		</div>
 	)

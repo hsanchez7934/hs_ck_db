@@ -39,10 +39,21 @@ const drinksAPI = createApi({
 				query: (keyword) => {
 					return {url: '/search.php', params: {s: keyword}}
 				}
+			}),
+			fetchDrinkDataByID: builder.query({
+				query: (id) => {
+					return {url: '/lookup.php', params: {i: id}}
+				}
 			})
 		}
 	}
 })
 
 export {drinksAPI}
-export const {useFetchRandomDrinksQuery, useFetchPopularDrinksQuery, useFetchDrinksByFirstLetterQuery, useFetchDrinksByKeywordQuery} = drinksAPI
+export const {
+	useFetchRandomDrinksQuery,
+	useFetchPopularDrinksQuery,
+	useFetchDrinksByFirstLetterQuery,
+	useFetchDrinksByKeywordQuery,
+	useFetchDrinkDataByIDQuery
+} = drinksAPI
