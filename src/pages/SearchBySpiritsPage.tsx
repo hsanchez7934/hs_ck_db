@@ -9,7 +9,6 @@ const spirits = ['Brandy', 'Bourbon', 'Gin', 'Rum', 'Scotch', 'Tequila', 'Vodka'
 const SearchBySpiritsPage = () => {
 	const [activeTab, setActiveTab] = useState('Brandy')
 	const {data, error, isFetching} = useFetchDrinksBySpiritQuery(activeTab)
-	console.log(data)
 
 	const renderedSpiritTabs = spirits.map((spirit) => {
 		return (
