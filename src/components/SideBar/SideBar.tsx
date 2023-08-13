@@ -113,7 +113,7 @@ const SideBar: React.FC = (props: Props) => {
 		>
 			<Toolbar
 				sx={{
-					backgroundColor: '#fff',
+					backgroundColor: '#000',
 					display: 'flex',
 					justifyContent: 'center',
 					alignItems: 'center',
@@ -149,7 +149,7 @@ const SideBar: React.FC = (props: Props) => {
 			>
 				<Toolbar
 					sx={{
-						backgroundImage: 'linear-gradient(to left, #434343 0%, black 100%)',
+						backgroundColor: '#000',
 						height: '100%'
 					}}
 				>
@@ -203,9 +203,10 @@ const SideBar: React.FC = (props: Props) => {
 					flexGrow: 1,
 					p: 3,
 					width: {sm: `calc(100% - ${drawerWidth}px)`},
-					// height: '100vh',
-					backgroundColor: '#ECECEC',
-					// overflow: 'hidden',
+					backgroundImage: 'linear-gradient(to top, #434343 0%, black 100%)',
+					backgroundPosition: 'center',
+					backgroundSize: 'cover',
+					backgroundRepeat: 'no-repeat',
 					padding: '0'
 				}}
 			>

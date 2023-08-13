@@ -1,18 +1,18 @@
 import {useState} from 'react'
-import SpiritCard from '../components/SpiritCard/SpiritCard'
+import SpiritTabs from '../components/SpiritTabs/SpiritTabs'
 import {useFetchDrinksBySpiritQuery} from '../store'
 import SkeletonLoader from '../components/Skeleton'
 import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
 
-const spirits = ['Brandy', 'Bourbon', 'Gin', 'Rum', 'Scotch', 'Tequila', 'Vodka', 'Whiskey']
+const spirits = ['Bourbon', 'Brandy', 'Gin', 'Rum', 'Scotch', 'Tequila', 'Vodka', 'Whiskey']
 
 const SearchBySpiritsPage = () => {
-	const [activeTab, setActiveTab] = useState('Brandy')
+	const [activeTab, setActiveTab] = useState(spirits[0])
 	const {data, error, isFetching} = useFetchDrinksBySpiritQuery(activeTab)
 
 	const renderedSpiritTabs = spirits.map((spirit) => {
 		return (
-			<SpiritCard
+			<SpiritTabs
 				key={spirit}
 				spirit={spirit}
 				isActiveTab={spirit === activeTab}

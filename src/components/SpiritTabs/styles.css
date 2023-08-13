@@ -4,9 +4,11 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border-bottom: 5px solid #fff;
-	-moz-border-top-colors: 5px solid #fff;
+	border-bottom: 5px solid #000;
+	border-top: 5px solid #000;
 	border-right: 1px solid #c4c3c0;
+	background-color: #000;
+	color: #fff;
 }
 
 .spirit-tab:hover {

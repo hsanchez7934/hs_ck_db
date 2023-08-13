@@ -12,7 +12,7 @@ const DrinkTags = ({tags}: TagsList) => {
 						key={text}
 						label={text}
 						sx={{
-							backgroundImage: 'linear-gradient(to top, #434343 0%, black 100%)',
+							backgroundImage: 'linear-gradient(to top, #434343 0%, #202121 100%)',
 							backgroundPosition: 'center',
 							backgroundSize: 'cover',
 							backgroundRepeat: 'no-repeat',

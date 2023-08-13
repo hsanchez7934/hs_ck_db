@@ -1,5 +1,4 @@
 import {useFetchPopularDrinksQuery} from '../store'
-import DrinkCard from '../components/DrinkCard'
 import SkeletonLoader from '../components/Skeleton'
 import DrinkImageList from '../components/DrinksImageList/DrinksImageList'
 

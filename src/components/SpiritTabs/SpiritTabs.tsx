@@ -2,7 +2,7 @@
 import { secondaryFont } from '../../fonts/fonts'
 import './styles.css'
 
-const SpiritCard = (props: any) => {
+const SpiritTabs = (props: any) => {
 	const {spirit, isActiveTab, setActiveTab} = props
 
 	return (
@@ -15,4 +15,4 @@ const SpiritCard = (props: any) => {
 	)
 }
 
-export default SpiritCard
+export default SpiritTabs
