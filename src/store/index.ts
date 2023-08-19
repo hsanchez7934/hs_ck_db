@@ -10,12 +10,14 @@ import {
 	updateSearchKeyword
 } from '../slices/searchDrinksSlice'
 import {updateIsModalOpen, updateModalDrink, modalDrinkReducer} from '../slices/modalDrinkSlice'
+import { updateDrinkMap , drinkPagerReducer} from '../slices/drinkPagerSlice'
 
 export const store = configureStore({
 	reducer: {
 		[drinksAPI.reducerPath]: drinksAPI.reducer,
 		searchDrinks: searchDrinksReducer,
-		modalDrink: modalDrinkReducer
+		modalDrink: modalDrinkReducer,
+		drinkPagerMap: drinkPagerReducer
 	},
 	middleware: (getDefaultMiddleware) => {
 		return getDefaultMiddleware().concat(drinksAPI.middleware)
@@ -41,5 +43,6 @@ export {
 	updateIsKeywordSearch,
 	updateSearchKeyword,
 	updateIsModalOpen,
-	updateModalDrink
+	updateModalDrink,
+	updateDrinkMap
 }

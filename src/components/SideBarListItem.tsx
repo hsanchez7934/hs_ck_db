@@ -1,7 +1,7 @@
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
-import {secondaryFont} from '../fonts/fonts'
+import {primaryFont} from '../fonts/fonts'
 
 interface Props {
 	link: {path: string; text: string}
@@ -14,7 +14,7 @@ const SideBarListItem = (props: Props): JSX.Element => {
 	const {link, caretIcons, addedStyles, onClick} = props
 	const styles = {
 		...addedStyles,
-		fontFamily: secondaryFont,
+		fontFamily: primaryFont,
 		margin: '5px 0',
 		fontSize: '20px'
 	}

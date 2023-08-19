@@ -1,5 +1,5 @@
 
-import { secondaryFont } from '../../fonts/fonts'
+import { primaryFont } from '../../fonts/fonts'
 import './styles.css'
 
 const SpiritTabs = (props: any) => {
@@ -10,7 +10,7 @@ const SpiritTabs = (props: any) => {
 			className={`spirit-tab ${isActiveTab ? 'spirit-tab-active' : ''}`}
 			onClick={() => setActiveTab(spirit)}
 		>
-			<p style={{fontFamily: secondaryFont}}>{spirit}</p>
+			<p style={{fontFamily: primaryFont}}>{spirit}</p>
 		</div>
 	)
 }

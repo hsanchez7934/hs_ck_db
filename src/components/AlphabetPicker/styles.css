@@ -1,7 +1,6 @@
 .letter-list-item {
 	display: flex;
 	align-items: center;
-	font-family: 'EB Garamond, serif';
 	color: white;
 	font-size: 17px;
 }

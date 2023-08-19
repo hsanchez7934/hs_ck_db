@@ -7,27 +7,33 @@
 	height: 100%;
 	width: 250px;
 	opacity: 0.9;
-	border: 1px solid #ececec;
-	outline-color: #aaabb8;
-	outline-width: 1px;
+	border: none;
+	outline: none;
 	background-color: inherit;
-	color: white;
+	color: #ececec;
 	font-size: 14px;
+}
+
+.search-input-container input:focus {
+	border-bottom: 1px solid #ececec;
 }
 
 .search-input-container button {
 	width: 50px;
 	background-color: inherit;
-	border: 1px inset #ececec;
+	border: none;
 	outline-color: #aaabb8;
+	color: #ececec;
 }
 
 .search-input-container button:hover {
 	cursor: pointer;
 	background-color: #ececec;
+	color: black;
 }
 
 .search-input-container button:disabled {
 	cursor: not-allowed;
 	background-color: inherit;
+	color: #ececec;
 }

@@ -4,7 +4,7 @@ import {active} from '../../colors/colors'
 import {FaCaretDown, FaCaretLeft} from 'react-icons/fa6'
 import {FaCocktail} from 'react-icons/fa'
 import {Link, Outlet, useLocation} from 'react-router-dom'
-import {secondaryFont} from '../../fonts/fonts'
+import {primaryFont} from '../../fonts/fonts'
 import {useAppSelector} from '../../store/hooks'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -130,7 +130,7 @@ const SideBar: React.FC = (props: Props) => {
 
 	const renderSearchText = isKeywordSearch && searchKeyword
 	const searchResultsText = renderSearchText && (
-		<Typography sx={{fontFamily: secondaryFont, marginLeft: '10px'}}>
+		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}}>
 			Displaying search results for: "{searchKeyword}"
 		</Typography>
 	)

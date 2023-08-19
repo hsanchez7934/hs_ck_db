@@ -1,12 +1,13 @@
 import './styles.css'
 import {DrinkDataPoint} from '../../types'
 import {Link, useLocation} from 'react-router-dom'
-import {updateIsModalOpen, updateModalDrink} from '../../store'
+import {updateIsModalOpen, updateModalDrink, updateDrinkMap} from '../../store'
 import {useAppDispatch} from '../../store/hooks'
 import Box from '@mui/material/Box'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
+import {useEffect} from 'react'
 
 interface Props {
 	drinksData: DrinkDataPoint[]
@@ -16,6 +17,22 @@ const DrinksImageList = (props: Props) => {
 	const {drinksData} = props
 	let location = useLocation()
 	const dispatch = useAppDispatch()
+
+	useEffect(() => {
+		const setDrinkPagerMap = () => {
+			const map = {}
+			for (let index = 0; index < drinksData.length; index++) {
+				const element = drinksData[index]
+				const previous = drinksData[index - 1]
+				const next = drinksData[index + 1]
+				const node = {data: element, previous: previous ? previous : null, next: next ? next : null}
+				// @ts-expect-error
+				map[element.idDrink] = node
+			}
+			dispatch(updateDrinkMap(map))
+		}
+		setDrinkPagerMap()
+	}, [drinksData, dispatch])
 
 	const handleOnClick = async (drink: DrinkDataPoint) => {
 		if (!drink.strInstructions) {

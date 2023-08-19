@@ -9,6 +9,7 @@ import {
 	updateSearchKeyword
 } from '../../store'
 import {useAppDispatch} from '../../store/hooks'
+import { primaryFont } from '../../fonts/fonts'
 
 interface Props {
 	isKeywordSearch: boolean
@@ -91,6 +92,7 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 							key={letter}
 							onClick={handleClick}
 							data-value={letter}
+							style={{fontFamily: primaryFont}}
 						>
 							{letter}
 						</li>

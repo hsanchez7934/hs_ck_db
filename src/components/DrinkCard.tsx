@@ -1,4 +1,4 @@
-import * as React from 'react'
+import {useState} from 'react'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
@@ -10,13 +10,20 @@ import SimpleDialog from '../components/SimpleDialog'
 import Typography from '@mui/material/Typography'
 import generateUUID from '../uuid'
 import {DrinkDataPoint} from '../types'
-import {primaryFont, secondaryFont} from '../fonts/fonts'
-import {useState} from 'react'
+import {primaryFont} from '../fonts/fonts'
+import {generatePath} from 'react-router-dom'
+import {useAppSelector, useAppDispatch} from '../store/hooks'
+import {updateModalDrink} from '../store'
+import fetchDrinkDataByID from '../helper-functions/fetchDrinkDataByID'
 
-import {FaShare} from 'react-icons/fa6'
-import {FaHeartCircleMinus} from 'react-icons/fa6'
-import {FaHeartCirclePlus} from 'react-icons/fa6'
-import {FaVideo} from 'react-icons/fa6'
+import {
+	FaVideo,
+	FaShare,
+	FaHeartCircleMinus,
+	FaHeartCirclePlus,
+	FaAngleLeft,
+	FaAngleRight
+} from 'react-icons/fa6'
 
 type Props = {drink: DrinkDataPoint | null}
 
@@ -26,6 +33,9 @@ const DrinkCard = (props: Props) => {
 	const [dialogTextColor, setDialogTextColor] = useState('')
 	const [openDialog, setOpenDialog] = useState(false)
 	const [toggleSaved, setToggleSaved] = useState(false)
+
+	const dispatch = useAppDispatch()
+	const {drinkPagerMap} = useAppSelector(({drinkPagerMap}) => drinkPagerMap)
 
 	let counter = 1
 	const ingredients = []
@@ -53,14 +63,14 @@ const DrinkCard = (props: Props) => {
 				<Typography
 					variant="body2"
 					color="text.secondary"
-					sx={{marginRight: '5px', fontFamily: secondaryFont, color: '#fff'}}
+					sx={{marginRight: '5px', fontFamily: primaryFont, color: '#fff'}}
 				>
 					{name}
 				</Typography>
 				<Typography
 					variant="body2"
 					color="text.secondary"
-					sx={{fontFamily: secondaryFont, color: '#fff'}}
+					sx={{fontFamily: primaryFont, color: '#fff'}}
 				>
 					{amount}
 				</Typography>
@@ -72,7 +82,7 @@ const DrinkCard = (props: Props) => {
 		<Typography
 			variant="h6"
 			color="text.secondary"
-			sx={{marginTop: '10px', fontFamily: secondaryFont, color: '#fff'}}
+			sx={{marginTop: '10px', fontFamily: primaryFont, color: '#fff'}}
 		>
 			{drink?.strGlass}
 		</Typography>
@@ -86,11 +96,13 @@ const DrinkCard = (props: Props) => {
 		)
 
 	const handleShareOnClick = async (drinkID: string | null | undefined): Promise<void> => {
-		const textToCopy = `https://localhost:3000/drink/${drinkID}`
-		window.navigator.clipboard.writeText(textToCopy).then(
+		// @ts-expect-error
+		const path = generatePath('localhost:3000/drink/:id', {id: drinkID})
+
+		window.navigator.clipboard.writeText(path).then(
 			() => {
 				setDialogTextColor('green')
-				setDialogText('Shareable link copied to clipboard!')
+				setDialogText('Link copied to clipboard!')
 				setOpenDialog(true)
 				setTimeout(() => {
 					setOpenDialog(false)
@@ -115,6 +127,29 @@ const DrinkCard = (props: Props) => {
 
 	const handleSaveOnClick = () => {
 		setToggleSaved(!toggleSaved)
+	}
+
+	const handlePager = async (id: string | number, direction: string) => {
+		let drink = null
+		if (direction === 'left') {
+			// @ts-expect-error
+			drink = drinkPagerMap[id].previous
+		} else if (direction === 'right') {
+			// @ts-expect-error
+			drink = drinkPagerMap[id].next
+		}
+		if (drink) {
+			if (!drink.strInstructions) {
+				drink = await fetchDrinkDataByID(drink)
+			}
+			dispatch(updateModalDrink(drink))
+			const currentUrl = window.location.href
+			const split = currentUrl.split('/')
+			split[split.length - 1] = drink.idDrink
+			const joined = split.join('/')
+			// @ts-expect-error
+			window.history.replaceState(null, null, joined)
+		}
 	}
 
 	const buttonStyles = {
@@ -143,6 +178,8 @@ const DrinkCard = (props: Props) => {
 					variant="h4"
 					component="div"
 					sx={{fontFamily: primaryFont, margin: '0', color: '#fff'}}
+					className='truncate'
+					title={`${drink?.strDrink}`}
 				>
 					{drink?.strDrink}
 				</Typography>
@@ -152,7 +189,7 @@ const DrinkCard = (props: Props) => {
 					<Typography
 						variant="h6"
 						color="text.secondary"
-						sx={{margin: '0', fontFamily: secondaryFont, color: '#fff'}}
+						sx={{margin: '0', fontFamily: primaryFont, color: '#fff'}}
 					>
 						Ingredients
 					</Typography>
@@ -161,14 +198,14 @@ const DrinkCard = (props: Props) => {
 					<Typography
 						variant="h6"
 						color="text.secondary"
-						sx={{fontFamily: secondaryFont, marginTop: '10px', color: '#fff'}}
+						sx={{fontFamily: primaryFont, marginTop: '10px', color: '#fff'}}
 					>
 						Instructions
 					</Typography>
 					<Typography
 						variant="body2"
 						color="text.secondary"
-						sx={{fontFamily: secondaryFont, color: '#fff'}}
+						sx={{fontFamily: primaryFont, color: '#fff'}}
 					>
 						{drink?.strInstructions}
 					</Typography>
@@ -176,6 +213,36 @@ const DrinkCard = (props: Props) => {
 				</CardContent>
 				<CardContent sx={{padding: 0, margin: '10px 0 0 0'}}>
 					<CardActions sx={{padding: 0, margin: 0}}>
+						{
+							// @ts-expect-error
+							drinkPagerMap[drink?.idDrink]?.previous ? (
+								<Button
+									size="small"
+									// @ts-expect-error
+									onClick={() => handlePager(drink?.idDrink, 'left')}
+									sx={{buttonStyles}}
+								>
+									<FaAngleLeft color="white" style={iconStyles} />
+								</Button>
+							) : (
+								<></>
+							)
+						}
+						{
+							// @ts-expect-error
+							drinkPagerMap[drink?.idDrink]?.next ? (
+								<Button
+									size="small"
+									// @ts-expect-error
+									onClick={() => handlePager(drink?.idDrink, 'right')}
+									sx={{buttonStyles}}
+								>
+									<FaAngleRight color="white" style={iconStyles} />
+								</Button>
+							) : (
+								<></>
+							)
+						}
 						<Button size="small" onClick={handleSaveOnClick} sx={buttonStyles}>
 							{toggleSaved ? (
 								<FaHeartCirclePlus color="red" style={iconStyles} />
@@ -183,8 +250,12 @@ const DrinkCard = (props: Props) => {
 								<FaHeartCircleMinus color="white" style={iconStyles} />
 							)}
 						</Button>
-						<Button size="small" onClick={() => handleShareOnClick(drink?.idDrink)} sx={buttonStyles}>
-							<FaShare color='white' style={iconStyles} />
+						<Button
+							size="small"
+							onClick={() => handleShareOnClick(drink?.idDrink)}
+							sx={buttonStyles}
+						>
+							<FaShare color="white" style={iconStyles} />
 						</Button>
 						{drink?.strVideo && (
 							<Button
@@ -195,7 +266,11 @@ const DrinkCard = (props: Props) => {
 								<FaVideo color="white" style={iconStyles} />
 							</Button>
 						)}
-						<SimpleDialog open={openDialog} dialogTextColor={dialogTextColor} dialogText={dialogText} />
+						<SimpleDialog
+							open={openDialog}
+							dialogTextColor={dialogTextColor}
+							dialogText={dialogText}
+						/>
 					</CardActions>
 				</CardContent>
 			</CardContent>

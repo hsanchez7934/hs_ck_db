@@ -1,5 +1,4 @@
 import './styles.css'
-import {useState} from 'react'
 import {FaSearch} from 'react-icons/fa'
 
 interface Props {
@@ -11,15 +10,6 @@ interface Props {
 
 const SearchInput = (props: Props) => {
 	const {handleOnClick, handleOnInput, inputValue, isDisabled} = props
-	const [iconColor, setIconColor] = useState('#ececec')
-
-	const handleOnMouseEnter = () => {
-		setIconColor('black')
-	}
-
-	const handleOnMouseLeave = () => {
-		setIconColor('#ececec')
-	}
 
 	return (
 		<div className="search-input-container">
@@ -30,12 +20,10 @@ const SearchInput = (props: Props) => {
 				value={inputValue}
 			/>
 			<button
-				onMouseLeave={handleOnMouseLeave}
-				onMouseEnter={handleOnMouseEnter}
 				onClick={handleOnClick}
 				disabled={isDisabled}
 			>
-				<FaSearch style={{fontSize: '18px', color: iconColor}} />
+				<FaSearch style={{fontSize: '18px'}} />
 			</button>
 		</div>
 	)
