@@ -1,8 +1,7 @@
 import './styles.css'
 import * as React from 'react'
 import {active} from '../../colors/colors'
-import {FaCaretDown, FaCaretLeft} from 'react-icons/fa6'
-import {FaCocktail} from 'react-icons/fa'
+import {FaCaretDown, FaCaretLeft, FaX} from 'react-icons/fa6'
 import {Link, Outlet, useLocation} from 'react-router-dom'
 import {primaryFont} from '../../fonts/fonts'
 import {useAppSelector} from '../../store/hooks'
@@ -26,7 +25,8 @@ interface Props {
 const drawerWidth = 240
 const paths = [
 	{path: '/', text: 'Home'},
-	{path: '/search', text: 'Search'}
+	{path: '/search', text: 'Search'},
+	{path: '/mydrinks', text: 'My Drinks'}
 ]
 
 const searchPaths = [
@@ -115,13 +115,13 @@ const SideBar: React.FC = (props: Props) => {
 				sx={{
 					backgroundColor: '#000',
 					display: 'flex',
-					justifyContent: 'center',
+					justifyContent: 'end',
 					alignItems: 'center',
-					fontSize: '35px',
-					color: '#434343'
+					fontSize: '20px',
+					color: 'white'
 				}}
 			>
-				<FaCocktail />
+				<FaX onClick={() => setMobileOpen(false)} className="nav_menu_close_icon" />
 			</Toolbar>
 			<Divider />
 			<List>{renderedNavLinks}</List>
@@ -140,13 +140,7 @@ const SideBar: React.FC = (props: Props) => {
 	return (
 		<Box sx={{display: 'flex', height: '100vh'}}>
 			<CssBaseline />
-			<AppBar
-				position="fixed"
-				sx={{
-					width: {sm: `calc(100% - ${drawerWidth}px)`},
-					ml: {sm: `${drawerWidth}px`}
-				}}
-			>
+			<AppBar position="fixed">
 				<Toolbar
 					sx={{
 						backgroundColor: '#000',
@@ -158,7 +152,7 @@ const SideBar: React.FC = (props: Props) => {
 						aria-label="open drawer"
 						edge="start"
 						onClick={handleDrawerToggle}
-						sx={{mr: 2, display: {sm: 'none'}}}
+						sx={{mr: 2}}
 					>
 						<MenuIcon />
 					</IconButton>
@@ -166,43 +160,34 @@ const SideBar: React.FC = (props: Props) => {
 					{isSearchByNamePath && searchResultsText}
 				</Toolbar>
 			</AppBar>
-			<Box
-				component="nav"
-				sx={{width: {sm: drawerWidth}, flexShrink: {sm: 0}}}
-				aria-label="mailbox folders"
-			>
-				<Drawer
-					container={container}
-					variant="temporary"
-					open={mobileOpen}
-					onClose={handleDrawerToggle}
-					ModalProps={{
-						keepMounted: true // Better open performance on mobile.
-					}}
-					sx={{
-						display: {xs: 'block', sm: 'none'},
-						'& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth}
-					}}
+			{mobileOpen && (
+				<Box
+					component="nav"
+					sx={{width: {sm: drawerWidth}, flexShrink: {sm: 0}}}
+					aria-label="mailbox folders"
 				>
-					{drawer}
-				</Drawer>
-				<Drawer
-					variant="permanent"
-					sx={{
-						display: {xs: 'none', sm: 'block'},
-						'& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth}
-					}}
-					open
-				>
-					{drawer}
-				</Drawer>
-			</Box>
+					<Drawer
+						container={container}
+						variant="temporary"
+						open={mobileOpen}
+						onClose={handleDrawerToggle}
+						ModalProps={{
+							keepMounted: true // Better open performance on mobile.
+						}}
+						sx={{
+							'& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth}
+						}}
+					>
+						{drawer}
+					</Drawer>
+				</Box>
+			)}
 			<Box
 				component="main"
 				sx={{
 					flexGrow: 1,
 					p: 3,
-					width: {sm: `calc(100% - ${drawerWidth}px)`},
+					width: {sm: '100%'},
 					backgroundImage: 'linear-gradient(to top, #434343 0%, black 100%)',
 					backgroundPosition: 'center',
 					backgroundSize: 'cover',

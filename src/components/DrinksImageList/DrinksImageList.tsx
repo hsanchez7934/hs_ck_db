@@ -22,12 +22,16 @@ const DrinksImageList = (props: Props) => {
 		const setDrinkPagerMap = () => {
 			const map = {}
 			for (let index = 0; index < drinksData.length; index++) {
-				const element = drinksData[index]
-				const previous = drinksData[index - 1]
-				const next = drinksData[index + 1]
-				const node = {data: element, previous: previous ? previous : null, next: next ? next : null}
+				const drink = drinksData[index]
+				const drinkPrevious = drinksData[index - 1]
+				const drinkNext = drinksData[index + 1]
+				const node = {
+					data: drink,
+					previous: drinkPrevious ? drinkPrevious : null,
+					next: drinkNext ? drinkNext : null
+				}
 				// @ts-expect-error
-				map[element.idDrink] = node
+				map[drink.idDrink] = node
 			}
 			dispatch(updateDrinkMap(map))
 		}

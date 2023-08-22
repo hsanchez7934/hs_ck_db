@@ -1,5 +1,3 @@
-// @ts-expect-error
-import imageUrl from '../images/no_drinks_found.jpg'
 import {primaryFont} from '../fonts/fonts'
 
 const NoDrinkDataNotice = () => {

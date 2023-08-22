@@ -21,11 +21,18 @@ import {
 	FaShare,
 	FaHeartCircleMinus,
 	FaHeartCirclePlus,
-	FaAngleLeft,
-	FaAngleRight
+	FaCircleArrowLeft,
+	FaCircleArrowRight
 } from 'react-icons/fa6'
 
 type Props = {drink: DrinkDataPoint | null}
+const buttonStyles = {
+	margin: 0,
+	border: 'none'
+}
+const iconStyles = {
+	fontSize: '25px'
+}
 
 const DrinkCard = (props: Props) => {
 	const {drink} = props
@@ -34,8 +41,8 @@ const DrinkCard = (props: Props) => {
 	const [openDialog, setOpenDialog] = useState(false)
 	const [toggleSaved, setToggleSaved] = useState(false)
 
-	const dispatch = useAppDispatch()
 	const {drinkPagerMap} = useAppSelector(({drinkPagerMap}) => drinkPagerMap)
+	const dispatch = useAppDispatch()
 
 	let counter = 1
 	const ingredients = []
@@ -78,7 +85,63 @@ const DrinkCard = (props: Props) => {
 		)
 	})
 
-	const glass = (
+	const toggleDialog = (color: string, text: string) => {
+		setDialogTextColor(color)
+		setDialogText(text)
+		setOpenDialog(true)
+		setTimeout(() => {
+			setOpenDialog(false)
+		}, 2000)
+	}
+
+	const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
+		const path = generatePath('localhost:3000/drink/:id', {id: drinkID})
+		window.navigator.clipboard.writeText(path).then(
+			() => {
+				toggleDialog('green', 'Link copied to clipboard!')
+			},
+			() => {
+				toggleDialog('red', 'Oops, something went wrong! Please try again.')
+			}
+		)
+	}
+
+	const handleViewOnClick = (url: string | null) => {
+		if (url) {
+			window.open(url)?.focus()
+		}
+	}
+
+	const handleSaveOnClick = () => {
+		setToggleSaved(!toggleSaved)
+		if (!toggleSaved) {
+			toggleDialog('green', 'Saved to favorites!')
+		} else {
+			toggleDialog('red', 'Removed from favorites!')
+		}
+	}
+
+	const handlePager = async (id: string | number, direction: string) => {
+		let drink = null
+		if (direction === 'left') {
+			drink = drinkPagerMap[id].previous
+		} else if (direction === 'right') {
+			drink = drinkPagerMap[id].next
+		}
+		if (drink) {
+			if (!drink.strInstructions) {
+				drink = await fetchDrinkDataByID(drink)
+			}
+			dispatch(updateModalDrink(drink))
+			const currentUrl = window.location.href
+			const split = currentUrl.split('/')
+			split[split.length - 1] = drink.idDrink
+			const updatedURL = split.join('/')
+			window.history.replaceState(null, '', updatedURL)
+		}
+	}
+
+	const renderedGlassType = drink?.strDrink && (
 		<Typography
 			variant="h6"
 			color="text.secondary"
@@ -95,70 +158,55 @@ const DrinkCard = (props: Props) => {
 			<></>
 		)
 
-	const handleShareOnClick = async (drinkID: string | null | undefined): Promise<void> => {
-		// @ts-expect-error
-		const path = generatePath('localhost:3000/drink/:id', {id: drinkID})
-
-		window.navigator.clipboard.writeText(path).then(
-			() => {
-				setDialogTextColor('green')
-				setDialogText('Link copied to clipboard!')
-				setOpenDialog(true)
-				setTimeout(() => {
-					setOpenDialog(false)
-				}, 2000)
-			},
-			() => {
-				setDialogTextColor('red')
-				setDialogText('Oops, something went wrong! Please try again.')
-				setOpenDialog(true)
-				setTimeout(() => {
-					setOpenDialog(false)
-				}, 2000)
-			}
+	let renderedPagerPrevious
+	if (drinkPagerMap && drink?.idDrink) {
+		renderedPagerPrevious = drinkPagerMap[drink.idDrink]?.previous ? (
+			<Button
+				size="small"
+				onClick={() => {
+					if (drink?.idDrink) handlePager(drink.idDrink, 'left')
+				}}
+				sx={{buttonStyles}}
+			>
+				<FaCircleArrowLeft color="white" style={iconStyles} />
+			</Button>
+		) : (
+			<></>
 		)
+	} else {
+		renderedPagerPrevious = <></>
 	}
 
-	const handleViewOnClick = (url: string | null) => {
-		if (url) {
-			window.open(url)?.focus()
-		}
+	let renderedPagerNext
+	if (drinkPagerMap && drink?.idDrink) {
+		renderedPagerNext = drinkPagerMap[drink.idDrink].next ? (
+			<Button
+				size="small"
+				onClick={() => {
+					if (drink?.idDrink) handlePager(drink.idDrink, 'right')
+				}}
+				sx={{buttonStyles}}
+			>
+				<FaCircleArrowRight color="white" style={iconStyles} />
+			</Button>
+		) : (
+			<></>
+		)
+	} else {
+		renderedPagerNext = <></>
 	}
 
-	const handleSaveOnClick = () => {
-		setToggleSaved(!toggleSaved)
-	}
+	const renderedSaveIcon = toggleSaved ? (
+		<FaHeartCirclePlus color="red" style={iconStyles} />
+	) : (
+		<FaHeartCircleMinus color="white" style={iconStyles} />
+	)
 
-	const handlePager = async (id: string | number, direction: string) => {
-		let drink = null
-		if (direction === 'left') {
-			// @ts-expect-error
-			drink = drinkPagerMap[id].previous
-		} else if (direction === 'right') {
-			// @ts-expect-error
-			drink = drinkPagerMap[id].next
-		}
-		if (drink) {
-			if (!drink.strInstructions) {
-				drink = await fetchDrinkDataByID(drink)
-			}
-			dispatch(updateModalDrink(drink))
-			const currentUrl = window.location.href
-			const split = currentUrl.split('/')
-			split[split.length - 1] = drink.idDrink
-			const joined = split.join('/')
-			// @ts-expect-error
-			window.history.replaceState(null, null, joined)
-		}
-	}
-
-	const buttonStyles = {
-		margin: 0,
-		border: 'none'
-	}
-	const iconStyles = {
-		fontSize: '25px'
-	}
+	const renderedVideoIcon = drink?.strVideo && (
+		<Button size="small" onClick={() => handleViewOnClick(drink.strVideo)} sx={buttonStyles}>
+			<FaVideo color="white" style={iconStyles} />
+		</Button>
+	)
 
 	return (
 		<Card
@@ -178,12 +226,12 @@ const DrinkCard = (props: Props) => {
 					variant="h4"
 					component="div"
 					sx={{fontFamily: primaryFont, margin: '0', color: '#fff'}}
-					className='truncate'
+					className="truncate"
 					title={`${drink?.strDrink}`}
 				>
 					{drink?.strDrink}
 				</Typography>
-				{drink?.strDrink && glass}
+				{renderedGlassType}
 				<Divider sx={{backgroundColor: '#fff'}} />
 				<CardContent sx={{overflow: 'auto', height: '70%', padding: '7px 3px 0px 0px'}}>
 					<Typography
@@ -213,59 +261,21 @@ const DrinkCard = (props: Props) => {
 				</CardContent>
 				<CardContent sx={{padding: 0, margin: '10px 0 0 0'}}>
 					<CardActions sx={{padding: 0, margin: 0}}>
-						{
-							// @ts-expect-error
-							drinkPagerMap[drink?.idDrink]?.previous ? (
-								<Button
-									size="small"
-									// @ts-expect-error
-									onClick={() => handlePager(drink?.idDrink, 'left')}
-									sx={{buttonStyles}}
-								>
-									<FaAngleLeft color="white" style={iconStyles} />
-								</Button>
-							) : (
-								<></>
-							)
-						}
-						{
-							// @ts-expect-error
-							drinkPagerMap[drink?.idDrink]?.next ? (
-								<Button
-									size="small"
-									// @ts-expect-error
-									onClick={() => handlePager(drink?.idDrink, 'right')}
-									sx={{buttonStyles}}
-								>
-									<FaAngleRight color="white" style={iconStyles} />
-								</Button>
-							) : (
-								<></>
-							)
-						}
+						{renderedPagerPrevious}
+						{renderedPagerNext}
 						<Button size="small" onClick={handleSaveOnClick} sx={buttonStyles}>
-							{toggleSaved ? (
-								<FaHeartCirclePlus color="red" style={iconStyles} />
-							) : (
-								<FaHeartCircleMinus color="white" style={iconStyles} />
-							)}
+							{renderedSaveIcon}
 						</Button>
 						<Button
 							size="small"
-							onClick={() => handleShareOnClick(drink?.idDrink)}
+							onClick={() => {
+								if (drink?.idDrink) handleShareOnClick(drink.idDrink)
+							}}
 							sx={buttonStyles}
 						>
 							<FaShare color="white" style={iconStyles} />
 						</Button>
-						{drink?.strVideo && (
-							<Button
-								size="small"
-								onClick={() => handleViewOnClick(drink.strVideo)}
-								sx={buttonStyles}
-							>
-								<FaVideo color="white" style={iconStyles} />
-							</Button>
-						)}
+						{renderedVideoIcon}
 						<SimpleDialog
 							open={openDialog}
 							dialogTextColor={dialogTextColor}

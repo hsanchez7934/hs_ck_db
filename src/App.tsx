@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage'
 import Layout from './pages/Layout'
 import NoMatchPage from './pages/NoMatchPages'
 import PopularDrinksPage from './pages/PopularDrinksPage'
+import SavedDrinksPage from './pages/SavedDrinksPage'
 import SearchByNamePage from './pages/SearchByNamePage'
 import SearchBySpiritsPage from './pages/SearchBySpiritsPage'
 
@@ -23,6 +24,7 @@ const App = (): JSX.Element => {
 					<Route path="/search/populardrinks" element={<PopularDrinksPage />} />
 					<Route path="/search/byname" element={<SearchByNamePage />} />
 					<Route path="/search/byspirit" element={<SearchBySpiritsPage />} />
+					<Route path="/mydrinks" element={<SavedDrinksPage />} />
 					<Route path="*" element={<NoMatchPage />} />
 				</Route>
 			</Routes>

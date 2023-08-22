@@ -1,7 +1,11 @@
 .hidden {
-	visibility: hidden
+	display: none;
 }
 
 .visible {
-	visibility: visible;
+	display: block;
+}
+
+.nav_menu_close_icon {
+	cursor: pointer;
 }
