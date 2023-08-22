@@ -13,7 +13,25 @@ interface Props {
 	drinksData: DrinkDataPoint[]
 }
 
+const windowWidth = window.innerWidth
+const windowHeight = window.innerHeight
+
+const setGridColumns = (width: number) => {
+	let columns = 4
+
+	if (width < 500) {
+		columns = 1
+	} else if (width < 700) {
+		columns = 2
+	} else if (width < 900) {
+		columns = 3
+	}
+	return columns
+}
+
 const DrinksImageList = (props: Props) => {
+	// console.log(windowWidth)
+	// console.log(windowHeight)
 	const {drinksData} = props
 	let location = useLocation()
 	const dispatch = useAppDispatch()
@@ -66,7 +84,7 @@ const DrinksImageList = (props: Props) => {
 		<Box>
 			<ImageList
 				variant="standard"
-				cols={4}
+				cols={setGridColumns(windowWidth)}
 				gap={8}
 				sx={{margin: 0, padding: '7px', overflow: 'hidden'}}
 			>

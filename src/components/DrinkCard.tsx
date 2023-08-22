@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect, useMemo} from 'react'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
@@ -15,6 +15,7 @@ import {generatePath} from 'react-router-dom'
 import {useAppSelector, useAppDispatch} from '../store/hooks'
 import {updateModalDrink} from '../store'
 import fetchDrinkDataByID from '../helper-functions/fetchDrinkDataByID'
+import DrinkLocalStorage from '../helper-functions/drinkLocalStorage'
 
 import {
 	FaVideo,
@@ -34,7 +35,11 @@ const iconStyles = {
 	fontSize: '25px'
 }
 
+
 const DrinkCard = (props: Props) => {
+	const drinkStorage = useMemo(() => new DrinkLocalStorage(), [])
+	drinkStorage.init()
+
 	const {drink} = props
 	const [dialogText, setDialogText] = useState('')
 	const [dialogTextColor, setDialogTextColor] = useState('')
@@ -43,6 +48,14 @@ const DrinkCard = (props: Props) => {
 
 	const {drinkPagerMap} = useAppSelector(({drinkPagerMap}) => drinkPagerMap)
 	const dispatch = useAppDispatch()
+
+	useEffect(() => {
+		if (drinkStorage.isDrinkSaved(drink?.idDrink)) {
+			setToggleSaved(true)
+		} else {
+			setToggleSaved(false)
+		}
+	}, [drink?.idDrink, drinkStorage])
 
 	let counter = 1
 	const ingredients = []
@@ -91,7 +104,7 @@ const DrinkCard = (props: Props) => {
 		setOpenDialog(true)
 		setTimeout(() => {
 			setOpenDialog(false)
-		}, 2000)
+		}, 1500)
 	}
 
 	const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
@@ -112,11 +125,13 @@ const DrinkCard = (props: Props) => {
 		}
 	}
 
-	const handleSaveOnClick = () => {
+	const handleSaveOnClick = (drink: any) => {
 		setToggleSaved(!toggleSaved)
 		if (!toggleSaved) {
+			drinkStorage.saveDrink(drink)
 			toggleDialog('green', 'Saved to favorites!')
 		} else {
+			drinkStorage.removeDrink(drink.idDrink)
 			toggleDialog('red', 'Removed from favorites!')
 		}
 	}
@@ -263,7 +278,7 @@ const DrinkCard = (props: Props) => {
 					<CardActions sx={{padding: 0, margin: 0}}>
 						{renderedPagerPrevious}
 						{renderedPagerNext}
-						<Button size="small" onClick={handleSaveOnClick} sx={buttonStyles}>
+						<Button size="small" onClick={() => handleSaveOnClick(drink)} sx={buttonStyles}>
 							{renderedSaveIcon}
 						</Button>
 						<Button
