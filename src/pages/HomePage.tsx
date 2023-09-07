@@ -54,7 +54,7 @@ const HomePage = () => {
 	}, [])
 
 	const content = <DrinksImageList drinksData={items} />
-	let notice
+	let notice = <></>
 	if (isLoading) {
 		notice = <SkeletonLoader />
 	} else if (error) {
