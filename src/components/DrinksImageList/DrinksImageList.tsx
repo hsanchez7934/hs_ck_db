@@ -8,13 +8,11 @@ import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
 import {useEffect} from 'react'
+import generateUUID from '../../uuid'
 
 interface Props {
 	drinksData: DrinkDataPoint[]
 }
-
-const windowWidth = window.innerWidth
-const windowHeight = window.innerHeight
 
 const setGridColumns = (width: number) => {
 	let columns = 4
@@ -30,8 +28,7 @@ const setGridColumns = (width: number) => {
 }
 
 const DrinksImageList = (props: Props) => {
-	// console.log(windowWidth)
-	// console.log(windowHeight)
+	const windowWidth = window.innerWidth
 	const {drinksData} = props
 	let location = useLocation()
 	const dispatch = useAppDispatch()
@@ -40,6 +37,7 @@ const DrinksImageList = (props: Props) => {
 		const setDrinkPagerMap = () => {
 			const map = {}
 			for (let index = 0; index < drinksData.length; index++) {
+				console.log(index)
 				const drink = drinksData[index]
 				const drinkPrevious = drinksData[index - 1]
 				const drinkNext = drinksData[index + 1]
@@ -51,6 +49,7 @@ const DrinksImageList = (props: Props) => {
 				// @ts-expect-error
 				map[drink.idDrink] = node
 			}
+			// console.log(map)
 			dispatch(updateDrinkMap(map))
 		}
 		setDrinkPagerMap()
@@ -65,7 +64,7 @@ const DrinksImageList = (props: Props) => {
 	}
 
 	const renderedDrinkImages = drinksData.map((drink: DrinkDataPoint) => (
-		<Link key={drink.idDrink} to={`/drink/${drink.idDrink}`} state={{backgroundLocation: location}}>
+		<Link key={`${drink.idDrink}_${generateUUID()}`} to={`/drink/${drink.idDrink}`} state={{backgroundLocation: location}}>
 			<ImageListItem className="image-container" onClick={() => handleOnClick(drink)}>
 				<img
 					src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}

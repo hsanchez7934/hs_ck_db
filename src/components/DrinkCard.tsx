@@ -174,7 +174,7 @@ const DrinkCard = (props: Props) => {
 		)
 
 	let renderedPagerPrevious
-	if (drinkPagerMap && drink?.idDrink) {
+	if (drinkPagerMap && drink?.idDrink && drinkPagerMap[drink.idDrink]) {
 		renderedPagerPrevious = drinkPagerMap[drink.idDrink]?.previous ? (
 			<Button
 				size="small"
@@ -193,7 +193,7 @@ const DrinkCard = (props: Props) => {
 	}
 
 	let renderedPagerNext
-	if (drinkPagerMap && drink?.idDrink) {
+	if (drinkPagerMap && drink?.idDrink && drinkPagerMap[drink.idDrink]) {
 		renderedPagerNext = drinkPagerMap[drink.idDrink].next ? (
 			<Button
 				size="small"

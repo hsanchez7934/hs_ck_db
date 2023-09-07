@@ -18,15 +18,11 @@ import SideBarListItem from '../SideBarListItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 
-interface Props {
-	window?: () => Window
-}
-
 const drawerWidth = 240
 const paths = [
 	{path: '/', text: 'Home'},
 	{path: '/search', text: 'Search'},
-	{path: '/mydrinks', text: 'My Drinks'}
+	{path: '/saveddrinks', text: 'Saved Drinks'}
 ]
 
 const searchPaths = [
@@ -35,13 +31,10 @@ const searchPaths = [
 	{path: '/search/byspirit', text: 'By Spirit'}
 ]
 
-const SideBar: React.FC = (props: Props) => {
-	const {window} = props
-	const container = window !== undefined ? () => window().document.body : undefined
-
+const SideBar: React.FC = () => {
 	const {searchKeyword, isKeywordSearch} = useAppSelector(({searchDrinks}) => searchDrinks)
 
-	const [mobileOpen, setMobileOpen] = React.useState(false)
+	const [navBarOpen, setNavBarOpen] = React.useState(false)
 	const [currentPath, setCurrentPath] = React.useState('')
 	const [showSearchLinks, setShowSearchLinks] = React.useState(false)
 
@@ -58,7 +51,7 @@ const SideBar: React.FC = (props: Props) => {
 	}, [location, currentPath])
 
 	const handleDrawerToggle = () => {
-		setMobileOpen(!mobileOpen)
+		setNavBarOpen(!navBarOpen)
 	}
 
 	const renderedSearchPaths = searchPaths.map((link) => {
@@ -117,11 +110,11 @@ const SideBar: React.FC = (props: Props) => {
 					display: 'flex',
 					justifyContent: 'end',
 					alignItems: 'center',
-					fontSize: '20px',
+					fontSize: '18px',
 					color: 'white'
 				}}
 			>
-				<FaX onClick={() => setMobileOpen(false)} className="nav_menu_close_icon" />
+				<FaX onClick={() => setNavBarOpen(false)} className="nav_menu_close_icon" />
 			</Toolbar>
 			<Divider />
 			<List>{renderedNavLinks}</List>
@@ -160,17 +153,12 @@ const SideBar: React.FC = (props: Props) => {
 					{isSearchByNamePath && searchResultsText}
 				</Toolbar>
 			</AppBar>
-			{mobileOpen && (
-				<Box
-					component="nav"
-					sx={{width: {sm: drawerWidth}, flexShrink: {sm: 0}}}
-					aria-label="mailbox folders"
-				>
+			{navBarOpen && (
+				<React.Fragment>
 					<Drawer
-						container={container}
-						variant="temporary"
-						open={mobileOpen}
+						open={navBarOpen}
 						onClose={handleDrawerToggle}
+						anchor='left'
 						ModalProps={{
 							keepMounted: true // Better open performance on mobile.
 						}}
@@ -180,7 +168,7 @@ const SideBar: React.FC = (props: Props) => {
 					>
 						{drawer}
 					</Drawer>
-				</Box>
+				</React.Fragment>
 			)}
 			<Box
 				component="main"

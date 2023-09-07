@@ -24,7 +24,7 @@ const App = (): JSX.Element => {
 					<Route path="/search/populardrinks" element={<PopularDrinksPage />} />
 					<Route path="/search/byname" element={<SearchByNamePage />} />
 					<Route path="/search/byspirit" element={<SearchBySpiritsPage />} />
-					<Route path="/mydrinks" element={<SavedDrinksPage />} />
+					<Route path="/saveddrinks" element={<SavedDrinksPage />} />
 					<Route path="*" element={<NoMatchPage />} />
 				</Route>
 			</Routes>

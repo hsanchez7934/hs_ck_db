@@ -2,12 +2,10 @@ import DrinkImageList from '../components/DrinksImageList/DrinksImageList'
 import DrinkLocalStorage from '../helper-functions/drinkLocalStorage'
 import {useMemo} from 'react'
 
-
 const SavedDrinksPage = () => {
 	const drinkStorage = useMemo(() => new DrinkLocalStorage(), [])
 	drinkStorage.init()
 	const drinkData = drinkStorage.getDrinkData()
-	console.log(drinkStorage)
 
 	let content
 	if (drinkData.length > 0) {
