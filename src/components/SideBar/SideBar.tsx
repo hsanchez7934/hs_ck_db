@@ -28,10 +28,10 @@ const paths = [
 
 const searchPaths = [
 	{path: '/search/popularcocktails', text: 'Popular Cocktails'},
+	{path: '/search/mocktails', text: 'Mocktails'},
 	{path: '/search/byname', text: 'By Name'},
 	{path: '/search/byspirit', text: 'By Spirit'},
 	{path: '/search/byingredient', text: 'By Ingredient'},
-	{path: '/search/mocktails', text: 'Mocktails'}
 ]
 
 const SideBar: React.FC = () => {
@@ -104,7 +104,8 @@ const SideBar: React.FC = () => {
 				backgroundPosition: 'center',
 				backgroundSize: 'cover',
 				backgroundRepeat: 'no-repeat',
-				height: '100%'
+				height: '100%',
+				overflow: 'hidden'
 			}}
 		>
 			<Toolbar
@@ -120,7 +121,7 @@ const SideBar: React.FC = () => {
 				<FaX onClick={() => setNavBarOpen(false)} className="nav_menu_close_icon" />
 			</Toolbar>
 			<Divider />
-			<List>{renderedNavLinks}</List>
+			<List sx={{overflow: 'auto'}}>{renderedNavLinks}</List>
 		</div>
 	)
 

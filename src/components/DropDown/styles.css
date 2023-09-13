@@ -6,4 +6,17 @@
 .dropdown-container select {
 	height: 100%;
 	width: 250px;
+	background-color: #000;
+	color: #fff;
+	border: none;
+}
+
+.dropdown-container select option {
+	background-color: #000;
+	color: #fff;
+}
+
+.dropdown-container select:focus {
+	border-bottom: 1px solid #fff;
+	outline: none;
 }
