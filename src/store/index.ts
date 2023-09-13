@@ -11,13 +11,15 @@ import {
 } from '../slices/searchDrinksSlice'
 import {updateIsModalOpen, updateModalDrink, modalDrinkReducer} from '../slices/modalDrinkSlice'
 import { updateDrinkMap , drinkPagerReducer} from '../slices/drinkPagerSlice'
+import { updateDrinksByIngredient, ingredientsDrinksReducer } from '../slices/ingredientsDrinksSlice'
 
 export const store = configureStore({
 	reducer: {
 		[drinksAPI.reducerPath]: drinksAPI.reducer,
 		searchDrinks: searchDrinksReducer,
 		modalDrink: modalDrinkReducer,
-		drinkPagerMap: drinkPagerReducer
+		drinkPagerMap: drinkPagerReducer,
+		drinksByIngredient: ingredientsDrinksReducer
 	},
 	middleware: (getDefaultMiddleware) => {
 		return getDefaultMiddleware().concat(drinksAPI.middleware)
@@ -32,7 +34,10 @@ export {
 	useFetchDrinksByFirstLetterQuery,
 	useFetchDrinksByKeywordQuery,
 	useFetchDrinkDataByIDQuery,
-	useFetchDrinksBySpiritQuery
+	useFetchDrinksBySpiritQuery,
+	useFetchNonAlcoholicDrinksQuery,
+	useFetchIngredientsQuery,
+	useFetchDrinkByIngredientQuery
 } from './apis/drinksAPI'
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
@@ -44,5 +49,6 @@ export {
 	updateSearchKeyword,
 	updateIsModalOpen,
 	updateModalDrink,
-	updateDrinkMap
+	updateDrinkMap,
+	updateDrinksByIngredient
 }

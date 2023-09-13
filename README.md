@@ -1,1 +1,3 @@
 Hex codes: dark indigo #2C2C54, deep purple-gray #474787, cool gray #AAABB8, light gray #ECECEC
+
+### Render related items in drink page component

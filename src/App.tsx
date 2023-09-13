@@ -5,13 +5,21 @@ import DrinkPage from './pages/DrinkPage'
 import HomePage from './pages/HomePage'
 import Layout from './pages/Layout'
 import NoMatchPage from './pages/NoMatchPages'
+import NonAlcoholicDrinksPage from './pages/NonAlcoholicDrinksPage'
 import PopularDrinksPage from './pages/PopularDrinksPage'
 import SavedDrinksPage from './pages/SavedDrinksPage'
 import SearchByNamePage from './pages/SearchByNamePage'
 import SearchBySpiritsPage from './pages/SearchBySpiritsPage'
+// import axios from 'axios'
+// import { apiKey } from './apiKey'
+import SearchByIngredientPage from './pages/SearchByIngredientPage'
 
 const App = (): JSX.Element => {
-
+	// const getingredients = async () => {
+	// 	const response = await axios.get(`https://www.thecocktaildb.com/api/json/v2/${apiKey}/list.php?i=list`)
+	// 	console.log(response)
+	// }
+	// getingredients()
 	let location = useLocation()
 	let state = location.state as {backgroundLocation?: Location}
 
@@ -21,9 +29,11 @@ const App = (): JSX.Element => {
 				<Route path="/" element={<Layout />}>
 					<Route index element={<HomePage />} />
 					<Route path="/drink/:id" element={<DrinkPage />} />
-					<Route path="/search/populardrinks" element={<PopularDrinksPage />} />
+					<Route path="/search/popularcocktails" element={<PopularDrinksPage />} />
 					<Route path="/search/byname" element={<SearchByNamePage />} />
 					<Route path="/search/byspirit" element={<SearchBySpiritsPage />} />
+					<Route path="/search/byingredient" element={<SearchByIngredientPage />} />
+					<Route path="/search/mocktails" element={<NonAlcoholicDrinksPage />} />
 					<Route path="/saveddrinks" element={<SavedDrinksPage />} />
 					<Route path="*" element={<NoMatchPage />} />
 				</Route>

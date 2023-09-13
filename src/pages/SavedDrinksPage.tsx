@@ -1,15 +1,21 @@
 import DrinkImageList from '../components/DrinksImageList/DrinksImageList'
 import DrinkLocalStorage from '../helper-functions/drinkLocalStorage'
-import {useMemo} from 'react'
+import {useEffect, useState} from 'react'
 
 const SavedDrinksPage = () => {
-	const drinkStorage = useMemo(() => new DrinkLocalStorage(), [])
-	drinkStorage.init()
-	const drinkData = drinkStorage.getDrinkData()
+	const [dataToRender, setDataToRender] = useState([])
+
+	useEffect(() => {
+		const drinkStorage = new DrinkLocalStorage()
+		drinkStorage.init()
+		const drinkData = drinkStorage.getDrinkData()
+		// @ts-expect-error
+		setDataToRender(drinkData)
+	}, [])
 
 	let content
-	if (drinkData.length > 0) {
-		content = <DrinkImageList drinksData={drinkData} />
+	if (dataToRender.length > 0) {
+		content = <DrinkImageList drinksData={dataToRender} />
 	} else {
 		content = <div>No saved data found.</div>
 	}

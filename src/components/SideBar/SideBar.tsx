@@ -10,6 +10,7 @@ import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
+import HeaderDropDown from '../HeaderDropDown'
 import HeaderSearchInput from '../HeaderSearchInput'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
@@ -26,9 +27,11 @@ const paths = [
 ]
 
 const searchPaths = [
-	{path: '/search/populardrinks', text: 'Popular Drinks'},
+	{path: '/search/popularcocktails', text: 'Popular Cocktails'},
 	{path: '/search/byname', text: 'By Name'},
-	{path: '/search/byspirit', text: 'By Spirit'}
+	{path: '/search/byspirit', text: 'By Spirit'},
+	{path: '/search/byingredient', text: 'By Ingredient'},
+	{path: '/search/mocktails', text: 'Mocktails'}
 ]
 
 const SideBar: React.FC = () => {
@@ -129,6 +132,7 @@ const SideBar: React.FC = () => {
 	)
 
 	const isSearchByNamePath = currentPath.split(' ')[0] === '/search/byname'
+	const isSearcByIngredientPath = currentPath.split(' ')[0] === '/search/byingredient'
 
 	return (
 		<Box sx={{display: 'flex', height: '100vh'}}>
@@ -151,6 +155,7 @@ const SideBar: React.FC = () => {
 					</IconButton>
 					{isSearchByNamePath && <HeaderSearchInput isKeywordSearch={isKeywordSearch} />}
 					{isSearchByNamePath && searchResultsText}
+					{isSearcByIngredientPath && <HeaderDropDown />}
 				</Toolbar>
 			</AppBar>
 			{navBarOpen && (

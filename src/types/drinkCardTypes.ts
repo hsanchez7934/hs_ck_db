@@ -1,4 +1,5 @@
 export interface DrinkDataPoint extends Record<string, any> {
+	drinkMapID: string | undefined
 	idDrink: string | null
 	strDrink: string | null
 	strDrinkAlternate: string | null

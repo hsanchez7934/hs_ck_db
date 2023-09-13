@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Divider from '@mui/material/Divider'
 import DrinkTags from './DrinkTags'
-import SimpleDialog from '../components/SimpleDialog'
+import SimpleDialog from './SimpleDialog'
 import Typography from '@mui/material/Typography'
 import generateUUID from '../uuid'
 import {DrinkDataPoint} from '../types'
@@ -35,19 +35,19 @@ const iconStyles = {
 	fontSize: '25px'
 }
 
-
 const DrinkCard = (props: Props) => {
 	const drinkStorage = useMemo(() => new DrinkLocalStorage(), [])
 	drinkStorage.init()
 
 	const {drink} = props
+	console.log(drink)
 	const [dialogText, setDialogText] = useState('')
 	const [dialogTextColor, setDialogTextColor] = useState('')
 	const [openDialog, setOpenDialog] = useState(false)
 	const [toggleSaved, setToggleSaved] = useState(false)
 
-	const {drinkPagerMap} = useAppSelector(({drinkPagerMap}) => drinkPagerMap)
 	const dispatch = useAppDispatch()
+	const {drinkPagerMap} = useAppSelector(({drinkPagerMap}) => drinkPagerMap)
 
 	useEffect(() => {
 		if (drinkStorage.isDrinkSaved(drink?.idDrink)) {
@@ -55,7 +55,7 @@ const DrinkCard = (props: Props) => {
 		} else {
 			setToggleSaved(false)
 		}
-	}, [drink?.idDrink, drinkStorage])
+	}, [drink?.idDrink, drinkStorage, drinkPagerMap])
 
 	let counter = 1
 	const ingredients = []
@@ -136,21 +136,29 @@ const DrinkCard = (props: Props) => {
 		}
 	}
 
-	const handlePager = async (id: string | number, direction: string) => {
-		let drink = null
-		if (direction === 'left') {
-			drink = drinkPagerMap[id].previous
-		} else if (direction === 'right') {
-			drink = drinkPagerMap[id].next
-		}
-		if (drink) {
-			if (!drink.strInstructions) {
-				drink = await fetchDrinkDataByID(drink)
+	const handlePager = async (drink: DrinkDataPoint, direction: string) => {
+		const {drinkMapID} = drink
+		let data = null
+
+		if (drinkMapID !== undefined) {
+			if (direction === 'left') {
+				data = drinkPagerMap[drinkMapID].previous
+			} else if (direction === 'right') {
+				data = drinkPagerMap[drinkMapID].next
 			}
-			dispatch(updateModalDrink(drink))
+		}
+
+		if (data) {
+			if (!data.strInstructions) {
+				const response = await fetchDrinkDataByID(data)
+				const {drinkMapID} = data
+				data = {...response, drinkMapID}
+			}
+			console.log(data)
+			dispatch(updateModalDrink(data))
 			const currentUrl = window.location.href
 			const split = currentUrl.split('/')
-			split[split.length - 1] = drink.idDrink
+			split[split.length - 1] = data.idDrink
 			const updatedURL = split.join('/')
 			window.history.replaceState(null, '', updatedURL)
 		}
@@ -173,43 +181,46 @@ const DrinkCard = (props: Props) => {
 			<></>
 		)
 
-	let renderedPagerPrevious
-	if (drinkPagerMap && drink?.idDrink && drinkPagerMap[drink.idDrink]) {
-		renderedPagerPrevious = drinkPagerMap[drink.idDrink]?.previous ? (
-			<Button
-				size="small"
-				onClick={() => {
-					if (drink?.idDrink) handlePager(drink.idDrink, 'left')
-				}}
-				sx={{buttonStyles}}
-			>
-				<FaCircleArrowLeft color="white" style={iconStyles} />
-			</Button>
-		) : (
-			<></>
-		)
-	} else {
-		renderedPagerPrevious = <></>
-	}
+	console.log(drinkPagerMap)
+	const hasPrevious: boolean =
+		drinkPagerMap &&
+		drink?.drinkMapID &&
+		drinkPagerMap[drink.drinkMapID] &&
+		drinkPagerMap[drink.drinkMapID].previous !== null
+	const hasNext: boolean =
+		drinkPagerMap &&
+		drink?.drinkMapID &&
+		drinkPagerMap[drink.drinkMapID] &&
+		drinkPagerMap[drink.drinkMapID].next !== null
 
-	let renderedPagerNext
-	if (drinkPagerMap && drink?.idDrink && drinkPagerMap[drink.idDrink]) {
-		renderedPagerNext = drinkPagerMap[drink.idDrink].next ? (
-			<Button
-				size="small"
-				onClick={() => {
-					if (drink?.idDrink) handlePager(drink.idDrink, 'right')
-				}}
-				sx={{buttonStyles}}
-			>
-				<FaCircleArrowRight color="white" style={iconStyles} />
-			</Button>
-		) : (
-			<></>
-		)
-	} else {
-		renderedPagerNext = <></>
-	}
+		console.log(hasPrevious, 'previous')
+		console.log(hasNext, 'next')
+
+	const renderedPagerPrevious = (
+		<Button
+			size="small"
+			onClick={() => {
+				if (drink && hasPrevious) handlePager(drink, 'left')
+			}}
+			sx={buttonStyles}
+			disabled={hasPrevious ? false : true}
+		>
+			<FaCircleArrowLeft color={hasPrevious ? 'white' : 'gray'} style={iconStyles} />
+		</Button>
+	)
+
+	const renderedPagerNext = (
+		<Button
+			size="small"
+			onClick={() => {
+				if (drink && hasNext) handlePager(drink, 'right')
+			}}
+			sx={buttonStyles}
+			disabled={hasNext ? false : true}
+		>
+			<FaCircleArrowRight color={hasNext ? 'white' : 'gray'} style={iconStyles} />
+		</Button>
+	)
 
 	const renderedSaveIcon = toggleSaved ? (
 		<FaHeartCirclePlus color="red" style={iconStyles} />
