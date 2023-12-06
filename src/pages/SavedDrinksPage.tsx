@@ -1,6 +1,7 @@
 import DrinkImageList from '../components/DrinksImageList/DrinksImageList'
 import DrinkLocalStorage from '../helper-functions/drinkLocalStorage'
 import {useEffect, useState} from 'react'
+import NoDrinkDataNotice from '../components/NoDrinkData'
 
 const SavedDrinksPage = () => {
 	const [dataToRender, setDataToRender] = useState([])
@@ -17,7 +18,7 @@ const SavedDrinksPage = () => {
 	if (dataToRender.length > 0) {
 		content = <DrinkImageList drinksData={dataToRender} />
 	} else {
-		content = <div>No saved data found.</div>
+		content = <NoDrinkDataNotice isSavedDrinksPage={true} />
 	}
 	return <div style={{overflow: 'auto', height: 'calc(100% - 64px)'}}>{content}</div>
 }

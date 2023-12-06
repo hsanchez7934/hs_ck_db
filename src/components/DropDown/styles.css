@@ -19,4 +19,5 @@
 .dropdown-container select:focus {
 	border-bottom: 1px solid #fff;
 	outline: none;
+	/* background-size: ; */
 }

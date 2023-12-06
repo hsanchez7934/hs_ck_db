@@ -32,7 +32,7 @@ const SearchBySpiritsPage = () => {
 
 	return (
 		<div style={{height: 'calc(100% - 64px)'}}>
-			<div style={{height: '45px', backgroundColor: '#fff', display: 'flex'}}>
+			<div style={{height: '45px', display: 'flex'}}>
 				{renderedSpiritTabs}
 			</div>
 			<div style={{height: 'calc(100% - 45px)', overflow: 'auto'}}>{content}</div>

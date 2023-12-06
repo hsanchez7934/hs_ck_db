@@ -19,3 +19,7 @@
 .spirit-tab-active {
 	border-bottom: 5px solid #07f2ea;
 }
+
+.spirit-tab:nth-child(8) {
+	border-right: none;
+}

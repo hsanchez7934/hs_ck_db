@@ -1,6 +1,9 @@
 import {primaryFont} from '../fonts/fonts'
 
-const NoDrinkDataNotice = () => {
+type Props = {isSavedDrinksPage?: boolean}
+
+const NoDrinkDataNotice = (props: Props) => {
+	const {isSavedDrinksPage} = props
 	return (
 		<div
 			style={{
@@ -19,7 +22,7 @@ const NoDrinkDataNotice = () => {
 					color: '#fff'
 				}}
 			>
-				No data found.
+				{isSavedDrinksPage ? `You haven't saved any drinks, browse the app and find some favorites!` : 'No data found.'}
 			</p>
 		</div>
 	)
