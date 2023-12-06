@@ -1,3 +1,4 @@
+import './styles.css'
 import {useState, useEffect, useMemo} from 'react'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
@@ -5,17 +6,17 @@ import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Divider from '@mui/material/Divider'
-import DrinkTags from './DrinkTags'
-import SimpleDialog from './SimpleDialog'
+import DrinkTags from '../DrinkTags'
+import SimpleDialog from '../SimpleDialog'
 import Typography from '@mui/material/Typography'
-import generateUUID from '../uuid'
-import {DrinkDataPoint} from '../types'
-import {primaryFont} from '../fonts/fonts'
+import generateUUID from '../../uuid'
+import {DrinkDataPoint} from '../../types'
+import {primaryFont} from '../../fonts/fonts'
 import {generatePath} from 'react-router-dom'
-import {useAppSelector, useAppDispatch} from '../store/hooks'
-import {updateModalDrink} from '../store'
-import fetchDrinkDataByID from '../helper-functions/fetchDrinkDataByID'
-import DrinkLocalStorage from '../helper-functions/drinkLocalStorage'
+import {useAppSelector, useAppDispatch} from '../../store/hooks'
+import {updateModalDrink} from '../../store'
+import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
+import DrinkLocalStorage from '../../helper-functions/drinkLocalStorage'
 
 import {
 	FaVideo,
@@ -204,6 +205,7 @@ const DrinkCard = (props: Props) => {
 			}}
 			sx={buttonStyles}
 			disabled={hasPrevious ? false : true}
+			className='btn_disabled'
 		>
 			<FaCircleArrowLeft color={hasPrevious ? 'white' : 'gray'} style={iconStyles} />
 		</Button>
@@ -217,6 +219,7 @@ const DrinkCard = (props: Props) => {
 			}}
 			sx={buttonStyles}
 			disabled={hasNext ? false : true}
+			className='btn_disabled'
 		>
 			<FaCircleArrowRight color={hasNext ? 'white' : 'gray'} style={iconStyles} />
 		</Button>

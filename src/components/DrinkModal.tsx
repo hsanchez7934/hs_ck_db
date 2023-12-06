@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
-import DrinkCard from './DrinkCard'
+import DrinkCard from './DrinkCard/DrinkCard'
 import {useNavigate} from 'react-router-dom'
 import {useAppDispatch, useAppSelector} from '../store/hooks'
 import {updateIsModalOpen, updateModalDrink} from '../store'

@@ -1,0 +1,4 @@
+.btn_disabled:disabled {
+	cursor: not-allowed !important;
+	pointer-events: all !important;
+}

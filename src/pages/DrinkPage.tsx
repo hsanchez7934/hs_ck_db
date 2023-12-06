@@ -1,4 +1,4 @@
-import DrinkCard from '../components/DrinkCard'
+import DrinkCard from '../components/DrinkCard/DrinkCard'
 import {useParams} from 'react-router-dom'
 import {useFetchDrinkDataByIDQuery} from '../store'
 import SkeletonLoader from '../components/Skeleton'

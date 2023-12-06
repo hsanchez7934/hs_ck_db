@@ -12,3 +12,6 @@ remove white right border from whiskey spirit tab
 
 give user ability to toggle between image grid view/type, would be cool
 mosiac vs grid
+
+Add no data notice to saved drinks when user has not saved any drinks
+Remove favorite immediately from UI when deleting drinks from favorites page
