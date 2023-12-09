@@ -41,7 +41,6 @@ const DrinkCard = (props: Props) => {
 	drinkStorage.init()
 
 	const {drink} = props
-	console.log(drink)
 	const [dialogText, setDialogText] = useState('')
 	const [dialogTextColor, setDialogTextColor] = useState('')
 	const [openDialog, setOpenDialog] = useState(false)

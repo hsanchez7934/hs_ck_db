@@ -33,7 +33,13 @@ const HeaderDropDown = () => {
 	}
 	return (
 		<div>
-			<DropDown data={dropdownData} handleOnChange={handleOnChange} dropdownValue={dropdownValue} />
+			<DropDown
+				data={dropdownData}
+				handleOnChange={handleOnChange}
+				dropdownValue={dropdownValue}
+				labelText={'Select an ingredient:'}
+				placeholderText={'Select an ingredient...'}
+			/>
 		</div>
 	)
 }

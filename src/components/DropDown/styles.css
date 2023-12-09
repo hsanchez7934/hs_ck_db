@@ -1,6 +1,12 @@
 .dropdown-container {
 	height: 40px;
 	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.dropdown-container label {
+	margin-right: 15px;
 }
 
 .dropdown-container select {
@@ -11,6 +17,10 @@
 	border: none;
 }
 
+.dropdown-container select:hover {
+	cursor: pointer;
+}
+
 .dropdown-container select option {
 	background-color: #000;
 	color: #fff;
@@ -19,5 +29,4 @@
 .dropdown-container select:focus {
 	border-bottom: 1px solid #fff;
 	outline: none;
-	/* background-size: ; */
 }

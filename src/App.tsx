@@ -1,7 +1,7 @@
 import './index.css'
 import {Routes, Route, useLocation} from 'react-router-dom'
 import DrinkModal from './components/DrinkModal'
-import DrinkPage from './pages/DrinkPage'
+import DrinkPage from './pages/DrinkPage/DrinkPage'
 import HomePage from './pages/HomePage'
 import Layout from './pages/Layout'
 import NoMatchPage from './pages/NoMatchPages'

@@ -28,10 +28,10 @@ const paths = [
 
 const searchPaths = [
 	{path: '/search/popularcocktails', text: 'Popular Cocktails'},
-	{path: '/search/mocktails', text: 'Mocktails'},
 	{path: '/search/byname', text: 'By Name'},
 	{path: '/search/byspirit', text: 'By Spirit'},
 	{path: '/search/byingredient', text: 'By Ingredient'},
+	{path: '/search/mocktails', text: 'NonAlcoholic'}
 ]
 
 const SideBar: React.FC = () => {

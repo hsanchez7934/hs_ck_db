@@ -1,0 +1,100 @@
+.drinkPageMainContainer {
+	height: 100%;
+	display: flex;
+}
+
+.drinkPageImage {
+	width: 50%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.drinkPageDrinkDetails {
+	width: 50%;
+	height: 100%;
+	overflow-y: scroll;
+	padding: 0px 25px;
+}
+
+.drinkPageDrinkTitle {
+	margin: 0px 0px 20px 0px;
+	width: 100%;
+	text-align: center;
+	font-size: 40px;
+	color: #fff;
+	border-bottom: 1px solid #fff;
+}
+
+.drinkDetailHeader {
+	display: flex;
+}
+
+.drinkDetailHeaderLabel {
+	width: 50%;
+	margin: 0;
+	font-size: 20px;
+	color: #fff;
+}
+
+.drinkDetailHeaderValue {
+	width: 50%;
+	margin: 0;
+	color: #fff;
+	text-align: right;
+	font-size: 20px;
+}
+
+.drinkPageDrinkTagsContainer {
+	text-align: center;
+	margin: 30px 0px;
+}
+
+.drinkPageIngredientsHeader,
+.drinkPageInstructionsHeader {
+	color: #fff;
+	margin: 20px 0px 20px 0px;
+	border-bottom: 1px solid #fff;
+	text-align: center;
+	padding-bottom: 10px;
+}
+
+.drinkPageIngredientsContainer {
+	height: auto;
+	padding: 20px 0px 0px 15px;
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.drinksPageIngredientCard {
+	height: 200px;
+	width: 200px;
+	margin: 0px 15px 20px 0px;
+	position: relative;
+}
+
+.drinksPageDrinkImage {
+	height: 100%;
+}
+
+.drinksPageIngredientsCardTextContainer {
+	display: flex;
+	color: #fff;
+	flex-direction: column;
+	position: absolute;
+	top: 0px;
+	border-radius: 25px;
+	padding: 15px;
+	backdrop-filter: blur(16px) saturate(180%);
+	-webkit-backdrop-filter: blur(16px) saturate(180%);
+	background-color: rgba(17, 25, 40, 0.25);
+	border: 1px solid rgba(255, 255, 255, 0.125);
+	filter: drop-shadow(0 30px 10px rgba(0, 0, 0, 0.125));
+}
+
+.drinkPageInstructionsText {
+	color: #fff;
+	margin: 10px 0px 25px 0px;
+	padding: 0px 0px 30px;
+}
