@@ -12,7 +12,8 @@ const SearchByNamePage = (): JSX.Element => {
 		searchDrinksData: {drinks},
 		isFetchingDrinks,
 		errorFetchingDrinks,
-		isKeywordSearch
+		isKeywordSearch,
+		searchKeyword
 	} = useAppSelector(({searchDrinks}) => searchDrinks)
 
 	useEffect(() => {
@@ -37,9 +38,9 @@ const SearchByNamePage = (): JSX.Element => {
 	}
 
 	return (
-		<div style={{backgroundColor: 'inherit', height: 'calc(100% - 64px)'}}>
-			<AlphtabetPicker isKeywordSearch={isKeywordSearch} />
-			<div style={{overflow: 'auto', height: 'calc(100% - 25px)'}}>{content}</div>
+		<div style={{backgroundColor: 'inherit', height: 'calc(100% - 64px)', overflow: 'hidden'}}>
+			<AlphtabetPicker isKeywordSearch={isKeywordSearch} searchKeyword={searchKeyword} />
+			<div style={{overflowY: 'scroll', height: 'calc(100% - 25px)'}}>{content}</div>
 		</div>
 	)
 }

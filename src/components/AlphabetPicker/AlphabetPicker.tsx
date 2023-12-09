@@ -9,15 +9,18 @@ import {
 	updateSearchKeyword
 } from '../../store'
 import {useAppDispatch} from '../../store/hooks'
-import { primaryFont } from '../../fonts/fonts'
+import {primaryFont} from '../../fonts/fonts'
+import DropDown from '../DropDown/DropDown'
 
 interface Props {
 	isKeywordSearch: boolean
+	searchKeyword: string
 }
 
 const AlphtabetPicker = (props: Props): JSX.Element => {
-	const {isKeywordSearch} = props
+	const {isKeywordSearch, searchKeyword} = props
 	const [searchLetter, setSearchLetter] = useState('a')
+	const [dropdownValue, setDropDownValue] = useState('A')
 	const {data, error, isFetching} = useFetchDrinksByFirstLetterQuery(searchLetter)
 	const dispatch = useAppDispatch()
 
@@ -64,25 +67,54 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 
 	const handleClick = (event: MouseEvent | any) => {
 		const listItem = event.target as HTMLLIElement
-		const letter = listItem?.dataset?.value?.toLowerCase()
-		if (letter) {
-			setSearchLetter(letter)
+		const searchLetter = listItem?.dataset?.value?.toLowerCase()
+		if (searchLetter) {
+			setSearchLetter(searchLetter)
+			setDropDownValue('A')
 		}
 		dispatch(updateIsKeywordSearch(false))
 		dispatch(updateSearchKeyword(''))
 	}
 
-	return (
-		<div style={{backgroundColor: 'black', height: '25px'}}>
-			<ul
-				style={{
-					display: 'flex',
-					justifyContent: 'space-evenly',
-					listStyleType: 'none',
-					padding: 0,
-					margin: 0
-				}}
+	const handleOnChange = (event: InputEvent | any) => {
+		const searchLetter = event.target.value
+		setSearchLetter(searchLetter.toLowerCase())
+		setDropDownValue(searchLetter)
+		dispatch(updateIsKeywordSearch(false))
+		dispatch(updateSearchKeyword(''))
+	}
+
+	const renderedSearchKeywordResults = (
+		<div style={{height: '30px', padding: '0px 0px 0px 15px'}}>
+			<p
+				className="truncate"
+				style={{margin: 0, color: '#fff', fontFamily: primaryFont}}
+				title={`Displaying search results for: "${searchKeyword}"`}
 			>
+				Displaying search results for: "{searchKeyword}"
+			</p>
+		</div>
+	)
+
+	if (window.innerWidth < 600) {
+		return (
+			<div className="alphabetPickerDropdownContainer">
+				{window.innerWidth < 600 && isKeywordSearch ? renderedSearchKeywordResults : <></>}
+				<DropDown
+					handleOnChange={handleOnChange}
+					dropdownValue={dropdownValue}
+					data={alphabet}
+					labelText="Select a letter:"
+					placeholderText="Select a letter..."
+					parentContainerWidth={402}
+				/>
+			</div>
+		)
+	}
+
+	return (
+		<div className="alphabetPickerContainer">
+			<ul>
 				{alphabet.map((letter, index) => {
 					return (
 						<li

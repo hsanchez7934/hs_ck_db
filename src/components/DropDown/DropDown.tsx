@@ -1,25 +1,38 @@
-import { primaryFont } from '../../fonts/fonts'
+import {primaryFont} from '../../fonts/fonts'
 import './styles.css'
 
 type Props = {
-	handleOnChange: (event: any) => void;
-	dropdownValue: string | number;
-	data: string[];
-	labelText: string;
-	placeholderText: string;
+	handleOnChange: (event: any) => void
+	dropdownValue: string | number
+	data: string[]
+	labelText: string
+	placeholderText: string
+	parentContainerWidth?: number
 }
 
 const DropDown = (props: Props) => {
-	const {handleOnChange, dropdownValue, data, labelText, placeholderText} = props
+	const {handleOnChange, dropdownValue, data, labelText, placeholderText, parentContainerWidth} =
+		props
 
-	const renderedData = data.map((item: any) => {
-		return <option value={item}>{item}</option>
+	const renderedData = data.map((item: string) => {
+		return (
+			<option key={item} value={item}>
+				{item}
+			</option>
+		)
 	})
 
+	const width = parentContainerWidth ? `${parentContainerWidth}px` : '100%'
+
 	return (
-		<div className="dropdown-container">
-			<label style={{fontFamily: primaryFont}}>{labelText}</label>
-			<select style={{fontFamily: primaryFont}} placeholder={placeholderText|| ''} onChange={handleOnChange} value={dropdownValue}>
+		<div className="dropdown-container" style={{width}}>
+			<label style={{fontFamily: primaryFont, color: '#fff'}}>{labelText}</label>
+			<select
+				style={{fontFamily: primaryFont, color: '#fff'}}
+				placeholder={placeholderText || ''}
+				onChange={handleOnChange}
+				value={dropdownValue}
+			>
 				{renderedData}
 			</select>
 		</div>

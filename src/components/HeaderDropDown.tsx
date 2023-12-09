@@ -9,10 +9,9 @@ import {useAppDispatch} from '../store/hooks'
 
 const HeaderDropDown = () => {
 	const [dropdownValue, setDropdownValue] = useState('Vodka')
-	const {data, error, isFetching} = useFetchIngredientsQuery('list')
+	const {data} = useFetchIngredientsQuery('list')
 	const datum = useFetchDrinkByIngredientQuery(dropdownValue)
 	const dispatch = useAppDispatch()
-	console.log(datum)
 
 	useEffect(() => {
 		let data = []

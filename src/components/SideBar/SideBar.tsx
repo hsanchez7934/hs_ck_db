@@ -31,7 +31,7 @@ const searchPaths = [
 	{path: '/search/byname', text: 'By Name'},
 	{path: '/search/byspirit', text: 'By Spirit'},
 	{path: '/search/byingredient', text: 'By Ingredient'},
-	{path: '/search/mocktails', text: 'NonAlcoholic'}
+	{path: '/search/nonalcoholic', text: 'Non-Alcoholic'}
 ]
 
 const SideBar: React.FC = () => {
@@ -125,7 +125,7 @@ const SideBar: React.FC = () => {
 		</div>
 	)
 
-	const renderSearchText = isKeywordSearch && searchKeyword
+	const renderSearchText = isKeywordSearch && searchKeyword && window.innerWidth >= 600
 	const searchResultsText = renderSearchText && (
 		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}}>
 			Displaying search results for: "{searchKeyword}"

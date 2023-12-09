@@ -30,3 +30,21 @@
 	border-bottom: 1px solid #fff;
 	outline: none;
 }
+
+.alphabetPickerDropdownContainer {
+	height: auto;
+	padding: 13px 0px;
+}
+
+.alphabetPickerContainer {
+	background-color: #000;
+	height: auto;
+}
+
+.alphabetPickerContainer ul {
+	display: flex;
+	justify-content: space-evenly;
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}

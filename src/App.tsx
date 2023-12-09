@@ -19,7 +19,7 @@ const App = (): JSX.Element => {
 		const response = await axios.get(`https://www.thecocktaildb.com/api/json/v2/${apiKey}/list.php?c=list`)
 		console.log(response)
 	}
-	getingredients()
+	// getingredients()
 	let location = useLocation()
 	let state = location.state as {backgroundLocation?: Location}
 
@@ -33,7 +33,7 @@ const App = (): JSX.Element => {
 					<Route path="/search/byname" element={<SearchByNamePage />} />
 					<Route path="/search/byspirit" element={<SearchBySpiritsPage />} />
 					<Route path="/search/byingredient" element={<SearchByIngredientPage />} />
-					<Route path="/search/mocktails" element={<NonAlcoholicDrinksPage />} />
+					<Route path="/search/nonalcoholic" element={<NonAlcoholicDrinksPage />} />
 					<Route path="/saveddrinks" element={<SavedDrinksPage />} />
 					<Route path="*" element={<NoMatchPage />} />
 				</Route>
