@@ -61,7 +61,7 @@ const DrinksImageList = (props: Props) => {
 				// @ts-expect-error
 				map[data.drinkMapID] = node
 			}
-			console.log(map, '.map')
+
 			// @ts-expect-error
 			setRenderData(drinks)
 			dispatch(updateDrinkMap(map))

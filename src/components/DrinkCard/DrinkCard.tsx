@@ -154,7 +154,6 @@ const DrinkCard = (props: Props) => {
 				const {drinkMapID} = data
 				data = {...response, drinkMapID}
 			}
-			console.log(data)
 			dispatch(updateModalDrink(data))
 			const currentUrl = window.location.href
 			const split = currentUrl.split('/')
@@ -181,7 +180,6 @@ const DrinkCard = (props: Props) => {
 			<></>
 		)
 
-	console.log(drinkPagerMap)
 	const hasPrevious: boolean =
 		drinkPagerMap &&
 		drink?.drinkMapID &&
@@ -193,9 +191,6 @@ const DrinkCard = (props: Props) => {
 		drinkPagerMap[drink.drinkMapID] &&
 		drinkPagerMap[drink.drinkMapID].next !== null
 
-		console.log(hasPrevious, 'previous')
-		console.log(hasNext, 'next')
-
 	const renderedPagerPrevious = (
 		<Button
 			size="small"
@@ -204,7 +199,7 @@ const DrinkCard = (props: Props) => {
 			}}
 			sx={buttonStyles}
 			disabled={hasPrevious ? false : true}
-			className='btn_disabled'
+			className="btn_disabled"
 		>
 			<FaCircleArrowLeft color={hasPrevious ? 'white' : 'gray'} style={iconStyles} />
 		</Button>
@@ -218,7 +213,7 @@ const DrinkCard = (props: Props) => {
 			}}
 			sx={buttonStyles}
 			disabled={hasNext ? false : true}
-			className='btn_disabled'
+			className="btn_disabled"
 		>
 			<FaCircleArrowRight color={hasNext ? 'white' : 'gray'} style={iconStyles} />
 		</Button>
@@ -235,6 +230,72 @@ const DrinkCard = (props: Props) => {
 			<FaVideo color="white" style={iconStyles} />
 		</Button>
 	)
+
+	const mobileCard = (
+		<div style={{height: '100%', overflow: 'hidden'}}>
+			<div
+				className="mobileDrinkCardImage"
+				style={{backgroundImage: `url(${drink?.strDrinkThumb})`, fontFamily: primaryFont}}
+			>
+				<div className="mobileDrinkCardInner">
+					<h1 className="truncate" title={drink?.strDrink || ''}>
+						{drink?.strDrink}
+					</h1>
+					{drink?.strGlass && (
+						<h2 className="truncate" title={drink?.strGlass || ''}>
+							{drink?.strGlass}
+						</h2>
+					)}
+					<div className="mobileDrinkCardDetailsContainer">
+						<Divider sx={{backgroundColor: '#fff'}} />
+						<h3 className="mobileDrinkCardIngredientsHeader">Ingredients</h3>
+						{renderedIngredients}
+						<Divider sx={{backgroundColor: '#fff'}} />
+						<h3 className="mobileDrinkCardInstructionsHeader">Instructions</h3>
+						<p className="mobileDrinkCardInstructionsText">{drink?.strInstructions}</p>
+					</div>
+				</div>
+				<div className="mobileDrinkCardActionBtnsContainer">
+					<CardActions
+						sx={{
+							padding: 0,
+							margin: 0,
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							height: '70%',
+							width: '95%'
+						}}
+					>
+						{renderedPagerPrevious}
+						{renderedPagerNext}
+						<Button size="small" onClick={() => handleSaveOnClick(drink)} sx={buttonStyles}>
+							{renderedSaveIcon}
+						</Button>
+						<Button
+							size="small"
+							onClick={() => {
+								if (drink?.idDrink) handleShareOnClick(drink.idDrink)
+							}}
+							sx={buttonStyles}
+						>
+							<FaShare color="white" style={iconStyles} />
+						</Button>
+						{renderedVideoIcon}
+						<SimpleDialog
+							open={openDialog}
+							dialogTextColor={dialogTextColor}
+							dialogText={dialogText}
+						/>
+					</CardActions>
+				</div>
+			</div>
+		</div>
+	)
+
+	if (window.innerWidth < 950) {
+		return mobileCard
+	}
 
 	return (
 		<Card

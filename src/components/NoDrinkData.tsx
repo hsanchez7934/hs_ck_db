@@ -11,7 +11,7 @@ const NoDrinkDataNotice = (props: Props) => {
 				width: '100%',
 				display: 'flex',
 				justifyContent: 'center',
-				alignItems: 'center',
+				alignItems: window.innerWidth < 600 ? 'start' :'center',
 				backgroundColor: '#000'
 			}}
 		>
