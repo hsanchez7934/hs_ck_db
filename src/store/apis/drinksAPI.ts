@@ -1,11 +1,12 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-import {apiKey} from '../../apiKey'
 import {DrinksDataResponse} from '../../types'
+
+console.log(process.env)
 
 const drinksAPI = createApi({
 	reducerPath: 'drinks',
 	baseQuery: fetchBaseQuery({
-		baseUrl: `https://www.thecocktaildb.com/api/json/v2/${apiKey}/`
+		baseUrl: `https://www.thecocktaildb.com/api/json/v2/${process.env.REACT_APP_COCKTAIL_DB_API_KEY}/`
 	}),
 	endpoints: (builder) => {
 		return {

@@ -1,6 +1,5 @@
 import {useState, useEffect, useRef} from 'react'
 import axios from 'axios'
-import {apiKey} from '../apiKey'
 import SkeletonLoader from '../components/Skeleton'
 import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
 import { debounce } from 'lodash'
@@ -17,7 +16,7 @@ const HomePage = () => {
 		setError(null)
 		try {
 			const response = await axios.get(
-				`https://www.thecocktaildb.com/api/json/v2/${apiKey}/randomselection.php`
+				`https://www.thecocktaildb.com/api/json/v2/${process.env.REACT_APP_COCKTAIL_DB_API_KEY}/randomselection.php`
 			)
 			const {drinks} = response.data
 			// @ts-expect-error

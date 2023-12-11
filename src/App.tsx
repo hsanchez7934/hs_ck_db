@@ -10,15 +10,14 @@ import PopularDrinksPage from './pages/PopularDrinksPage'
 import SavedDrinksPage from './pages/SavedDrinksPage'
 import SearchByNamePage from './pages/SearchByNamePage'
 import SearchBySpiritsPage from './pages/SearchBySpiritsPage'
-import axios from 'axios'
-import { apiKey } from './apiKey'
+// import axios from 'axios'
 import SearchByIngredientPage from './pages/SearchByIngredientPage'
 
 const App = (): JSX.Element => {
-	const getingredients = async () => {
-		const response = await axios.get(`https://www.thecocktaildb.com/api/json/v2/${apiKey}/list.php?c=list`)
-		console.log(response)
-	}
+	// const getingredients = async () => {
+	// 	const response = await axios.get(`https://www.thecocktaildb.com/api/json/v2/${apiKey}/list.php?c=list`)
+	// 	console.log(response)
+	// }
 	// getingredients()
 	let location = useLocation()
 	let state = location.state as {backgroundLocation?: Location}
