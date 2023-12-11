@@ -4,7 +4,7 @@ import {DrinksDataResponse} from '../../types'
 const drinksAPI = createApi({
 	reducerPath: 'drinks',
 	baseQuery: fetchBaseQuery({
-		baseUrl: `https://www.thecocktaildb.com/api/json/v2/${process.env.COCKTAIL_DB_API_KEY}/`
+		baseUrl: `https://www.thecocktaildb.com/api/json/v2/${DOTENV_COCKTAIL_DB_API_KEY}/`
 	}),
 	endpoints: (builder) => {
 		return {
