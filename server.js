@@ -3,7 +3,7 @@ const app = express()
 const path = require('path')
 const bodyParser = require('body-parser')
 require('dotenv').config()
-
+console.log(process.ENV)
 const requireHTTPS = (request, response, next) => {
 	// eslint-disable-next-line
 	if (request.header('x-forwarded-proto') != 'https') {
