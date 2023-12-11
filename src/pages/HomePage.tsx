@@ -4,6 +4,17 @@ import SkeletonLoader from '../components/Skeleton'
 import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
 import { debounce } from 'lodash'
 
+let baseUrl: any
+let apiKey: any
+
+if (process.env.NODE_ENV === 'development') {
+	baseUrl = process.env.REACT_APP_CK_DB_BASE_URL
+	apiKey = process.env.REACT_APP_CK_DB_KEY
+} else if (process.env.NODE_ENV === 'production') {
+	baseUrl = process.env.CK_DB_BASE_URL
+	apiKey = process.env.CK_DB_KEY
+}
+
 const HomePage = () => {
 	const infiniteScrollContainer = useRef()
 	const [items, setItems] = useState([])
@@ -16,7 +27,7 @@ const HomePage = () => {
 		setError(null)
 		try {
 			const response = await axios.get(
-				`https://www.thecocktaildb.com/api/json/v2/${process.env.DOTENV_CK_DB_KEY}/randomselection.php`
+				`${baseUrl}${apiKey}/randomselection.php`
 			)
 			const {drinks} = response.data
 			// @ts-expect-error

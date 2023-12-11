@@ -13,6 +13,8 @@ import SearchBySpiritsPage from './pages/SearchBySpiritsPage'
 // import axios from 'axios'
 import SearchByIngredientPage from './pages/SearchByIngredientPage'
 
+console.log(process.env)
+
 const App = (): JSX.Element => {
 	// const getingredients = async () => {
 	// 	const response = await axios.get(`https://www.thecocktaildb.com/api/json/v2/${apiKey}/list.php?c=list`)
