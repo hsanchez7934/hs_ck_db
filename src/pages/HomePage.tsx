@@ -48,7 +48,6 @@ const HomePage = () => {
 	}, [scrollTop, debounced])
 
 	useEffect(() => {
-		console.log('second useeffect')
 		fetchData()
 	}, [])
 

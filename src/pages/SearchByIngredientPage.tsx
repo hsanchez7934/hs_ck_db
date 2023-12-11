@@ -7,7 +7,6 @@ import NoDrinkDataNotice from '../components/NoDrinkData'
 
 const SearchByIngredientpage = () => {
     const {drinksByIngredient} = useAppSelector((state) => state.drinksByIngredient)
-    console.log(drinksByIngredient)
 
 	let content = <></>
 	// if (isFetching) {

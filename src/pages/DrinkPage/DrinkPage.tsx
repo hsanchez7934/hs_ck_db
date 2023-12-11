@@ -25,7 +25,6 @@ const DrinkPage = (): JSX.Element => {
 
 	const renderedIngredientContainers = () => {
 		return ingredients.map((ingredient: any, index: number) => {
-			console.log(ingredient)
 			return (
 				<div
 					className={`drinksPageIngredientCard ${

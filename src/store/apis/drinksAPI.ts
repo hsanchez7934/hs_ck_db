@@ -1,8 +1,6 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 import {DrinksDataResponse} from '../../types'
 
-console.log(process.env)
-
 const drinksAPI = createApi({
 	reducerPath: 'drinks',
 	baseQuery: fetchBaseQuery({

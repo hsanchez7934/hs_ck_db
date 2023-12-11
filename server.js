@@ -4,7 +4,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 
 const requireHTTPS = (request, response, next) => {
-    // eslint-disable-next-line
+	// eslint-disable-next-line
 	if (request.header('x-forwarded-proto') != 'https') {
 		return response.redirect(`https://${request.header('host')}${request.url}`)
 	}
@@ -23,7 +23,6 @@ app.locals.title = 'Cocktail DB'
 
 app.listen(app.get('port'), () => {
 	console.log(`${app.locals.title} is running on ${app.get('port')}.`)
-
 })
 
 app.get('/', function (req, res) {
