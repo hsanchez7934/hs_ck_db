@@ -24,7 +24,8 @@ import {
 	FaHeartCircleMinus,
 	FaHeartCirclePlus,
 	FaCircleArrowLeft,
-	FaCircleArrowRight
+	FaCircleArrowRight,
+	FaEye
 } from 'react-icons/fa6'
 
 type Props = {drink: DrinkDataPoint | null}
@@ -105,6 +106,11 @@ const DrinkCard = (props: Props) => {
 		setTimeout(() => {
 			setOpenDialog(false)
 		}, 1500)
+	}
+
+	const handleOpenDetailedView = (drinkID: string | any): void => {
+		const path = generatePath('localhost:3000/drink/:id', {id: drinkID})
+		window.open(path, '_blank')
 	}
 
 	const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
@@ -200,6 +206,7 @@ const DrinkCard = (props: Props) => {
 			sx={buttonStyles}
 			disabled={hasPrevious ? false : true}
 			className="btn_disabled"
+			title='Previous Drink'
 		>
 			<FaCircleArrowLeft color={hasPrevious ? 'white' : 'gray'} style={iconStyles} />
 		</Button>
@@ -214,25 +221,30 @@ const DrinkCard = (props: Props) => {
 			sx={buttonStyles}
 			disabled={hasNext ? false : true}
 			className="btn_disabled"
+			title='Next Drink'
 		>
 			<FaCircleArrowRight color={hasNext ? 'white' : 'gray'} style={iconStyles} />
 		</Button>
 	)
 
 	const renderedSaveIcon = toggleSaved ? (
-		<FaHeartCirclePlus color="red" style={iconStyles} />
+		<FaHeartCirclePlus title='Add/Remove from favorites' color="red" style={iconStyles} />
 	) : (
-		<FaHeartCircleMinus color="white" style={iconStyles} />
+		<FaHeartCircleMinus title='Add/Remove from favorites' color="white" style={iconStyles} />
 	)
 
+	const renderedDetailedViewIcon = <Button title='Open drink detailed view in new browser tab' onClick={() => handleOpenDetailedView(drink?.idDrink)}>
+		<FaEye color="white" style={iconStyles} />
+	</Button>
+
 	const renderedVideoIcon = drink?.strVideo && (
-		<Button size="small" onClick={() => handleViewOnClick(drink.strVideo)} sx={buttonStyles}>
+		<Button title="Open drink instruction video." size="small" onClick={() => handleViewOnClick(drink.strVideo)} sx={buttonStyles}>
 			<FaVideo color="white" style={iconStyles} />
 		</Button>
 	)
 
 	const mobileCard = (
-		<div style={{height: '100%', overflow: 'hidden'}}>
+		<div style={{height: '100%', overflow: 'hidden', backgroundColor: '#000'}}>
 			<div
 				className="mobileDrinkCardImage"
 				style={{backgroundImage: `url(${drink?.strDrinkThumb})`, fontFamily: primaryFont}}
@@ -253,6 +265,7 @@ const DrinkCard = (props: Props) => {
 						<Divider sx={{backgroundColor: '#fff'}} />
 						<h3 className="mobileDrinkCardInstructionsHeader">Instructions</h3>
 						<p className="mobileDrinkCardInstructionsText">{drink?.strInstructions}</p>
+						{renderedTags}
 					</div>
 				</div>
 				<div className="mobileDrinkCardActionBtnsContainer">
@@ -273,6 +286,7 @@ const DrinkCard = (props: Props) => {
 							{renderedSaveIcon}
 						</Button>
 						<Button
+							title="Copy shareable link to clipboard"
 							size="small"
 							onClick={() => {
 								if (drink?.idDrink) handleShareOnClick(drink.idDrink)
@@ -281,6 +295,7 @@ const DrinkCard = (props: Props) => {
 						>
 							<FaShare color="white" style={iconStyles} />
 						</Button>
+						{renderedDetailedViewIcon}
 						{renderedVideoIcon}
 						<SimpleDialog
 							open={openDialog}
@@ -356,6 +371,7 @@ const DrinkCard = (props: Props) => {
 							{renderedSaveIcon}
 						</Button>
 						<Button
+							title="Copy shareable link to clipboard"
 							size="small"
 							onClick={() => {
 								if (drink?.idDrink) handleShareOnClick(drink.idDrink)
@@ -364,6 +380,7 @@ const DrinkCard = (props: Props) => {
 						>
 							<FaShare color="white" style={iconStyles} />
 						</Button>
+						{renderedDetailedViewIcon}
 						{renderedVideoIcon}
 						<SimpleDialog
 							open={openDialog}

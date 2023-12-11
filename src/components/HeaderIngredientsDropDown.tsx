@@ -7,7 +7,7 @@ import {
 import DropDown from './DropDown/DropDown'
 import {useAppDispatch} from '../store/hooks'
 
-const HeaderDropDown = () => {
+const HeaderIngredientsDropDown = () => {
 	const [dropdownValue, setDropdownValue] = useState('Vodka')
 	const {data} = useFetchIngredientsQuery('list')
 	const datum = useFetchDrinkByIngredientQuery(dropdownValue)
@@ -38,9 +38,10 @@ const HeaderDropDown = () => {
 				dropdownValue={dropdownValue}
 				labelText={'Select an ingredient:'}
 				placeholderText={'Select an ingredient...'}
+				hideLabel={window.innerWidth < 550}
 			/>
 		</div>
 	)
 }
 
-export default HeaderDropDown
+export default HeaderIngredientsDropDown

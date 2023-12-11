@@ -19,7 +19,9 @@ const NoDrinkDataNotice = (props: Props) => {
 				style={{
 					fontFamily: primaryFont,
 					fontSize: '2em',
-					color: '#fff'
+					color: '#fff',
+					textAlign: 'center',
+					padding: '0px 10px'
 				}}
 			>
 				{isSavedDrinksPage ? `You haven't saved any drinks, browse the app and find some favorites!` : 'No data found.'}

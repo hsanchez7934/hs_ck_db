@@ -10,7 +10,8 @@ import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
-import HeaderDropDown from '../HeaderDropDown'
+import HeaderIngredientsDropDown from '../HeaderIngredientsDropDown'
+import HeaderSpiritsDropDown from '../HeaderSpiritsDropDown'
 import HeaderSearchInput from '../HeaderSearchInput'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
@@ -134,7 +135,8 @@ const SideBar: React.FC = () => {
 
 	const isSearchByNamePath = currentPath.split(' ')[0] === '/search/byname'
 	const isSearcByIngredientPath = currentPath.split(' ')[0] === '/search/byingredient'
-
+	const isSearchBySpiritsPath = currentPath.split(' ')[0] === '/search/byspirit'
+	const renderSpiritsHeaderDropdown = window.innerWidth < 800 && isSearchBySpiritsPath
 	return (
 		<Box sx={{display: 'flex', height: '100vh'}}>
 			<CssBaseline />
@@ -156,7 +158,8 @@ const SideBar: React.FC = () => {
 					</IconButton>
 					{isSearchByNamePath && <HeaderSearchInput isKeywordSearch={isKeywordSearch} />}
 					{isSearchByNamePath && searchResultsText}
-					{isSearcByIngredientPath && <HeaderDropDown />}
+					{isSearcByIngredientPath && <HeaderIngredientsDropDown />}
+					{renderSpiritsHeaderDropdown && <HeaderSpiritsDropDown />}
 				</Toolbar>
 			</AppBar>
 			{navBarOpen && (

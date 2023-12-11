@@ -96,7 +96,7 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 		</div>
 	)
 
-	if (window.innerWidth < 600) {
+	if (window.innerWidth < 700) {
 		return (
 			<div className="alphabetPickerDropdownContainer">
 				{window.innerWidth < 600 && isKeywordSearch ? renderedSearchKeywordResults : <></>}
@@ -107,6 +107,7 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 					labelText="Select a letter:"
 					placeholderText="Select a letter..."
 					parentContainerWidth={402}
+					hideLabel={false}
 				/>
 			</div>
 		)

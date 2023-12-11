@@ -8,10 +8,11 @@ type Props = {
 	labelText: string
 	placeholderText: string
 	parentContainerWidth?: number
+	hideLabel: boolean
 }
 
 const DropDown = (props: Props) => {
-	const {handleOnChange, dropdownValue, data, labelText, placeholderText, parentContainerWidth} =
+	const {hideLabel, handleOnChange, dropdownValue, data, labelText, placeholderText, parentContainerWidth} =
 		props
 
 	const renderedData = data.map((item: string) => {
@@ -22,11 +23,19 @@ const DropDown = (props: Props) => {
 		)
 	})
 
+	const renderedLabel = hideLabel ? (
+		<></>
+	) : (
+		<label className="truncate" title={labelText} style={{fontFamily: primaryFont, color: '#fff'}}>
+			{labelText}
+		</label>
+	)
+
 	const width = parentContainerWidth ? `${parentContainerWidth}px` : '100%'
 
 	return (
 		<div className="dropdown-container" style={{width}}>
-			<label style={{fontFamily: primaryFont, color: '#fff'}}>{labelText}</label>
+			{renderedLabel}
 			<select
 				style={{fontFamily: primaryFont, color: '#fff'}}
 				placeholder={placeholderText || ''}

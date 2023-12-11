@@ -1,6 +1,5 @@
 .drinkPageMainContainer {
 	height: 100%;
-	display: flex;
 }
 
 .drinkPageImage {
@@ -10,15 +9,22 @@
 	background-size: cover;
 }
 
-.drinkPageDrinkDetails {
+.drinkPageHalf {
 	width: 50%;
+}
+
+.drinkPageFull {
+	width: 100%
+}
+
+.drinkPageDrinkDetails {
 	height: 100%;
 	overflow-y: scroll;
 	padding: 0px 25px;
 }
 
 .drinkPageDrinkTitle {
-	margin: 0px 0px 20px 0px;
+	margin: 5px 0px 20px 0px;
 	width: 100%;
 	text-align: center;
 	font-size: 40px;
@@ -68,13 +74,21 @@
 }
 
 .drinksPageIngredientCard {
-	height: 200px;
-	width: 200px;
-	margin: 0px 15px 20px 0px;
+	margin: 0px 0px 20px 0px;
 	position: relative;
 }
 
-.drinksPageDrinkImage {
+.drinksPageIngredientCardFull {
+	height: 200px;
+	width: 200px;
+}
+
+.drinksPageIngredientCardMobile {
+	height: 140px;
+	width: 140px;
+}
+
+.drinksPageIngredientImage {
 	height: 100%;
 }
 
@@ -84,8 +98,8 @@
 	flex-direction: column;
 	position: absolute;
 	top: 0px;
-	border-radius: 25px;
-	padding: 15px;
+	border-radius: 20px;
+	padding: 5px 10px;
 	backdrop-filter: blur(16px) saturate(180%);
 	-webkit-backdrop-filter: blur(16px) saturate(180%);
 	background-color: rgba(17, 25, 40, 0.25);

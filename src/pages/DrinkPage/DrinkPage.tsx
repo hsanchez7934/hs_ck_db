@@ -5,6 +5,8 @@ import SkeletonLoader from '../../components/Skeleton'
 import {primaryFont} from '../../fonts/fonts'
 import DrinkTags from '../../components/DrinkTags'
 
+const isMobileView = window.innerWidth < 1050
+
 const DrinkPage = (): JSX.Element => {
 	let {id} = useParams<'id'>()
 	const {data, error, isFetching} = useFetchDrinkDataByIDQuery(id)
@@ -25,14 +27,22 @@ const DrinkPage = (): JSX.Element => {
 		return ingredients.map((ingredient: any, index: number) => {
 			console.log(ingredient)
 			return (
-				<div className="drinksPageIngredientCard" key={index}>
+				<div
+					className={`drinksPageIngredientCard ${
+						isMobileView ? 'drinksPageIngredientCardMobile' : 'drinksPageIngredientCardFull'
+					}`}
+					key={index}
+				>
 					<img
-						className='drinksPageDrinkImage'
+						className="drinksPageIngredientImage"
 						alt={ingredient.name}
 						title={ingredient.name}
 						src={`https://www.thecocktaildb.com/images/ingredients/${ingredient.name}.png`}
 					></img>
-					<div className='drinksPageIngredientsCardTextContainer' title={`${ingredient.amount}, ${ingredient.name}`}>
+					<div
+						className="drinksPageIngredientsCardTextContainer"
+						title={`${ingredient.amount}, ${ingredient.name}`}
+					>
 						<p style={{margin: 0, fontFamily: primaryFont}}>{ingredient.amount}</p>
 						<p style={{margin: 0, fontFamily: primaryFont}}>{ingredient.name}</p>
 					</div>
@@ -45,10 +55,10 @@ const DrinkPage = (): JSX.Element => {
 		if (label !== '' || !label) {
 			return (
 				<div className="drinkDetailHeader">
-					<p className="drinkDetailHeaderLabel" style={{fontFamily: primaryFont}}>
+					<p className="drinkDetailHeaderLabel truncate" style={{fontFamily: primaryFont}}>
 						{label}
 					</p>
-					<p className="drinkDetailHeaderValue" style={{fontFamily: primaryFont}}>
+					<p className="drinkDetailHeaderValue truncate" style={{fontFamily: primaryFont}}>
 						{value}
 					</p>
 				</div>
@@ -67,48 +77,58 @@ const DrinkPage = (): JSX.Element => {
 		const drinkGlassTypeHeader = getDrinkDetailHeader('Served in:', drink.strGlass)
 		const drinkGategoryHeader = getDrinkDetailHeader('Category:', drink.strCategory)
 		const drinkAlcoholicHeader = getDrinkDetailHeader('Alcoholic/Nonalcoholic:', drink.strAlcoholic)
-		return (
-			<main className="drinkPageMainContainer">
-				<div
-					className="drinkPageImage"
-					style={{backgroundImage: `url(${drink?.strDrinkThumb})`}}
-				></div>
-				<div className="drinkPageDrinkDetails">
-					<h1 className="drinkPageDrinkTitle" style={{fontFamily: primaryFont}}>
-						{drink?.strDrink}
-					</h1>
-					{drinkGlassTypeHeader}
-					{drinkGategoryHeader}
-					{drinkAlcoholicHeader}
-					<div className="drinkPageDrinkTagsContainer">{renderedTags}</div>
+
+		const renderedDrinkDetails = (
+			<div
+				className={`drinkPageDrinkDetails ${isMobileView ? 'drinkPageFull' : 'drinkPageHalf'}`}
+				style={{opacity: isMobileView ? 0.7 : 1, backgroundColor: isMobileView ? '#000' : ''}}
+			>
+				<h1 className="drinkPageDrinkTitle" style={{fontFamily: primaryFont}}>
+					{drink?.strDrink}
+				</h1>
+				{drinkGlassTypeHeader}
+				{drinkGategoryHeader}
+				{drinkAlcoholicHeader}
+				<div className="drinkPageDrinkTagsContainer">{renderedTags}</div>
+				<h2
+					className="drinkPageIngredientsHeader"
+					style={{
+						fontFamily: primaryFont
+					}}
+				>
+					Ingredients
+				</h2>
+				<div className="drinkPageIngredientsContainer">{renderedIngredientContainers()}</div>
+				<div>
 					<h2
-						className="drinkPageIngredientsHeader"
+						className="drinkPageInstructionsHeader"
 						style={{
 							fontFamily: primaryFont
 						}}
 					>
-						Ingredients
+						Instructions
 					</h2>
-					<div className="drinkPageIngredientsContainer">{renderedIngredientContainers()}</div>
-					<div>
-						<h2
-							className="drinkPageInstructionsHeader"
-							style={{
-								fontFamily: primaryFont
-							}}
-						>
-							Instructions
-						</h2>
-						<p
-							className="drinkPageInstructionsText"
-							style={{
-								fontFamily: primaryFont
-							}}
-						>
-							{drink.strInstructions}
-						</p>
-					</div>
+					<p
+						className="drinkPageInstructionsText"
+						style={{
+							fontFamily: primaryFont
+						}}
+					>
+						{drink.strInstructions}
+					</p>
 				</div>
+			</div>
+		)
+
+		return (
+			<main className={`drinkPageMainContainer`} style={{display: isMobileView ? 'block' : 'flex'}}>
+				<div
+					className={`drinkPageImage ${isMobileView ? 'drinkPageFull' : 'drinkPageHalf'}`}
+					style={{backgroundImage: `url(${drink?.strDrinkThumb})`}}
+				>
+					{isMobileView ? renderedDrinkDetails : <></>}
+				</div>
+				{isMobileView ? <></> : renderedDrinkDetails}
 			</main>
 		)
 	}

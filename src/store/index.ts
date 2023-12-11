@@ -12,6 +12,7 @@ import {
 import {updateIsModalOpen, updateModalDrink, modalDrinkReducer} from '../slices/modalDrinkSlice'
 import { updateDrinkMap , drinkPagerReducer} from '../slices/drinkPagerSlice'
 import { updateDrinksByIngredient, ingredientsDrinksReducer } from '../slices/ingredientsDrinksSlice'
+import { updateSelectedSpirit, spiritsDrinkReducer } from '../slices/spiritsDrinksSlice'
 
 export const store = configureStore({
 	reducer: {
@@ -19,7 +20,8 @@ export const store = configureStore({
 		searchDrinks: searchDrinksReducer,
 		modalDrink: modalDrinkReducer,
 		drinkPagerMap: drinkPagerReducer,
-		drinksByIngredient: ingredientsDrinksReducer
+		drinksByIngredient: ingredientsDrinksReducer,
+		spiritsPageState: spiritsDrinkReducer
 	},
 	middleware: (getDefaultMiddleware) => {
 		return getDefaultMiddleware().concat(drinksAPI.middleware)
@@ -50,5 +52,6 @@ export {
 	updateIsModalOpen,
 	updateModalDrink,
 	updateDrinkMap,
-	updateDrinksByIngredient
+	updateDrinksByIngredient,
+	updateSelectedSpirit
 }
