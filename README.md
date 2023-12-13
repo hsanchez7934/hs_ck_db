@@ -7,7 +7,7 @@ Introducing Cocktail Explorer, a sophisticated web application designed for cock
 
 - **Extensive recipe library:** Access a vast and curated collection of cocktail recipes, ranging from timeless classics to contemporary creations. Cocktail Explorer boasts a comprehensive database, ensuring users have an extensive array of choices to suit every palate and occasion.
 
-- **Intuitive earch functionality:** Navigate through the diverse repertoire of cocktails effortlessly with our intuitive search options. Whether you're in the mood for a refreshing summer cocktail or a warming winter concoction, finding the perfect recipe is a breeze.
+- **Intuitive search functionality:** Navigate through the diverse repertoire of cocktails effortlessly with our intuitive search options. Whether you're in the mood for a refreshing summer cocktail or a warming winter concoction, finding the perfect recipe is a breeze.
 
 - **Step by step instructions and visual aids:** Each cocktail recipe is accompanied by clear and concise step-by-step instructions, ensuring even the novice mixologist can craft a perfect drink. Visual aids such as images and videos provide additional guidance for an immersive learning experience.
 
