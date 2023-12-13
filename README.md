@@ -7,8 +7,8 @@ Hello, welcome to my GitHub page for the Cocktail Catalog, my name is Hector and
 - JavaScript
 - React.js
 - Redux Toolkit
-- HTML
-- CSS
+- HTML5
+- CSS3
 - Node.js
 - Express.js
 - Database powered by the [Cocktail DB](https://www.thecocktaildb.com/)
