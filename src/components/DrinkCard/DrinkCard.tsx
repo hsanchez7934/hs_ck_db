@@ -109,12 +109,12 @@ const DrinkCard = (props: Props) => {
 	}
 
 	const handleOpenDetailedView = (drinkID: string | any): void => {
-		const path = generatePath('localhost:3000/drink/:id', {id: drinkID})
+		const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
 		window.open(path, '_blank')
 	}
 
 	const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
-		const path = generatePath('localhost:3000/drink/:id', {id: drinkID})
+		const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
 		window.navigator.clipboard.writeText(path).then(
 			() => {
 				toggleDialog('green', 'Link copied to clipboard!')
