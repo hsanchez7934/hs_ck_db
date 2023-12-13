@@ -19,6 +19,7 @@ Introducing Cocktail Explorer, a sophisticated web application designed for cock
 - JavaScript
 - React.js
 - Redux Toolkit
+- React Router
 - HTML5
 - CSS3
 - Node.js
