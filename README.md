@@ -8,5 +8,5 @@ Hello, welcome to my GitHub page for the Cocktail Catalog, my name is Hector and
 - HTML
 - CSS
 - Node.js/Express.js
-- Database powered by [Cocktail DB](https://www.thecocktaildb.com/)
+- Database powered by the [Cocktail DB](https://www.thecocktaildb.com/)
 - Hosted on Heroku
