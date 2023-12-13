@@ -11,7 +11,7 @@ const style = {
 	left: '50%',
 	transform: 'translate(-50%, -50%)',
 	width: window.innerWidth >= 1000 ? '900px': '80%',
-	height:'470px',
+	height:window.innerHeight <= 650 ? '70%' : '470px',
 	bgcolor: 'background.paper',
 	border: '2px solid #000',
 	boxShadow: 24,

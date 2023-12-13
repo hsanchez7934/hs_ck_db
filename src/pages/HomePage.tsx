@@ -30,7 +30,7 @@ const HomePage = () => {
 		}
 	}
 
-	const debounced = debounce(fetchData, 2000)
+	const debounced = debounce(fetchData, 1000)
 
 	useEffect(() => {
 		const copy = infiniteScrollContainer.current

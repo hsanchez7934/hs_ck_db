@@ -17,6 +17,7 @@ import {useAppSelector, useAppDispatch} from '../../store/hooks'
 import {updateModalDrink} from '../../store'
 import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
 import DrinkLocalStorage from '../../helper-functions/drinkLocalStorage'
+import {updateTriggerRender} from '../../store'
 
 import {
 	FaVideo,
@@ -86,14 +87,14 @@ const DrinkCard = (props: Props) => {
 					color="text.secondary"
 					sx={{marginRight: '5px', fontFamily: primaryFont, color: '#fff'}}
 				>
-					{name}
+					{amount}
 				</Typography>
 				<Typography
 					variant="body2"
 					color="text.secondary"
 					sx={{fontFamily: primaryFont, color: '#fff'}}
 				>
-					{amount}
+					{name}
 				</Typography>
 			</div>
 		)
@@ -137,6 +138,7 @@ const DrinkCard = (props: Props) => {
 	}
 
 	const handleSaveOnClick = (drink: any) => {
+		dispatch(updateTriggerRender(true))
 		setToggleSaved(!toggleSaved)
 		if (!toggleSaved) {
 			drinkStorage.saveDrink(drink)
@@ -259,7 +261,13 @@ const DrinkCard = (props: Props) => {
 	)
 
 	const mobileCard = (
-		<div style={{height: '100%', overflow: 'hidden', backgroundColor: '#000'}}>
+		<div
+			style={{
+				height: '100%',
+				overflow: window.innerHeight <= 650 ? 'scroll' : 'hidden',
+				backgroundColor: '#000'
+			}}
+		>
 			<div
 				className="mobileDrinkCardImage"
 				style={{backgroundImage: `url(${drink?.strDrinkThumb})`, fontFamily: primaryFont}}
@@ -283,7 +291,10 @@ const DrinkCard = (props: Props) => {
 						{renderedTags}
 					</div>
 				</div>
-				<div className="mobileDrinkCardActionBtnsContainer">
+				<div
+					className="mobileDrinkCardActionBtnsContainer"
+					style={{height: window.innerHeight <= 650 ? '60px' : '100px'}}
+				>
 					<CardActions
 						sx={{
 							padding: 0,
