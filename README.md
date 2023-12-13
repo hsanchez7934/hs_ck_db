@@ -1,17 +1,12 @@
-Hex codes: dark indigo #2C2C54, deep purple-gray #474787, cool gray #AAABB8, light gray #ECECEC
+# Welcome to The Cocktail Catalog
+[Click here to be directed to the live application](https://hs-ck-2fb0336fc8da.herokuapp.com/)
 
-### Render related items in drink page component
+Hello, welcome to my GitHub page for the Cocktail Catalog, my name is Hector and I am the front end developer who built this application using the following tech stack:
 
-use AI to determine how many calories or nutritional information for
-the cocktail based on ingredients and amounts
-
-Add overlay buttons to drink page content display, the overlay
-will be on the drink image
-
-remove white right border from whiskey spirit tab
-
-give user ability to toggle between image grid view/type, would be cool
-mosiac vs grid
-
-Add no data notice to saved drinks when user has not saved any drinks
-Remove favorite immediately from UI when deleting drinks from favorites page
+- React.js
+- Redux Toolkit
+- HTML
+- CSS
+- Node.js/Express.js
+- Database powered by [Cocktail DB](https://www.thecocktaildb.com/)
+- Hosted on Heroku
