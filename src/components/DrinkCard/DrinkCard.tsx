@@ -109,7 +109,12 @@ const DrinkCard = (props: Props) => {
 	}
 
 	const handleOpenDetailedView = (drinkID: string | any): void => {
-		const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
+		let path
+		if (process.env.NODE_ENV === 'production') {
+			path = generatePath('/drink/:id', {id: drinkID})
+		} else {
+			path = generatePath(`localhost:3000/drink/:id`, {id: drinkID})
+		}
 		window.open(path, '_blank')
 	}
 
@@ -206,7 +211,7 @@ const DrinkCard = (props: Props) => {
 			sx={buttonStyles}
 			disabled={hasPrevious ? false : true}
 			className="btn_disabled"
-			title='Previous Drink'
+			title="Previous Drink"
 		>
 			<FaCircleArrowLeft color={hasPrevious ? 'white' : 'gray'} style={iconStyles} />
 		</Button>
@@ -221,24 +226,34 @@ const DrinkCard = (props: Props) => {
 			sx={buttonStyles}
 			disabled={hasNext ? false : true}
 			className="btn_disabled"
-			title='Next Drink'
+			title="Next Drink"
 		>
 			<FaCircleArrowRight color={hasNext ? 'white' : 'gray'} style={iconStyles} />
 		</Button>
 	)
 
 	const renderedSaveIcon = toggleSaved ? (
-		<FaHeartCirclePlus title='Add/Remove from favorites' color="red" style={iconStyles} />
+		<FaHeartCirclePlus title="Add/Remove from favorites" color="red" style={iconStyles} />
 	) : (
-		<FaHeartCircleMinus title='Add/Remove from favorites' color="white" style={iconStyles} />
+		<FaHeartCircleMinus title="Add/Remove from favorites" color="white" style={iconStyles} />
 	)
 
-	const renderedDetailedViewIcon = <Button title='Open drink detailed view in new browser tab' onClick={() => handleOpenDetailedView(drink?.idDrink)}>
-		<FaEye color="white" style={iconStyles} />
-	</Button>
+	const renderedDetailedViewIcon = (
+		<Button
+			title="Open drink detailed view in new browser tab"
+			onClick={() => handleOpenDetailedView(drink?.idDrink)}
+		>
+			<FaEye color="white" style={iconStyles} />
+		</Button>
+	)
 
 	const renderedVideoIcon = drink?.strVideo && (
-		<Button title="Open drink instruction video." size="small" onClick={() => handleViewOnClick(drink.strVideo)} sx={buttonStyles}>
+		<Button
+			title="Open drink instruction video."
+			size="small"
+			onClick={() => handleViewOnClick(drink.strVideo)}
+			sx={buttonStyles}
+		>
 			<FaVideo color="white" style={iconStyles} />
 		</Button>
 	)
