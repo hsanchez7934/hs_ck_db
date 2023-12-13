@@ -1,5 +1,5 @@
 # Welcome to The Cocktail Explorer
-[Click here to navigate to the live application](https://hs-ck-2fb0336fc8da.herokuapp.com/)
+[Click here to navigate to Cocktail Explorer!](https://hs-ck-2fb0336fc8da.herokuapp.com/)
 
 Introducing Cocktail Explorer, a sophisticated web application designed for cocktail enthusiasts and mixology aficionados alike. This elegantly crafted platform serves as your virtual guide through the world of mixology, offering an immersive and user-friendly experience for discovering, creating, and sharing exquisite cocktail recipes.
 
