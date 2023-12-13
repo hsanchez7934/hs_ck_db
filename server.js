@@ -2,14 +2,14 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const bodyParser = require('body-parser')
-console.log(process.env)
-if (process.env.NODE_ENV === 'production') {
-	require('dotenv').config({
-		path: `${__dirname}/.env.${process.env.NODE_ENV}`
-	})
-} else {
-	require('dotenv').config()
-}
+require('dotenv').config()
+
+// if (process.env.NODE_ENV === 'production') {
+// 	require('dotenv').config({
+// 		path: `${__dirname}/.env.production`
+// 	})
+// } else {
+// }
 
 const requireHTTPS = (request, response, next) => {
 	// eslint-disable-next-line
@@ -33,7 +33,7 @@ app.listen(app.get('port'), () => {
 	console.log(`${app.locals.title} is running on ${app.get('port')}.`)
 })
 
-app.get('/', function (req, res) {
+app.get('/*', function (req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 

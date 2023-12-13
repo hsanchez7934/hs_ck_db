@@ -4,30 +4,20 @@ import SkeletonLoader from '../components/Skeleton'
 import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
 import { debounce } from 'lodash'
 
-let baseUrl: any
-let apiKey: any
-
-if (process.env.NODE_ENV === 'development') {
-	baseUrl = process.env.REACT_APP_CK_DB_BASE_URL
-	apiKey = process.env.REACT_APP_CK_DB_KEY
-} else if (process.env.NODE_ENV === 'production') {
-	baseUrl = process.env.CK_DB_BASE_URL
-	apiKey = process.env.CK_DB_KEY
-}
-
 const HomePage = () => {
 	const infiniteScrollContainer = useRef()
 	const [items, setItems] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState(null)
-	const [scrollTop, setScrollTop] = useState(window.innerHeight - 64)
+	const [scrollTop, setScrollTop] = useState(((window.innerHeight - 64) / 2) - 100)
 
 	const fetchData = async () => {
 		setIsLoading(true)
 		setError(null)
+
 		try {
 			const response = await axios.get(
-				`${baseUrl}${apiKey}/randomselection.php`
+				`${process.env.REACT_APP_CK_DB_BASE_URL}${process.env.REACT_APP_CK_DB_KEY}/randomselection.php`
 			)
 			const {drinks} = response.data
 			// @ts-expect-error
@@ -40,7 +30,7 @@ const HomePage = () => {
 		}
 	}
 
-	const debounced = debounce(fetchData, 1500)
+	const debounced = debounce(fetchData, 2000)
 
 	useEffect(() => {
 		const copy = infiniteScrollContainer.current
@@ -48,7 +38,7 @@ const HomePage = () => {
 			// @ts-expect-error
 			const containerScrollTop = infiniteScrollContainer.current.scrollTop
 			if (containerScrollTop > scrollTop) {
-				setScrollTop(scrollTop + window.innerHeight - 64)
+				setScrollTop(scrollTop + (window.innerHeight - 64))
 				debounced()
 			}
 		}

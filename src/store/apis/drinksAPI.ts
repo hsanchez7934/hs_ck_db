@@ -1,20 +1,10 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 import {DrinksDataResponse} from '../../types'
 
-let baseUrl
-let apiKey
-if (process.env.NODE_ENV === 'development') {
-	baseUrl = process.env.REACT_APP_CK_DB_BASE_URL
-	apiKey = process.env.REACT_APP_CK_DB_KEY
-} else if (process.env.NODE_ENV === 'production') {
-	baseUrl = process.env.CK_DB_BASE_URL
-	apiKey = process.env.CK_DB_KEY
-}
-
 const drinksAPI = createApi({
 	reducerPath: 'drinks',
 	baseQuery: fetchBaseQuery({
-		baseUrl: `${baseUrl}${apiKey}/`
+		baseUrl: `${process.env.REACT_APP_CK_DB_BASE_URL}${process.env.REACT_APP_CK_DB_KEY}/`
 	}),
 	endpoints: (builder) => {
 		return {
