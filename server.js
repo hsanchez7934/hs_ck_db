@@ -4,13 +4,6 @@ const path = require('path')
 const bodyParser = require('body-parser')
 require('dotenv').config()
 
-// if (process.env.NODE_ENV === 'production') {
-// 	require('dotenv').config({
-// 		path: `${__dirname}/.env.production`
-// 	})
-// } else {
-// }
-
 const requireHTTPS = (request, response, next) => {
 	// eslint-disable-next-line
 	if (request.header('x-forwarded-proto') != 'https') {
