@@ -261,13 +261,7 @@ const DrinkCard = (props: Props) => {
 	)
 
 	const mobileCard = (
-		<div
-			style={{
-				height: '100%',
-				overflow: window.innerHeight <= 650 ? 'scroll' : 'hidden',
-				backgroundColor: '#000'
-			}}
-		>
+		<div style={{height: '100%', overflow: 'hidden', backgroundColor: '#000'}}>
 			<div
 				className="mobileDrinkCardImage"
 				style={{backgroundImage: `url(${drink?.strDrinkThumb})`, fontFamily: primaryFont}}
@@ -291,10 +285,7 @@ const DrinkCard = (props: Props) => {
 						{renderedTags}
 					</div>
 				</div>
-				<div
-					className="mobileDrinkCardActionBtnsContainer"
-					style={{height: window.innerHeight <= 650 ? '60px' : '100px'}}
-				>
+				<div className="mobileDrinkCardActionBtnsContainer">
 					<CardActions
 						sx={{
 							padding: 0,
