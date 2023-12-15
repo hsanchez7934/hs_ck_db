@@ -25,4 +25,4 @@ Introducing Cocktail Explorer, a sophisticated web application designed for cock
 - Node.js
 - Express.js
 - Database powered by the [Cocktail DB](https://www.thecocktaildb.com/)
-- Hosted to Heroku
+- Hosted on Heroku

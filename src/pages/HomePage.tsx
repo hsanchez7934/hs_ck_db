@@ -2,14 +2,14 @@ import {useState, useEffect, useRef} from 'react'
 import axios from 'axios'
 import SkeletonLoader from '../components/Skeleton'
 import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
-import { debounce } from 'lodash'
+import {debounce} from 'lodash'
 
 const HomePage = () => {
 	const infiniteScrollContainer = useRef()
 	const [items, setItems] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState(null)
-	const [scrollTop, setScrollTop] = useState(((window.innerHeight - 64) / 2) - 100)
+	const [stateScrollTop, setStateScrollTop] = useState((window.innerHeight - 64) / 2 - 100)
 
 	const fetchData = async () => {
 		setIsLoading(true)
@@ -36,9 +36,9 @@ const HomePage = () => {
 		const copy = infiniteScrollContainer.current
 		const handleScroll = () => {
 			// @ts-expect-error
-			const containerScrollTop = infiniteScrollContainer.current.scrollTop
-			if (containerScrollTop > scrollTop) {
-				setScrollTop(scrollTop + (window.innerHeight - 64))
+			const {scrollTop} = infiniteScrollContainer.current
+			if (scrollTop > stateScrollTop) {
+				setStateScrollTop(scrollTop + (window.innerHeight - 64))
 				debounced()
 			}
 		}
@@ -46,11 +46,26 @@ const HomePage = () => {
 		infiniteScrollContainer.current?.addEventListener('scroll', handleScroll)
 		// @ts-expect-error
 		return () => copy.removeEventListener('scroll', handleScroll)
-	}, [scrollTop, debounced])
+	}, [stateScrollTop, debounced])
 
 	useEffect(() => {
 		fetchData()
 	}, [])
+
+	const handleScroll = async () => {
+		if (window.innerWidth < 950) {
+			// @ts-expect-error
+			const {scrollTop, scrollHeight} = infiniteScrollContainer?.current
+			if (scrollTop === 0) {
+				const pastScroll = scrollHeight
+				// await props.fecthMoreChat()
+				// @ts-expect-error
+				const currentScroll = (await infiniteScrollContainer?.current?.scrollHeight) - pastScroll
+				// @ts-expect-error
+				await infiniteScrollContainer?.current.scrollTo(0, currentScroll)
+			}
+		}
+	}
 
 	const content = <DrinksImageList drinksData={items} />
 	let notice = <></>
@@ -58,12 +73,15 @@ const HomePage = () => {
 		notice = <SkeletonLoader />
 	} else if (error) {
 		notice = <div>Error...</div>
-	} else {
 	}
 
 	return (
+		<div
 		// @ts-expect-error
-		<div ref={infiniteScrollContainer} style={{overflow: 'auto', height: 'calc(100% - 64px)'}}>
+			ref={infiniteScrollContainer}
+			style={{overflow: 'auto', height: 'calc(100% - 64px)'}}
+			onScroll={handleScroll}
+		>
 			{content}
 			{notice}
 		</div>
