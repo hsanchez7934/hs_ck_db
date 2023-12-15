@@ -19,6 +19,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import SideBarListItem from '../SideBarListItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
+import MobileHomePageHeader from '../MobileHomePageHeader/MobileHomePageHeader'
 
 const drawerWidth = 240
 const paths = [
@@ -136,7 +137,10 @@ const SideBar: React.FC = () => {
 	const isSearchByNamePath = currentPath.split(' ')[0] === '/search/byname'
 	const isSearcByIngredientPath = currentPath.split(' ')[0] === '/search/byingredient'
 	const isSearchBySpiritsPath = currentPath.split(' ')[0] === '/search/byspirit'
+	const isRootPath = currentPath.split(' ')[0] === '/'
 	const renderSpiritsHeaderDropdown = window.innerWidth < 800 && isSearchBySpiritsPath
+	const renderMobileHomePageHeader = window.innerWidth < 800 && isRootPath
+
 	return (
 		<Box sx={{display: 'flex', height: '100vh'}}>
 			<CssBaseline />
@@ -160,6 +164,7 @@ const SideBar: React.FC = () => {
 					{isSearchByNamePath && searchResultsText}
 					{isSearcByIngredientPath && <HeaderIngredientsDropDown />}
 					{renderSpiritsHeaderDropdown && <HeaderSpiritsDropDown />}
+					{renderMobileHomePageHeader && <MobileHomePageHeader />}
 				</Toolbar>
 			</AppBar>
 			{navBarOpen && (

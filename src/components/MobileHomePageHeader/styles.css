@@ -1,0 +1,31 @@
+.mobileHomePageHeaderContainer {
+	color: #000;
+	height: 100%;
+	width: 80%;
+	display: flex;
+	align-items: center;
+}
+
+.mobileHomePageHeaderLabel {
+	margin: 0px 10px;
+	color: #fff;
+}
+
+.mobileHomePageHeaderBtn {
+	width: auto;
+	height: auto;
+	background-color: inherit;
+	font-size: 20px;
+	padding: 7px 10px;
+	color: #fff;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid #000;
+}
+
+.mobileHomePageHeaderBtn:hover {
+	background-color: #fff;
+	color: #000;
+	cursor: pointer;
+}

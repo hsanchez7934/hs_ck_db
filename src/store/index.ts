@@ -14,6 +14,7 @@ import { updateDrinkMap , drinkPagerReducer} from '../slices/drinkPagerSlice'
 import { updateDrinksByIngredient, ingredientsDrinksReducer } from '../slices/ingredientsDrinksSlice'
 import { updateSelectedSpirit, spiritsDrinkReducer } from '../slices/spiritsDrinksSlice'
 import { updateTriggerRender, savedDrinkReducer } from '../slices/savedDrinkSlice'
+import { updateRenderNextSetOfDrinks, mobileHomePageReducer } from '../slices/mobileHomePageSlice'
 
 export const store = configureStore({
 	reducer: {
@@ -23,7 +24,8 @@ export const store = configureStore({
 		drinkPagerMap: drinkPagerReducer,
 		drinksByIngredient: ingredientsDrinksReducer,
 		spiritsPageState: spiritsDrinkReducer,
-		savedDrinkState: savedDrinkReducer
+		savedDrinkState: savedDrinkReducer,
+		mobileHomePageState: mobileHomePageReducer
 	},
 	middleware: (getDefaultMiddleware) => {
 		return getDefaultMiddleware().concat(drinksAPI.middleware)
@@ -56,5 +58,6 @@ export {
 	updateDrinkMap,
 	updateDrinksByIngredient,
 	updateSelectedSpirit,
-	updateTriggerRender
+	updateTriggerRender,
+	updateRenderNextSetOfDrinks
 }
