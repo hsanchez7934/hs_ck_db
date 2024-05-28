@@ -123,7 +123,7 @@ const DrinkCard = (props: Props) => {
 		const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
 		window.navigator.clipboard.writeText(path).then(
 			() => {
-				toggleDialog('green', 'The url for this drink recipe has been copied to your clipboard!')
+				toggleDialog('green', 'Link copied to clipboard!')
 			},
 			() => {
 				toggleDialog('red', 'Oops, something went wrong! Please try again.')
