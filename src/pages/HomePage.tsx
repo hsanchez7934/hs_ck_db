@@ -61,7 +61,6 @@ const HomePage = () => {
 
 	useEffect(() => {
 		if (window.innerWidth < 800) {
-			console.log('use effect 2')
 			fetchData(true)
 		} else {
 			fetchData(false)

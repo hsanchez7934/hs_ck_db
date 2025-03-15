@@ -11,8 +11,6 @@ import {store} from './store'
 import {BrowserRouter} from 'react-router-dom'
 import {Auth0Provider} from '@auth0/auth0-react'
 
-console.log(process.env.REACT_APP_AUTH0_DOMAIN)
-console.log(process.env.REACT_APP_CK_DB_BASE_URL)
 const element = document.getElementById('root') as HTMLElement
 const root = ReactDOM.createRoot(element)
 

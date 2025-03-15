@@ -47,8 +47,6 @@ const searchPaths = [
 const SideBar: React.FC = () => {
 	const {searchKeyword, isKeywordSearch} = useAppSelector(({searchDrinks}) => searchDrinks)
 	const {isAuthenticated, user, isLoading} = useAuth0()
-	console.log(user)
-	console.log(useAuth0())
 	const [navBarOpen, setNavBarOpen] = React.useState(false)
 	const [currentPath, setCurrentPath] = React.useState('')
 	const [showSearchLinks, setShowSearchLinks] = React.useState(false)
