@@ -38,6 +38,7 @@ const DropDown = (props: Props) => {
 			{renderedLabel}
 			<select
 				style={{fontFamily: primaryFont, color: '#fff'}}
+				// @ts-expect-error
 				placeholder={placeholderText || ''}
 				onChange={handleOnChange}
 				value={dropdownValue}
