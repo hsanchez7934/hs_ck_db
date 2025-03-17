@@ -1,5 +1,5 @@
 {
-  "name": "cocktails_db",
+  "name": "the_cocktail_catalog",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
