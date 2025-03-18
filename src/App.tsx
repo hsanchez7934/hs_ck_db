@@ -1,3 +1,5 @@
+import React from 'react'
+import { AuthenticationGuard } from './components/authentication-guard'
 import './index.css'
 import {Routes, Route, useLocation} from 'react-router-dom'
 import DrinkModal from './components/DrinkModal'
@@ -27,7 +29,8 @@ const App = (): JSX.Element => {
 					<Route path="/search/byspirit" element={<SearchBySpiritsPage />} />
 					<Route path="/search/byingredient" element={<SearchByIngredientPage />} />
 					<Route path="/search/nonalcoholic" element={<NonAlcoholicDrinksPage />} />
-					<Route path="/saveddrinks" element={<SavedDrinksPage />} />
+					{/* <Route path="/saveddrinks" element={<SavedDrinksPage />} /> */}
+					<Route path="/saveddrinks" element={<AuthenticationGuard component={SavedDrinksPage} path='saveddrinks' />} />
 					<Route path="*" element={<NoMatchPage />} />
 				</Route>
 			</Routes>

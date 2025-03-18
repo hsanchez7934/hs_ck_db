@@ -1,3 +1,4 @@
+import React from 'react'
 import {primaryFont} from '../fonts/fonts'
 
 type Props = {isSavedDrinksPage?: boolean}

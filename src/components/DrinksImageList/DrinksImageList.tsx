@@ -1,4 +1,5 @@
 import './styles.css'
+import React from 'react'
 import {DrinkDataPoint} from '../../types'
 import {Link, useLocation} from 'react-router-dom'
 import {updateIsModalOpen, updateModalDrink, updateDrinkMap} from '../../store'

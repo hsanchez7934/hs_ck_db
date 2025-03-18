@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef, useCallback} from 'react'
+import React, {useState, useEffect, useRef, useCallback} from 'react'
 import axios from 'axios'
 import SkeletonLoader from '../components/Skeleton'
 import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
