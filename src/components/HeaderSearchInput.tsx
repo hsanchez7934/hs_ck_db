@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useFetchDrinksByKeywordQuery} from '../store'
 import {useAppDispatch} from '../store/hooks'
 import {

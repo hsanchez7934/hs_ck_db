@@ -3,13 +3,11 @@ import {active} from '../../colors/colors'
 
 import * as React from 'react'
 import {Link, Outlet, useLocation} from 'react-router-dom'
-import {useAuth0} from '@auth0/auth0-react'
 import {useAppSelector} from '../../store/hooks'
 
 import {FaCaretDown, FaCaretLeft, FaX} from 'react-icons/fa6'
 import {primaryFont} from '../../fonts/fonts'
 import AppBar from '@mui/material/AppBar'
-import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
 import Divider from '@mui/material/Divider'
@@ -19,15 +17,12 @@ import HeaderSpiritsDropDown from '../HeaderSpiritsDropDown'
 import HeaderSearchInput from '../HeaderSearchInput'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
-import LoginButton from '../LoginButton/LoginButton'
-import LogoutButton from '../LogoutButton/LogoutButton'
-import Menu from '@mui/material/Menu'
 import MenuIcon from '@mui/icons-material/Menu'
+import MobileHomePageHeader from '../MobileHomePageHeader/MobileHomePageHeader'
 import SideBarListItem from '../SideBarListItem'
 import Toolbar from '@mui/material/Toolbar'
-import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import MobileHomePageHeader from '../MobileHomePageHeader/MobileHomePageHeader'
+import UserMenu from '../UserMenu/UserMenu'
 
 const drawerWidth = 240
 const paths = [
@@ -46,11 +41,9 @@ const searchPaths = [
 
 const SideBar: React.FC = () => {
 	const {searchKeyword, isKeywordSearch} = useAppSelector(({searchDrinks}) => searchDrinks)
-	const {isAuthenticated, user, isLoading} = useAuth0()
 	const [navBarOpen, setNavBarOpen] = React.useState(false)
 	const [currentPath, setCurrentPath] = React.useState('')
 	const [showSearchLinks, setShowSearchLinks] = React.useState(false)
-	const [anchorElUser, setAnchorElUser] = React.useState(null)
 
 	const handleSearchLinks = () => {
 		setShowSearchLinks(!showSearchLinks)
@@ -150,31 +143,6 @@ const SideBar: React.FC = () => {
 	const renderSpiritsHeaderDropdown = window.innerWidth < 800 && isSearchBySpiritsPath
 	const renderMobileHomePageHeader = window.innerWidth < 800 && isRootPath
 
-	const handleOnUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-		// @ts-expect-error
-		setAnchorElUser(event.currentTarget)
-	}
-
-	const handleCloseUserMenu = () => {
-		setAnchorElUser(null)
-	}
-
-	const renderAuthButtons = () => {
-		const button = isAuthenticated ? <LogoutButton /> : <LoginButton />
-		return (
-			<Menu
-				sx={{mt: '45px'}}
-				id="userSettingMenu"
-				anchorEl={anchorElUser}
-				anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-				open={Boolean(anchorElUser)}
-				onClose={handleCloseUserMenu}
-			>
-				{button}
-			</Menu>
-		)
-	}
-
 	return (
 		<Box sx={{display: 'flex', height: '100vh'}}>
 			<CssBaseline />
@@ -199,14 +167,7 @@ const SideBar: React.FC = () => {
 					{isSearcByIngredientPath && <HeaderIngredientsDropDown />}
 					{renderSpiritsHeaderDropdown && <HeaderSpiritsDropDown />}
 					{renderMobileHomePageHeader && <MobileHomePageHeader />}
-					<Box sx={{flexGrow: 1, display: 'flex', justifyContent: 'flex-end'}}>
-						<Tooltip title="Open settings">
-							<IconButton onClick={handleOnUserMenu} sx={{p: 0}}>
-								<Avatar alt="User image" src={isAuthenticated ? user?.picture : ''} />
-							</IconButton>
-						</Tooltip>
-						{renderAuthButtons()}
-					</Box>
+					<UserMenu />
 				</Toolbar>
 			</AppBar>
 			{navBarOpen && (

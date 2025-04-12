@@ -14,9 +14,11 @@ import SearchByNamePage from './pages/SearchByNamePage'
 import SearchBySpiritsPage from './pages/SearchBySpiritsPage'
 import SearchByIngredientPage from './pages/SearchByIngredientPage'
 
+import './firebase/firebaseConfig'
+
 const App = (): JSX.Element => {
-	let location = useLocation()
-	let state = location.state as {backgroundLocation?: Location}
+	const location = useLocation()
+	const state = location.state as {backgroundLocation?: Location}
 
 	return (
 		<div className="full">
