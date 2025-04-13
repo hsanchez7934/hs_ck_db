@@ -31,7 +31,6 @@ const App = (): JSX.Element => {
 					<Route path="/search/byspirit" element={<SearchBySpiritsPage />} />
 					<Route path="/search/byingredient" element={<SearchByIngredientPage />} />
 					<Route path="/search/nonalcoholic" element={<NonAlcoholicDrinksPage />} />
-					{/* <Route path="/saveddrinks" element={<SavedDrinksPage />} /> */}
 					<Route path="/saveddrinks" element={<AuthenticationGuard component={SavedDrinksPage} path='saveddrinks' />} />
 					<Route path="*" element={<NoMatchPage />} />
 				</Route>

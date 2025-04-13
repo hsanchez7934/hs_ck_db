@@ -17,7 +17,6 @@ interface Props {
 
 const setGridColumns = (width: number) => {
 	let columns = 4
-
 	if (width < 500) {
 		columns = 1
 	} else if (width < 700) {
@@ -32,7 +31,7 @@ const DrinksImageList = (props: Props) => {
 	const windowWidth = window.innerWidth
 	const {drinksData} = props
 	const [renderData, setRenderData] = useState([])
-	let location = useLocation()
+	const location = useLocation()
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
@@ -59,11 +58,11 @@ const DrinksImageList = (props: Props) => {
 				currentID = nextID
 				nextID = generateUUID()
 
-				// @ts-expect-error
+				// @ts-expect-error generic
 				map[data.drinkMapID] = node
 			}
 
-			// @ts-expect-error
+			// @ts-expect-error generic
 			setRenderData(drinks)
 			dispatch(updateDrinkMap(map))
 		}

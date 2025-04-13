@@ -10,11 +10,11 @@ import {
 	updateSearchKeyword
 } from '../slices/searchDrinksSlice'
 import {updateIsModalOpen, updateModalDrink, modalDrinkReducer} from '../slices/modalDrinkSlice'
-import { updateDrinkMap , drinkPagerReducer} from '../slices/drinkPagerSlice'
-import { updateDrinksByIngredient, ingredientsDrinksReducer } from '../slices/ingredientsDrinksSlice'
-import { updateSelectedSpirit, spiritsDrinkReducer } from '../slices/spiritsDrinksSlice'
-import { updateTriggerRender, savedDrinkReducer } from '../slices/savedDrinkSlice'
-import { updateRenderNextSetOfDrinks, mobileHomePageReducer } from '../slices/mobileHomePageSlice'
+import {updateDrinkMap, drinkPagerReducer} from '../slices/drinkPagerSlice'
+import {updateDrinksByIngredient, ingredientsDrinksReducer} from '../slices/ingredientsDrinksSlice'
+import {updateSelectedSpirit, spiritsDrinkReducer} from '../slices/spiritsDrinksSlice'
+import {updateTriggerRender, updateUserSavedDrinks, updateGetFreshUpdate, savedDrinkReducer} from '../slices/savedDrinkSlice'
+import {updateRenderNextSetOfDrinks, mobileHomePageReducer} from '../slices/mobileHomePageSlice'
 
 export const store = configureStore({
 	reducer: {
@@ -59,5 +59,7 @@ export {
 	updateDrinksByIngredient,
 	updateSelectedSpirit,
 	updateTriggerRender,
-	updateRenderNextSetOfDrinks
+	updateRenderNextSetOfDrinks,
+	updateUserSavedDrinks,
+	updateGetFreshUpdate
 }

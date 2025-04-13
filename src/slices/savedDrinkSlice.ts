@@ -2,10 +2,14 @@ import {createSlice} from '@reduxjs/toolkit'
 
 interface SavedDrinkState {
 	triggerRender: boolean;
+	userSavedDrinks: string[]
+	getFreshUpdate: boolean
 }
 
 const initialState: SavedDrinkState = {
-	triggerRender: false
+	triggerRender: false,
+	userSavedDrinks: [],
+	getFreshUpdate: true
 }
 
 const savedDrinkSlice = createSlice({
@@ -14,9 +18,15 @@ const savedDrinkSlice = createSlice({
 	reducers: {
 		updateTriggerRender: (state, action: {type: string; payload: any}) => {
 			state.triggerRender = action.payload
+		},
+		updateUserSavedDrinks: (state, action: {type: string; payload: any}) => {
+			state.userSavedDrinks = action.payload
+		},
+		updateGetFreshUpdate: (state, action: {type: string; payload: any}) => {
+			state.getFreshUpdate = action.payload
 		}
 	}
 })
 
 export const savedDrinkReducer = savedDrinkSlice.reducer
-export const {updateTriggerRender} = savedDrinkSlice.actions
+export const {updateTriggerRender, updateUserSavedDrinks, updateGetFreshUpdate} = savedDrinkSlice.actions

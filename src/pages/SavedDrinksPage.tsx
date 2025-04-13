@@ -1,25 +1,26 @@
+import React, {useEffect, useState} from 'react'
 import DrinkImageList from '../components/DrinksImageList/DrinksImageList'
-import DrinkLocalStorage from '../helper-functions/drinkLocalStorage'
-import {useEffect, useState} from 'react'
 import NoDrinkDataNotice from '../components/NoDrinkData'
-import { useAppSelector, useAppDispatch } from '../store/hooks'
-import { updateTriggerRender } from '../store'
+import {useAppSelector, useAppDispatch} from '../store/hooks'
+import {useAuth0} from '@auth0/auth0-react'
+import {updateTriggerRender} from '../store'
 
 const SavedDrinksPage = () => {
+	const {user} = useAuth0()
 	const [dataToRender, setDataToRender] = useState([])
-	const {triggerRender} = useAppSelector(({savedDrinkState}) => savedDrinkState)
+	const {triggerRender, userSavedDrinks} = useAppSelector(
+		({savedDrinkState}) => savedDrinkState
+	)
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
-		const drinkStorage = new DrinkLocalStorage()
-		drinkStorage.init()
-		const drinkData = drinkStorage.getDrinkData()
-		// @ts-expect-error
-		setDataToRender(drinkData)
+		// @ts-expect-error generic
+		setDataToRender(userSavedDrinks)
+
 		if (triggerRender) {
 			dispatch(updateTriggerRender(false))
 		}
-	}, [triggerRender, dispatch])
+	}, [triggerRender, user, userSavedDrinks])
 
 	let content
 	if (dataToRender.length > 0) {

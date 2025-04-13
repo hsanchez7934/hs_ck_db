@@ -8,7 +8,6 @@ interface Props {
 }
 
 export const AuthenticationGuard = ({component, path}: Props) => {
-  console.log(`${window.location.origin}/${path}`)
 	const Component = withAuthenticationRequired(component, {
 		onRedirecting: () => (
 			<div className="page-layout">

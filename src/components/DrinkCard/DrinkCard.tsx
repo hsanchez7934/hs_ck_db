@@ -1,6 +1,6 @@
 import './styles.css'
 import React from 'react'
-import {useState, useEffect, useMemo} from 'react'
+import {useState, useEffect} from 'react'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
@@ -17,8 +17,11 @@ import {generatePath} from 'react-router-dom'
 import {useAppSelector, useAppDispatch} from '../../store/hooks'
 import {updateModalDrink} from '../../store'
 import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
-import DrinkLocalStorage from '../../helper-functions/drinkLocalStorage'
 import {updateTriggerRender} from '../../store'
+import {useAuth0} from '@auth0/auth0-react'
+
+import {saveUserDrinkInDB} from '../../firebase/firebase-user-drink-storage'
+import {updateUserSavedDrinks, updateGetFreshUpdate} from '../../store'
 
 import {
 	FaVideo,
@@ -40,8 +43,7 @@ const iconStyles = {
 }
 
 const DrinkCard = (props: Props) => {
-	const drinkStorage = useMemo(() => new DrinkLocalStorage(), [])
-	drinkStorage.init()
+	const {isAuthenticated, user} = useAuth0()
 
 	const {drink} = props
 	const [dialogText, setDialogText] = useState('')
@@ -51,14 +53,23 @@ const DrinkCard = (props: Props) => {
 
 	const dispatch = useAppDispatch()
 	const {drinkPagerMap} = useAppSelector(({drinkPagerMap}) => drinkPagerMap)
+	const {getFreshUpdate, userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
+
+	const isDrinkSaved = (drinkID: string | null | undefined) => {
+		if (drinkID) {
+			const found = userSavedDrinks?.find((drink: any) => drink.idDrink === drinkID)
+			return found
+		}
+		return false
+	}
 
 	useEffect(() => {
-		if (drinkStorage.isDrinkSaved(drink?.idDrink)) {
+		if (isDrinkSaved(drink?.idDrink)) {
 			setToggleSaved(true)
 		} else {
 			setToggleSaved(false)
 		}
-	}, [drink?.idDrink, drinkStorage, drinkPagerMap])
+	}, [drink?.idDrink, drinkPagerMap, isAuthenticated, user])
 
 	let counter = 1
 	const ingredients = []
@@ -142,11 +153,22 @@ const DrinkCard = (props: Props) => {
 		dispatch(updateTriggerRender(true))
 		setToggleSaved(!toggleSaved)
 		if (!toggleSaved) {
-			drinkStorage.saveDrink(drink)
-			toggleDialog('green', 'Saved to favorites!')
+			const drinks = [...userSavedDrinks]
+			drinks.push(drink)
+			saveUserDrinkInDB(user?.sub, drinks).then(() => {
+				toggleDialog('green', 'Saved to favorites!')
+				dispatch(updateUserSavedDrinks(drinks))
+				dispatch(updateGetFreshUpdate(true))
+			})
 		} else {
-			drinkStorage.removeDrink(drink.idDrink)
-			toggleDialog('red', 'Removed from favorites!')
+			const filtered = userSavedDrinks.filter(
+				(savedDrink: any) => savedDrink.idDrink !== drink.idDrink
+			)
+			saveUserDrinkInDB(user?.sub, filtered).then(() => {
+				dispatch(updateUserSavedDrinks(filtered))
+				dispatch(updateGetFreshUpdate(true))
+				toggleDialog('red', 'Removed from favorites!')
+			})
 		}
 	}
 

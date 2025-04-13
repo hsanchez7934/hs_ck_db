@@ -1,5 +1,5 @@
 import {doc, setDoc, getDoc} from 'firebase/firestore'
-import {firestoreDB} from '../firebase/firebaseConfig'
+import {firestoreDB} from './firebaseConfig'
 
 interface UserProps {
 	email: string
