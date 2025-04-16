@@ -53,7 +53,7 @@ const DrinkCard = (props: Props) => {
 
 	const dispatch = useAppDispatch()
 	const {drinkPagerMap} = useAppSelector(({drinkPagerMap}) => drinkPagerMap)
-	const {getFreshUpdate, userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
+	const {userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
 
 	const isDrinkSaved = (drinkID: string | null | undefined) => {
 		if (drinkID) {

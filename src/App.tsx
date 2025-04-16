@@ -9,7 +9,7 @@ import Layout from './pages/Layout'
 import NoMatchPage from './pages/NoMatchPages'
 import NonAlcoholicDrinksPage from './pages/NonAlcoholicDrinksPage'
 import PopularDrinksPage from './pages/PopularDrinksPage'
-import SavedDrinksPage from './pages/SavedDrinksPage'
+import SavedDrinksPage from './pages/SavedDrinksPage/SavedDrinksPage'
 import SearchByNamePage from './pages/SearchByNamePage'
 import SearchBySpiritsPage from './pages/SearchBySpiritsPage'
 import SearchByIngredientPage from './pages/SearchByIngredientPage'
@@ -33,9 +33,9 @@ const App = (): JSX.Element => {
 					<Route path="/search/byspirit" element={<SearchBySpiritsPage />} />
 					<Route path="/search/byingredient" element={<SearchByIngredientPage />} />
 					<Route path="/search/nonalcoholic" element={<NonAlcoholicDrinksPage />} />
-					<Route path="/saveddrinks" element={protectedElem} />
+					{/* <Route path="/saveddrinks" element={protectedElem} /> */}
 					{/* <Route path="/saveddrinks" element={<AuthenticationGuard component={SavedDrinksPage} path='saveddrinks' />} /> */}
-					{/* <Route path="/saveddrinks" element={<SavedDrinksPage />} /> */}
+					<Route path="/saveddrinks" element={<SavedDrinksPage />} />
 					<Route path="*" element={<NoMatchPage />} />
 				</Route>
 			</Routes>

@@ -1,0 +1,21 @@
+#btn_loginFromSavedDrinksPage {
+	width: 150px;
+    height: 50px;
+	background-color: inherit;
+	border: none;
+	outline-color: #aaabb8;
+	color: #ececec;
+    font-size: 1.5em;
+}
+
+#btn_loginFromSavedDrinksPage:hover {
+	cursor: pointer;
+	background-color: #ececec;
+	color: black;
+}
+
+#btn_loginFromSavedDrinksPage:disabled {
+	cursor: not-allowed;
+	background-color: inherit;
+	color: #ececec;
+}
