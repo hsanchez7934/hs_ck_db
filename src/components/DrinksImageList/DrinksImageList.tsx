@@ -27,12 +27,25 @@ const setGridColumns = (width: number) => {
 	return columns
 }
 
+const removeSavedMapIDs = (drinksList: any) => {
+		if (drinksList[0]?.drinkMapID) {
+			const cleaned = drinksList.map((drink: any) => {
+				const newDrink = Object.assign({}, drink)
+				delete newDrink.drinkMapID
+				return newDrink
+			})
+			return cleaned
+		}
+		return drinksList
+}
+
 const DrinksImageList = (props: Props) => {
 	const windowWidth = window.innerWidth
 	const {drinksData} = props
 	const [renderData, setRenderData] = useState([])
 	const location = useLocation()
 	const dispatch = useAppDispatch()
+
 
 	useEffect(() => {
 		const setDrinkPagerMap = () => {
@@ -41,10 +54,11 @@ const DrinksImageList = (props: Props) => {
 			let previousID = null
 			let currentID = generateUUID()
 			let nextID = generateUUID()
-			for (let index = 0; index < drinksData.length; index++) {
-				const data = Object.assign({...drinksData[index], drinkMapID: currentID})
-				const previous = drinksData[index - 1] ? Object.assign({...drinksData[index - 1], drinkMapID: previousID}) : null
-				const next = drinksData[index + 1] ? Object.assign({...drinksData[index + 1], drinkMapID: nextID}) : null
+			const drinksDataToRender = removeSavedMapIDs(drinksData)
+			for (let index = 0; index < drinksDataToRender.length; index++) {
+				const data = Object.assign({...drinksDataToRender[index], drinkMapID: currentID})
+				const previous = drinksDataToRender[index - 1] ? Object.assign({...drinksDataToRender[index - 1], drinkMapID: previousID}) : null
+				const next = drinksDataToRender[index + 1] ? Object.assign({...drinksDataToRender[index + 1], drinkMapID: nextID}) : null
 
 				drinks.push(data)
 
@@ -61,7 +75,6 @@ const DrinksImageList = (props: Props) => {
 				// @ts-expect-error generic
 				map[data.drinkMapID] = node
 			}
-
 			// @ts-expect-error generic
 			setRenderData(drinks)
 			dispatch(updateDrinkMap(map))
