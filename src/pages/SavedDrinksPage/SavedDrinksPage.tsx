@@ -6,15 +6,13 @@ import {useAppSelector, useAppDispatch} from '../../store/hooks'
 import {useAuth0} from '@auth0/auth0-react'
 import {updateTriggerRender} from '../../store'
 
-import { primaryFont } from '../../fonts/fonts'
+import {primaryFont} from '../../fonts/fonts'
 
 const SavedDrinksPage = () => {
 	const {loginWithRedirect} = useAuth0()
-	const {user, isAuthenticated} = useAuth0()
+	const {user, isAuthenticated, isLoading} = useAuth0()
 	const [dataToRender, setDataToRender] = useState([])
-	const {triggerRender, userSavedDrinks} = useAppSelector(
-		({savedDrinkState}) => savedDrinkState
-	)
+	const {triggerRender, userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
@@ -25,7 +23,6 @@ const SavedDrinksPage = () => {
 			dispatch(updateTriggerRender(false))
 		}
 	}, [triggerRender, user, userSavedDrinks])
-
 
 	const renderLoginNotice = () => {
 		return (
@@ -39,7 +36,7 @@ const SavedDrinksPage = () => {
 					alignItems: 'center',
 					backgroundColor: '#000',
 					flexDirection: 'column',
-					fontFamily: primaryFont,
+					fontFamily: primaryFont
 				}}
 			>
 				<p
@@ -52,11 +49,14 @@ const SavedDrinksPage = () => {
 				>
 					You must sign in to view your saved drinks. Click the button below to sign in.
 				</p>
-				<button id='btn_loginFromSavedDrinksPage' onClick={() => loginWithRedirect()}>Sign In</button>
+				<button id="btn_loginFromSavedDrinksPage" onClick={() => loginWithRedirect()}>
+					Sign In
+				</button>
 			</div>
 		)
 	}
 
+	console.log('isLoading: ', isLoading)
 	let content
 	if (!isAuthenticated) {
 		content = renderLoginNotice()

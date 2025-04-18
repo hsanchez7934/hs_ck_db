@@ -1,5 +1,5 @@
 import React from 'react'
-import { AuthenticationGuard } from './components/authentication-guard'
+// import { AuthenticationGuard } from './components/authentication-guard'
 import './index.css'
 import {Routes, Route, useLocation} from 'react-router-dom'
 import DrinkModal from './components/DrinkModal'
@@ -16,7 +16,7 @@ import SearchByIngredientPage from './pages/SearchByIngredientPage'
 
 import './firebase/firebaseConfig'
 
-const protectedElem = <AuthenticationGuard component={SavedDrinksPage} path='saveddrinks' />
+// const protectedElem = <AuthenticationGuard component={SavedDrinksPage} path='saveddrinks' />
 
 const App = (): JSX.Element => {
 	const location = useLocation()

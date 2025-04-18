@@ -6,9 +6,11 @@ import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
+// import DialogTitle from '@mui/material/DialogTitle'
+// import Dialog from '@mui/material/Dialog'
 import Divider from '@mui/material/Divider'
 import DrinkTags from '../DrinkTags'
-import SimpleDialog from '../SimpleDialog'
+import SimpleDialog from '../SimpleDialog/SimpleDialog'
 import Typography from '@mui/material/Typography'
 import generateUUID from '../../uuid'
 import {DrinkDataPoint} from '../../types'
@@ -48,8 +50,10 @@ const DrinkCard = (props: Props) => {
 	const {drink} = props
 	const [dialogText, setDialogText] = useState('')
 	const [dialogTextColor, setDialogTextColor] = useState('')
-	const [openDialog, setOpenDialog] = useState(false)
+	const [openSavedStatedDialog, setOpenSavedStateDialog] = useState(false)
 	const [toggleSaved, setToggleSaved] = useState(false)
+
+	const [toggleLoginDialog, setToggleLoginDialog] = useState(false)
 
 	const dispatch = useAppDispatch()
 	const {drinkPagerMap} = useAppSelector(({drinkPagerMap}) => drinkPagerMap)
@@ -64,6 +68,7 @@ const DrinkCard = (props: Props) => {
 	}
 
 	useEffect(() => {
+		console.log('useEffect')
 		if (isDrinkSaved(drink?.idDrink)) {
 			setToggleSaved(true)
 		} else {
@@ -115,9 +120,9 @@ const DrinkCard = (props: Props) => {
 	const toggleDialog = (color: string, text: string) => {
 		setDialogTextColor(color)
 		setDialogText(text)
-		setOpenDialog(true)
+		setOpenSavedStateDialog(true)
 		setTimeout(() => {
-			setOpenDialog(false)
+			setOpenSavedStateDialog(false)
 		}, 1500)
 	}
 
@@ -150,25 +155,32 @@ const DrinkCard = (props: Props) => {
 	}
 
 	const handleSaveOnClick = (drink: any) => {
-		dispatch(updateTriggerRender(true))
-		setToggleSaved(!toggleSaved)
-		if (!toggleSaved) {
-			const drinks = [...userSavedDrinks]
-			drinks.push(drink)
-			saveUserDrinkInDB(user?.sub, drinks).then(() => {
-				toggleDialog('green', 'Saved to favorites!')
-				dispatch(updateUserSavedDrinks(drinks))
-				dispatch(updateGetFreshUpdate(true))
-			})
+		if (isAuthenticated) {
+			dispatch(updateTriggerRender(true))
+			setToggleSaved(!toggleSaved)
+			if (!toggleSaved) {
+				const drinks = [...userSavedDrinks]
+				drinks.push(drink)
+				saveUserDrinkInDB(user?.sub, drinks).then(() => {
+					toggleDialog('green', 'Saved to favorites!')
+					dispatch(updateUserSavedDrinks(drinks))
+					dispatch(updateGetFreshUpdate(true))
+				})
+			} else {
+				const filtered = userSavedDrinks.filter(
+					(savedDrink: any) => savedDrink.idDrink !== drink.idDrink
+				)
+				saveUserDrinkInDB(user?.sub, filtered).then(() => {
+					dispatch(updateUserSavedDrinks(filtered))
+					dispatch(updateGetFreshUpdate(true))
+					toggleDialog('red', 'Removed from favorites!')
+				})
+			}
 		} else {
-			const filtered = userSavedDrinks.filter(
-				(savedDrink: any) => savedDrink.idDrink !== drink.idDrink
-			)
-			saveUserDrinkInDB(user?.sub, filtered).then(() => {
-				dispatch(updateUserSavedDrinks(filtered))
-				dispatch(updateGetFreshUpdate(true))
-				toggleDialog('red', 'Removed from favorites!')
-			})
+			console.log('not authenticated')
+			console.log('toggleLoginDialog: ', toggleLoginDialog)
+			setToggleLoginDialog(true)
+			console.log('toggleLoginDialog: ', toggleLoginDialog)
 		}
 	}
 
@@ -338,9 +350,15 @@ const DrinkCard = (props: Props) => {
 						{renderedDetailedViewIcon}
 						{renderedVideoIcon}
 						<SimpleDialog
-							open={openDialog}
+							open={openSavedStatedDialog}
 							dialogTextColor={dialogTextColor}
 							dialogText={dialogText}
+							isLoginDialog={false}
+						/>
+						<SimpleDialog
+							open={toggleLoginDialog}
+							isLoginDialog={true}
+							onLoginDialogClose={() => console.log('test')}
 						/>
 					</CardActions>
 				</div>
@@ -423,10 +441,20 @@ const DrinkCard = (props: Props) => {
 						{renderedDetailedViewIcon}
 						{renderedVideoIcon}
 						<SimpleDialog
-							open={openDialog}
+							open={openSavedStatedDialog}
 							dialogTextColor={dialogTextColor}
 							dialogText={dialogText}
+							isLoginDialog={false}
 						/>
+						{
+							toggleLoginDialog && <SimpleDialog
+								open={toggleLoginDialog}
+								// dialogTextColor={dialogTextColor}
+								// dialogText={dialogText}
+								isLoginDialog={true}
+								onLoginDialogClose={() => setToggleLoginDialog(false)}
+							/>
+						}
 					</CardActions>
 				</CardContent>
 			</CardContent>
