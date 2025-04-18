@@ -1,3 +1,4 @@
+import React from 'react'
 import './styles.css'
 import {FaSearch} from 'react-icons/fa'
 
@@ -6,10 +7,11 @@ interface Props {
 	handleOnInput: (event: React.FormEvent<HTMLInputElement>) => void,
 	inputValue: string;
 	isDisabled: boolean;
+	handleOnKeyDown: (event: React.FormEvent<HTMLInputElement>) => void;
 }
 
 const SearchInput = (props: Props) => {
-	const {handleOnClick, handleOnInput, inputValue, isDisabled} = props
+	const {handleOnClick, handleOnInput, inputValue, isDisabled, handleOnKeyDown} = props
 
 	return (
 		<div className="search-input-container">
@@ -17,6 +19,7 @@ const SearchInput = (props: Props) => {
 				type="text"
 				placeholder="Search for a cocktail..."
 				onInput={(event) => handleOnInput(event)}
+				onKeyDown={(event) => handleOnKeyDown(event)}
 				value={inputValue}
 			/>
 			<button

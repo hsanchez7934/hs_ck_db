@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react'
-import {useAppSelector, useAppDispatch} from '../store/hooks'
-import {updateIsKeywordSearch, updateSearchKeyword} from '../store'
 import AlphtabetPicker from '../components/AlphabetPicker/AlphabetPicker'
 import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
 import NoDrinkDataNotice from '../components/NoDrinkData'
 import SkeletonLoader from '../components/Skeleton'
+import {useAppSelector, useAppDispatch} from '../store/hooks'
+import {updateIsKeywordSearch, updateSearchKeyword} from '../store'
 
 const SearchByNamePage = (): JSX.Element => {
 	const dispatch = useAppDispatch()

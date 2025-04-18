@@ -34,7 +34,7 @@ const HeaderSearchInput = (props: Props): JSX.Element => {
 		}
 	}, [dispatch, data, error, isFetching, isKeywordSearch])
 
-	const handleOnClick = () => {
+	const executeSearch = () => {
 		setSearchKeyword(inputValue)
 		setInputValue('')
 		dispatch(updateIsKeywordSearch(true))
@@ -46,12 +46,20 @@ const HeaderSearchInput = (props: Props): JSX.Element => {
 		setInputValue(value)
 	}
 
+	const handleOnKeyDown = (event: React.FormEvent<HTMLInputElement>) => {
+		// @ts-expect-error generic
+		if (inputValue.length > 0 && event.key === 'Enter') { 
+			executeSearch()
+		}
+	}
+
 	return (
 		<>
 			<SearchInput
 				inputValue={inputValue}
-				handleOnClick={handleOnClick}
+				handleOnClick={executeSearch}
 				handleOnInput={handleOnInput}
+				handleOnKeyDown={handleOnKeyDown}
 				isDisabled={!inputValue}
 			/>
 		</>

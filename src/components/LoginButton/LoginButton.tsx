@@ -13,7 +13,7 @@ const LoginButton: React.FC = () => {
 
 	return (
 		<MenuItem onClick={() => handleLogin()}>
-			<Typography textAlign="center">Login</Typography>
+			<Typography textAlign="center">Sign In</Typography>
 		</MenuItem>
 	)
 }

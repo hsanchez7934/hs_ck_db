@@ -6,7 +6,7 @@ const LogoutButton: React.FC = () => {
 	const {logout} = useAuth0()
 	return (
 		<MenuItem onClick={() => logout({logoutParams: {returnTo: window.location.origin}})}>
-			<Typography textAlign="center">Logout</Typography>
+			<Typography textAlign="center">Sign Out</Typography>
 		</MenuItem>
 	)
 }

@@ -35,7 +35,7 @@ const SimpleDialog = (props: SimpleDialogProps): JSX.Element => {
 	if (isLoginDialog) {
 		content = (
 			<Dialog open={open} sx={{fontFamily: primaryFont}}>
-				<DialogTitle>You must be signed in to be able to save drinks</DialogTitle>
+				<DialogTitle>You must be signed in to be able to save drinks.</DialogTitle>
 				<DialogActions>
 					<button className="btn_loginFromDrinkCard" onClick={handleSignInOnClick}>
 						Sign In
