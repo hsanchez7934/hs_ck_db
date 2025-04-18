@@ -15,6 +15,14 @@ const SavedDrinksPage = () => {
 	const {triggerRender, userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
 	const dispatch = useAppDispatch()
 
+	const handleLogin = async () => {
+		await loginWithRedirect({
+			appState: {
+				returnTo: window.location.origin + '/saveddrinks'
+			}
+		})
+	}
+
 	useEffect(() => {
 		// @ts-expect-error generic
 		setDataToRender(userSavedDrinks)
@@ -22,7 +30,7 @@ const SavedDrinksPage = () => {
 		if (triggerRender) {
 			dispatch(updateTriggerRender(false))
 		}
-	}, [triggerRender, user, userSavedDrinks])
+	}, [triggerRender, user, userSavedDrinks, dispatch])
 
 	const renderLoginNotice = () => {
 		return (
@@ -49,7 +57,7 @@ const SavedDrinksPage = () => {
 				>
 					You must sign in to view your saved drinks. Click the button below to sign in.
 				</p>
-				<button id="btn_loginFromSavedDrinksPage" onClick={() => loginWithRedirect()}>
+				<button id="btn_loginFromSavedDrinksPage" onClick={() => handleLogin()}>
 					Sign In
 				</button>
 			</div>

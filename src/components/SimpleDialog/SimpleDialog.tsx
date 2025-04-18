@@ -15,15 +15,20 @@ interface SimpleDialogProps {
 }
 
 const SimpleDialog = (props: SimpleDialogProps): JSX.Element => {
-	const {loginWithRedirect} = useAuth0()
+	const {loginWithRedirect, loginWithPopup} = useAuth0()
 	const {open, dialogText, dialogTextColor, isLoginDialog, onLoginDialogClose} = props
-	console.log(open)
-	console.log(onLoginDialogClose)
 
 	const handleSignInOnClick = () => {
 		if (onLoginDialogClose) {
 			onLoginDialogClose()
-			loginWithRedirect()
+			// loginWithRedirect()
+			loginWithPopup()
+		}
+	}
+
+	const handleCloseOnClick = () => {
+		if (onLoginDialogClose) {
+			onLoginDialogClose()
 		}
 	}
 
@@ -36,7 +41,7 @@ const SimpleDialog = (props: SimpleDialogProps): JSX.Element => {
 					<button className="btn_loginFromDrinkCard" onClick={handleSignInOnClick}>
 						Sign In
 					</button>
-					<button className="btn_loginFromDrinkCard" onClick={onLoginDialogClose}>
+					<button className="btn_loginFromDrinkCard" onClick={handleCloseOnClick}>
 						Cancel
 					</button>
 				</DialogActions>

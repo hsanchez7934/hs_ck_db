@@ -358,7 +358,7 @@ const DrinkCard = (props: Props) => {
 						<SimpleDialog
 							open={toggleLoginDialog}
 							isLoginDialog={true}
-							onLoginDialogClose={() => console.log('test')}
+							onLoginDialogClose={() => setToggleLoginDialog(false)}
 						/>
 					</CardActions>
 				</div>
