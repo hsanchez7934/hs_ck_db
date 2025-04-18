@@ -49,7 +49,7 @@ const SideBar: React.FC = () => {
 		setShowSearchLinks(!showSearchLinks)
 	}
 
-	let location = useLocation()
+	const location = useLocation()
 	React.useEffect(() => {
 		setCurrentPath(location.pathname)
 		if (currentPath.split(' ')[0].includes('search')) {

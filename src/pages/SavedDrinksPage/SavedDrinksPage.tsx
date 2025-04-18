@@ -10,7 +10,7 @@ import {primaryFont} from '../../fonts/fonts'
 
 const SavedDrinksPage = () => {
 	const {loginWithRedirect} = useAuth0()
-	const {user, isAuthenticated, isLoading} = useAuth0()
+	const {user, isAuthenticated} = useAuth0()
 	const [dataToRender, setDataToRender] = useState([])
 	const {triggerRender, userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
 	const dispatch = useAppDispatch()
@@ -40,7 +40,6 @@ const SavedDrinksPage = () => {
 					width: '100%',
 					display: 'flex',
 					justifyContent: 'center',
-					// alignItems: window.innerWidth < 600 ? 'start' :'center',
 					alignItems: 'center',
 					backgroundColor: '#000',
 					flexDirection: 'column',
@@ -64,7 +63,6 @@ const SavedDrinksPage = () => {
 		)
 	}
 
-	console.log('isLoading: ', isLoading)
 	let content
 	if (!isAuthenticated) {
 		content = renderLoginNotice()

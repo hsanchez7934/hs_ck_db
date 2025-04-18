@@ -13,7 +13,6 @@ import {Auth0Provider} from '@auth0/auth0-react'
 
 const element = document.getElementById('root') as HTMLElement
 const root = ReactDOM.createRoot(element)
-// const url = window.location.origin + '/saveddrinks'
 
 root.render(
 	<Auth0Provider

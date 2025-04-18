@@ -68,7 +68,6 @@ const DrinkCard = (props: Props) => {
 	}
 
 	useEffect(() => {
-		console.log('useEffect')
 		if (isDrinkSaved(drink?.idDrink)) {
 			setToggleSaved(true)
 		} else {
@@ -177,10 +176,7 @@ const DrinkCard = (props: Props) => {
 				})
 			}
 		} else {
-			console.log('not authenticated')
-			console.log('toggleLoginDialog: ', toggleLoginDialog)
 			setToggleLoginDialog(true)
-			console.log('toggleLoginDialog: ', toggleLoginDialog)
 		}
 	}
 

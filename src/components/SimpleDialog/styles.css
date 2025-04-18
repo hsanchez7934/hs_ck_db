@@ -1,10 +1,10 @@
 .btn_loginFromDrinkCard {
 	background-color: black;
-	width: 80px;
 	height: 40px;
 	border: none;
 	color: #ececec;
 	font-size: 1em;
+	padding: 5px;
 }
 
 .btn_loginFromDrinkCard:hover {

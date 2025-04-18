@@ -15,13 +15,12 @@ interface SimpleDialogProps {
 }
 
 const SimpleDialog = (props: SimpleDialogProps): JSX.Element => {
-	const {loginWithRedirect, loginWithPopup} = useAuth0()
+	const {loginWithPopup} = useAuth0()
 	const {open, dialogText, dialogTextColor, isLoginDialog, onLoginDialogClose} = props
 
 	const handleSignInOnClick = () => {
 		if (onLoginDialogClose) {
 			onLoginDialogClose()
-			// loginWithRedirect()
 			loginWithPopup()
 		}
 	}
