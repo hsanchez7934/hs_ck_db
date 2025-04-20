@@ -1,5 +1,4 @@
 import React from 'react'
-// import { AuthenticationGuard } from './components/authentication-guard'
 import './index.css'
 import {Routes, Route, useLocation} from 'react-router-dom'
 import DrinkModal from './components/DrinkModal'
@@ -16,8 +15,6 @@ import SearchByIngredientPage from './pages/SearchByIngredientPage'
 
 import './firebase/firebaseConfig'
 
-// const protectedElem = <AuthenticationGuard component={SavedDrinksPage} path='saveddrinks' />
-
 const App = (): JSX.Element => {
 	const location = useLocation()
 	const state = location.state as {backgroundLocation?: Location}
@@ -33,8 +30,6 @@ const App = (): JSX.Element => {
 					<Route path="/search/byspirit" element={<SearchBySpiritsPage />} />
 					<Route path="/search/byingredient" element={<SearchByIngredientPage />} />
 					<Route path="/search/nonalcoholic" element={<NonAlcoholicDrinksPage />} />
-					{/* <Route path="/saveddrinks" element={protectedElem} /> */}
-					{/* <Route path="/saveddrinks" element={<AuthenticationGuard component={SavedDrinksPage} path='saveddrinks' />} /> */}
 					<Route path="/saveddrinks" element={<SavedDrinksPage />} />
 					<Route path="*" element={<NoMatchPage />} />
 				</Route>

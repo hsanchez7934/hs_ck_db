@@ -6,8 +6,6 @@ import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
-// import DialogTitle from '@mui/material/DialogTitle'
-// import Dialog from '@mui/material/Dialog'
 import Divider from '@mui/material/Divider'
 import DrinkTags from '../DrinkTags'
 import SimpleDialog from '../SimpleDialog/SimpleDialog'
@@ -445,8 +443,6 @@ const DrinkCard = (props: Props) => {
 						{
 							toggleLoginDialog && <SimpleDialog
 								open={toggleLoginDialog}
-								// dialogTextColor={dialogTextColor}
-								// dialogText={dialogText}
 								isLoginDialog={true}
 								onLoginDialogClose={() => setToggleLoginDialog(false)}
 							/>

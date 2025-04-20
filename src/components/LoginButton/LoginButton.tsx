@@ -1,7 +1,7 @@
 import React from 'react'
 import {MenuItem, Typography} from '@mui/material'
 import {useAuth0} from '@auth0/auth0-react'
-import { useLocation } from 'react-router-dom'
+import {useLocation} from 'react-router-dom'
 
 const LoginButton: React.FC = () => {
 	const {loginWithRedirect} = useAuth0()
