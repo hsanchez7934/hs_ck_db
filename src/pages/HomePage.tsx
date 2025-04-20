@@ -58,7 +58,7 @@ const HomePage = () => {
 			// @ts-expect-error generic
 			return () => copy.removeEventListener('scroll', handleScroll)
 		}
-	}, [scrollTop, debounced, dispatch])
+	}, [scrollTop, debounced])
 
 	useEffect(() => {
 		if (window.innerWidth < 800) {
@@ -75,9 +75,7 @@ const HomePage = () => {
 	}, [renderNextSetOfDrinks, fetchData])
 
 	let content = <LoadingSpinner />
-	if (isLoading) {
-		content = <LoadingSpinner />
-	} else if (error) {
+	if (error) {
 		content = <NoDrinkDataNotice isErrorMessage={true} />
 	} else if (drinksDataToRender && drinksDataToRender.length > 0) {
 		content = <DrinksImageList drinksData={drinksDataToRender} />
