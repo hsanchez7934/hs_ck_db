@@ -6,9 +6,9 @@ import {useLocation} from 'react-router-dom'
 const LoginButton: React.FC = () => {
 	const {loginWithRedirect} = useAuth0()
 	const location = useLocation()
-
+	
 	const handleLogin = () => {
-		loginWithRedirect({appState: {returnTo: `${window.location.origin}/${location.pathname}`}})
+		loginWithRedirect({appState: {returnTo: `${window.location.origin}${location.pathname}`}})
 	}
 
 	return (
