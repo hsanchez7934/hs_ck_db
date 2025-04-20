@@ -5,45 +5,62 @@ import * as React from 'react'
 import {Link, Outlet, useLocation} from 'react-router-dom'
 import {useAppSelector} from '../../store/hooks'
 
-import {FaCaretDown, FaCaretLeft, FaX} from 'react-icons/fa6'
+import {FaCaretDown, FaCaretLeft, FaX, FaMartiniGlassEmpty} from 'react-icons/fa6'
 import {primaryFont} from '../../fonts/fonts'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
+import {Favorite} from '@mui/icons-material'
 import HeaderIngredientsDropDown from '../HeaderIngredientsDropDown'
 import HeaderSpiritsDropDown from '../HeaderSpiritsDropDown'
 import HeaderSearchInput from '../HeaderSearchInput'
+import {HomeRounded} from '@mui/icons-material'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import MenuIcon from '@mui/icons-material/Menu'
 import MobileHomePageHeader from '../MobileHomePageHeader/MobileHomePageHeader'
+import {Search} from '@mui/icons-material'
 import SideBarListItem from '../SideBarListItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import UserMenu from '../UserMenu/UserMenu'
 
-const drawerWidth = 240
-const paths = [
-	{path: '/', text: 'Home'},
-	{path: '/search', text: 'Search'},
-	{path: '/saveddrinks', text: 'Saved Drinks'}
-]
-
-const searchPaths = [
-	{path: '/search/popularcocktails', text: 'Popular Cocktails'},
-	{path: '/search/byname', text: 'By Name'},
-	{path: '/search/byspirit', text: 'By Spirit'},
-	{path: '/search/byingredient', text: 'By Ingredient'},
-	{path: '/search/nonalcoholic', text: 'Non-Alcoholic'}
-]
+import { TiCoffee, TiSortAlphabetically } from "react-icons/ti"
+import { MdBlender } from "react-icons/md"
+import { GiBeerBottle } from "react-icons/gi";
 
 const SideBar: React.FC = () => {
 	const {searchKeyword, isKeywordSearch} = useAppSelector(({searchDrinks}) => searchDrinks)
 	const [navBarOpen, setNavBarOpen] = React.useState(false)
 	const [currentPath, setCurrentPath] = React.useState('')
 	const [showSearchLinks, setShowSearchLinks] = React.useState(false)
+
+	const drawerWidth = 240
+	const linkIconStyles = (path: string, isSecondary: boolean) => ({
+		margin: '0px 4px 4px 0px',
+		fontSize: isSecondary ? '15px' : '22px',
+		color: currentPath.split(' ')[0] === path ? active : '#FFF'
+	})
+
+	const paths = [
+		{path: '/', text: 'Home', icon: <HomeRounded sx={linkIconStyles('/', false)} />},
+		{path: '/search', text: 'Search', icon: <Search sx={linkIconStyles('/search', false)} />},
+		{path: '/saveddrinks', text: 'Saved Drinks', icon: <Favorite sx={linkIconStyles('/saveddrinks', false)} />}
+	]
+
+	const searchPaths = [
+		{
+			path: '/search/popularcocktails',
+			text: 'Popular Cocktails',
+			icon: <FaMartiniGlassEmpty style={linkIconStyles('/search/popularcocktails', true)} />
+		},
+		{path: '/search/byname', text: 'By Name', icon: <TiSortAlphabetically style={linkIconStyles('/search/byname', false)} />},
+		{path: '/search/byspirit', text: 'By Spirit', icon: <GiBeerBottle style={linkIconStyles('/search/byspirit', false)} />},
+		{path: '/search/byingredient', text: 'By Ingredient', icon: <MdBlender style={linkIconStyles('/search/byingredient', true)} />},
+		{path: '/search/nonalcoholic', text: 'Non-Alcoholic', icon: <TiCoffee style={linkIconStyles('/search/nonalcoholic', false)} />}
+	]
 
 	const handleSearchLinks = () => {
 		setShowSearchLinks(!showSearchLinks)
@@ -65,7 +82,7 @@ const SideBar: React.FC = () => {
 		const isActivePath = currentPath.split(' ')[0] === link.path ? active : '#FFF'
 		return (
 			<Link to={link.path} key={link.text} style={{textDecoration: 'none', color: isActivePath}}>
-				<SideBarListItem link={link} />
+				<SideBarListItem link={link} linkIcon={link.icon} />
 			</Link>
 		)
 	})
@@ -86,6 +103,7 @@ const SideBar: React.FC = () => {
 							)
 						}
 						onClick={handleSearchLinks}
+						linkIcon={link.icon}
 					/>
 					<div style={{paddingLeft: '20px'}} className={showSearchLinks ? 'visible' : 'hidden'}>
 						{renderedSearchPaths}
@@ -96,7 +114,7 @@ const SideBar: React.FC = () => {
 		const isActivePath = currentPath.split(' ')[0] === link.path ? active : '#FFF'
 		return (
 			<Link to={link.path} key={link.text} style={{color: isActivePath, textDecoration: 'none'}}>
-				<SideBarListItem link={link} />
+				<SideBarListItem link={link} linkIcon={link.icon} />
 			</Link>
 		)
 	})
@@ -142,14 +160,15 @@ const SideBar: React.FC = () => {
 	const isRootPath = currentPath.split(' ')[0] === '/'
 	const renderSpiritsHeaderDropdown = window.innerWidth < 800 && isSearchBySpiritsPath
 	const renderMobileHomePageHeader = window.innerWidth < 800 && isRootPath
-	const renderSavedDrinksHeader = window.innerWidth < 800 && currentPath.split(' ')[0] === '/saveddrinks'
-	const renderPopularDrinksHeader = window.innerWidth < 800 && currentPath.split(' ')[0] === '/search/popularcocktails'
-	const renderNonAlcoholicDrinksHeader = window.innerWidth < 800 && currentPath.split(' ')[0] === '/search/nonalcoholic'
+	const renderSavedDrinksHeader =
+		window.innerWidth < 800 && currentPath.split(' ')[0] === '/saveddrinks'
+	const renderPopularDrinksHeader =
+		window.innerWidth < 800 && currentPath.split(' ')[0] === '/search/popularcocktails'
+	const renderNonAlcoholicDrinksHeader =
+		window.innerWidth < 800 && currentPath.split(' ')[0] === '/search/nonalcoholic'
 
 	const renderedSavedDrinksHeader = (textToRender: string): React.ReactElement => (
-		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}}>
-			{textToRender}
-		</Typography>
+		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}}>{textToRender}</Typography>
 	)
 
 	return (
