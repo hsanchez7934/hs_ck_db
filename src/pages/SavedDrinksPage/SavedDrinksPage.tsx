@@ -2,6 +2,7 @@ import './styles.css'
 import React, {useEffect, useState} from 'react'
 
 import DrinkImageList from '../../components/DrinksImageList/DrinksImageList'
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
 import NoDrinkDataNotice from '../../components/NoDrinkData'
 import {primaryFont} from '../../fonts/fonts'
 import {useAppSelector, useAppDispatch} from '../../store/hooks'
@@ -59,7 +60,7 @@ const SavedDrinksPage = () => {
 		)
 	}
 
-	let content
+	let content = <LoadingSpinner />
 	if (!isAuthenticated) {
 		content = renderLoginNotice()
 	} else if (dataToRender.length > 0) {

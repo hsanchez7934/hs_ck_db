@@ -1,15 +1,15 @@
 import './styles.css'
 import React from 'react'
-import {DrinkDataPoint} from '../../types'
-import {Link, useLocation} from 'react-router-dom'
-import {updateIsModalOpen, updateModalDrink, updateDrinkMap} from '../../store'
-import {useAppDispatch} from '../../store/hooks'
 import Box from '@mui/material/Box'
+import {DrinkDataPoint} from '../../types'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
+import {Link, useLocation} from 'react-router-dom'
 import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
-import {useEffect, useState} from 'react'
 import generateUUID from '../../uuid'
+import {updateIsModalOpen, updateModalDrink, updateDrinkMap} from '../../store'
+import {useEffect, useState} from 'react'
+import {useAppDispatch} from '../../store/hooks'
 
 interface Props {
 	drinksData: DrinkDataPoint[]
