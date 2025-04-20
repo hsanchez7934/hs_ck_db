@@ -1,15 +1,19 @@
-import {useFetchNonAlcoholicDrinksQuery} from '../store'
-import SkeletonLoader from '../components/Skeleton'
+import React from 'react'
+
 import DrinkImageList from '../components/DrinksImageList/DrinksImageList'
+import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
+import NoDrinkDataNotice from '../components/NoDrinkData'
+import {useFetchNonAlcoholicDrinksQuery} from '../store'
 
 const NonAlcoholicDrinksPage = () => {
 	const {data, error, isFetching} = useFetchNonAlcoholicDrinksQuery('Non_Alcoholic')
-	let content
+
+	let content = <LoadingSpinner />
 	if (isFetching) {
-		content = <SkeletonLoader />
+		content = <LoadingSpinner />
 	} else if (error) {
-		content = <div>Oh no! Looks like an error has occured. Please refresh this page.</div>
-	} else {
+		content = <NoDrinkDataNotice isErrorMessage={true}/>
+	} else if (data && data?.drinks?.length > 0) {
 		const drinksData = data?.drinks || []
 		content = <DrinkImageList drinksData={drinksData} />
 	}

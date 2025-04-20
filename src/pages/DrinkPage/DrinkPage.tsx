@@ -1,14 +1,16 @@
 import './styles.css'
-import {useParams} from 'react-router-dom'
-import {useFetchDrinkDataByIDQuery} from '../../store'
-import SkeletonLoader from '../../components/Skeleton'
-import {primaryFont} from '../../fonts/fonts'
+import React from 'react'
 import DrinkTags from '../../components/DrinkTags'
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
+import NoDrinkDataNotice from '../../components/NoDrinkData'
+import {primaryFont} from '../../fonts/fonts'
+import {useFetchDrinkDataByIDQuery} from '../../store'
+import {useParams} from 'react-router-dom'
 
 const isMobileView = window.innerWidth < 1050
 
 const DrinkPage = (): JSX.Element => {
-	let {id} = useParams<'id'>()
+	const {id} = useParams<'id'>()
 	const {data, error, isFetching} = useFetchDrinkDataByIDQuery(id)
 
 	let counter = 1
@@ -132,12 +134,12 @@ const DrinkPage = (): JSX.Element => {
 		)
 	}
 
-	let content
+	let content = <LoadingSpinner />
 	if (isFetching) {
-		content = <SkeletonLoader />
+		content = <LoadingSpinner />
 	} else if (error) {
-		return <div>Error fetching data</div>
-	} else {
+		return <NoDrinkDataNotice isErrorMessage={true} />
+	} else if (data && data?.drinks?.length > 0) {
 		content = renderedDrinkPageComponent(data?.drinks[0])
 	}
 

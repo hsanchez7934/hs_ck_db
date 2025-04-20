@@ -1,10 +1,20 @@
 import React from 'react'
 import {primaryFont} from '../fonts/fonts'
 
-type Props = {isSavedDrinksPage?: boolean}
+type Props = {isSavedDrinksPage?: boolean; isErrorMessage?: boolean}
 
 const NoDrinkDataNotice = (props: Props) => {
-	const {isSavedDrinksPage} = props
+	const {isSavedDrinksPage, isErrorMessage} = props
+
+	let text = ''
+	if (isSavedDrinksPage) {
+		text = `You haven't saved any drinks, browse the app and find some favorites!`
+	} else if (isErrorMessage) {
+		text = 'An error has occurred, please refresh the page.'
+	} else {
+		text = 'No data found.'
+	}
+
 	return (
 		<div
 			style={{
@@ -25,7 +35,7 @@ const NoDrinkDataNotice = (props: Props) => {
 					padding: '0px 10px'
 				}}
 			>
-				{isSavedDrinksPage ? `You haven't saved any drinks, browse the app and find some favorites!` : 'No data found.'}
+				{text}
 			</p>
 		</div>
 	)

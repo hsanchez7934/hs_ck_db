@@ -28,7 +28,7 @@ const setGridColumns = (width: number) => {
 }
 
 const removeSavedMapIDs = (drinksList: any) => {
-		if (drinksList[0]?.drinkMapID) {
+		if (drinksList?.[0]?.drinkMapID) {
 			const cleaned = drinksList.map((drink: any) => {
 				const newDrink = Object.assign({}, drink)
 				delete newDrink.drinkMapID
@@ -45,7 +45,6 @@ const DrinksImageList = (props: Props) => {
 	const [renderData, setRenderData] = useState([])
 	const location = useLocation()
 	const dispatch = useAppDispatch()
-
 
 	useEffect(() => {
 		const setDrinkPagerMap = () => {

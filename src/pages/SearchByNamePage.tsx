@@ -2,9 +2,9 @@ import React, {useEffect} from 'react'
 import AlphtabetPicker from '../components/AlphabetPicker/AlphabetPicker'
 import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
 import NoDrinkDataNotice from '../components/NoDrinkData'
-import SkeletonLoader from '../components/Skeleton'
-import {useAppSelector, useAppDispatch} from '../store/hooks'
+import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
 import {updateIsKeywordSearch, updateSearchKeyword} from '../store'
+import {useAppSelector, useAppDispatch} from '../store/hooks'
 
 const SearchByNamePage = (): JSX.Element => {
 	const dispatch = useAppDispatch()
@@ -24,13 +24,13 @@ const SearchByNamePage = (): JSX.Element => {
 		return () => cleanup()
 	}, [dispatch])
 
-	let content
+	let content = <LoadingSpinner />
 	if (isFetchingDrinks) {
-		content = <SkeletonLoader />
+		content = <LoadingSpinner />
 	} else if (errorFetchingDrinks) {
-		return <div>Error...</div>
+		return <NoDrinkDataNotice isErrorMessage={true} />
 	} else {
-		if (drinks.length > 0) {
+		if (drinks && drinks.length > 0) {
 			content = <DrinksImageList drinksData={drinks} />
 		} else {
 			content = <NoDrinkDataNotice />

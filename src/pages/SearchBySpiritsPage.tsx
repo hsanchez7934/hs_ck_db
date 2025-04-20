@@ -1,10 +1,12 @@
-import {useState, useEffect} from 'react'
-import SpiritTabs from '../components/SpiritTabs/SpiritTabs'
-import {useFetchDrinksBySpiritQuery} from '../store'
-import SkeletonLoader from '../components/Skeleton'
+import React from 'react'
 import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
-import {useAppSelector, useAppDispatch} from '../store/hooks'
+import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
+import NoDrinkDataNotice from '../components/NoDrinkData'
+import SpiritTabs from '../components/SpiritTabs/SpiritTabs'
 import {updateSelectedSpirit} from '../store'
+import {useAppSelector, useAppDispatch} from '../store/hooks'
+import {useFetchDrinksBySpiritQuery} from '../store'
+import {useState, useEffect} from 'react'
 
 const spirits = ['Bourbon', 'Brandy', 'Gin', 'Rum', 'Scotch', 'Tequila', 'Vodka', 'Whiskey']
 
@@ -34,12 +36,12 @@ const SearchBySpiritsPage = () => {
 		)
 	})
 
-	let content
+	let content = <LoadingSpinner />
 	if (isFetching) {
-		content = <SkeletonLoader />
+		content = <LoadingSpinner />
 	} else if (error) {
-		content = <div>Error...</div>
-	} else {
+		content = <NoDrinkDataNotice isErrorMessage={true} />
+	} else if (data && data?.drinks?.length > 0) {
 		content = <DrinksImageList drinksData={data.drinks} />
 	}
 

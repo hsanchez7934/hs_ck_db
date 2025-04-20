@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react'
 import axios from 'axios'
-import SkeletonLoader from '../components/Skeleton'
 import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
+import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
+import NoDrinkDataNotice from '../components/NoDrinkData'
 import {debounce} from 'lodash'
 import {useAppSelector, useAppDispatch} from '../store/hooks'
 import {updateRenderNextSetOfDrinks} from '../store'
@@ -10,7 +11,7 @@ const HomePage = () => {
 	const {renderNextSetOfDrinks} = useAppSelector(({mobileHomePageState}) => mobileHomePageState)
 	const dispatch = useAppDispatch()
 	const infiniteScrollContainer = useRef()
-	const [items, setItems] = useState([])
+	const [drinksDataToRender, setDrinksDataToRender] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState(null)
 	const [scrollTop, setScrollTop] = useState((window.innerHeight - 64) / 2 - 100)
@@ -25,14 +26,14 @@ const HomePage = () => {
 			)
 			const {drinks} = response.data
 			if (isMobile) {
-				setItems(drinks)
+				setDrinksDataToRender(drinks)
 				dispatch(updateRenderNextSetOfDrinks(false))
 			} else {
-				// @ts-expect-error
-				setItems((prevItems) => [...prevItems, ...drinks])
+				// @ts-expect-error generic
+				setDrinksDataToRender((prevItems) => [...prevItems, ...drinks])
 			}
 		} catch (error) {
-			// @ts-expect-error
+			// @ts-expect-error generic
 			setError(error)
 		} finally {
 			setIsLoading(false)
@@ -45,16 +46,16 @@ const HomePage = () => {
 		if (window.innerWidth >= 800) {
 			const copy = infiniteScrollContainer.current
 			const handleScroll = () => {
-				// @ts-expect-error
+				// @ts-expect-error generic
 				const containerScrollTop = infiniteScrollContainer.current.scrollTop
 				if (containerScrollTop > scrollTop) {
 					setScrollTop(scrollTop + (window.innerHeight - 64))
 					debounced(false)
 				}
 			}
-			// @ts-expect-error
+			// @ts-expect-error generic
 			infiniteScrollContainer.current?.addEventListener('scroll', handleScroll)
-			// @ts-expect-error
+			// @ts-expect-error generic
 			return () => copy.removeEventListener('scroll', handleScroll)
 		}
 	}, [scrollTop, debounced, dispatch])
@@ -73,21 +74,21 @@ const HomePage = () => {
 		}
 	}, [renderNextSetOfDrinks, fetchData])
 
-	const content = <DrinksImageList drinksData={items} />
-	let notice = <></>
+	let content = <LoadingSpinner />
 	if (isLoading) {
-		notice = <SkeletonLoader />
+		content = <LoadingSpinner />
 	} else if (error) {
-		notice = <div>Error...</div>
-	} else {
+		content = <NoDrinkDataNotice isErrorMessage={true} />
+	} else if (drinksDataToRender && drinksDataToRender.length > 0) {
+		content = <DrinksImageList drinksData={drinksDataToRender} />
 	}
 
 	return (
-		// @ts-expect-error
+		// @ts-expect-error generic
 		<div ref={infiniteScrollContainer} style={{overflow: 'auto', height: 'calc(100% - 64px)'}}>
 			{content}
-			{notice}
 		</div>
 	)
 }
+
 export default HomePage
