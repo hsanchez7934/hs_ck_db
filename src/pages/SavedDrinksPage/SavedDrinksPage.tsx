@@ -1,26 +1,22 @@
 import './styles.css'
 import React, {useEffect, useState} from 'react'
+
 import DrinkImageList from '../../components/DrinksImageList/DrinksImageList'
 import NoDrinkDataNotice from '../../components/NoDrinkData'
+import {primaryFont} from '../../fonts/fonts'
 import {useAppSelector, useAppDispatch} from '../../store/hooks'
 import {useAuth0} from '@auth0/auth0-react'
 import {updateTriggerRender} from '../../store'
 
-import {primaryFont} from '../../fonts/fonts'
-
 const SavedDrinksPage = () => {
-	const {loginWithRedirect} = useAuth0()
+	const {loginWithPopup} = useAuth0()
 	const {user, isAuthenticated} = useAuth0()
 	const [dataToRender, setDataToRender] = useState([])
 	const {triggerRender, userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
 	const dispatch = useAppDispatch()
 
 	const handleLogin = async () => {
-		await loginWithRedirect({
-			appState: {
-				returnTo: window.location.origin + '/saveddrinks'
-			}
-		})
+		loginWithPopup()
 	}
 
 	useEffect(() => {
