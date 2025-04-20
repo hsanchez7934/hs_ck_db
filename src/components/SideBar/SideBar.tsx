@@ -142,6 +142,15 @@ const SideBar: React.FC = () => {
 	const isRootPath = currentPath.split(' ')[0] === '/'
 	const renderSpiritsHeaderDropdown = window.innerWidth < 800 && isSearchBySpiritsPath
 	const renderMobileHomePageHeader = window.innerWidth < 800 && isRootPath
+	const renderSavedDrinksHeader = window.innerWidth < 800 && currentPath.split(' ')[0] === '/saveddrinks'
+	const renderPopularDrinksHeader = window.innerWidth < 800 && currentPath.split(' ')[0] === '/search/popularcocktails'
+	const renderNonAlcoholicDrinksHeader = window.innerWidth < 800 && currentPath.split(' ')[0] === '/search/nonalcoholic'
+
+	const renderedSavedDrinksHeader = (textToRender: string): React.ReactElement => (
+		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}}>
+			{textToRender}
+		</Typography>
+	)
 
 	return (
 		<Box sx={{display: 'flex', height: '100vh'}}>
@@ -167,6 +176,9 @@ const SideBar: React.FC = () => {
 					{isSearcByIngredientPath && <HeaderIngredientsDropDown />}
 					{renderSpiritsHeaderDropdown && <HeaderSpiritsDropDown />}
 					{renderMobileHomePageHeader && <MobileHomePageHeader />}
+					{renderSavedDrinksHeader && renderedSavedDrinksHeader('Saved Drinks')}
+					{renderPopularDrinksHeader && renderedSavedDrinksHeader('Popular Cocktails')}
+					{renderNonAlcoholicDrinksHeader && renderedSavedDrinksHeader('Non-Alcoholic')}
 					<UserMenu />
 				</Toolbar>
 			</AppBar>
