@@ -39,7 +39,6 @@ const SavedDrinksPage = () => {
 					alignItems: 'center',
 					backgroundColor: '#000',
 					flexDirection: 'column',
-					fontFamily: primaryFont
 				}}
 			>
 				<p
@@ -47,12 +46,13 @@ const SavedDrinksPage = () => {
 						fontSize: '1.8em',
 						color: '#fff',
 						textAlign: 'center',
-						padding: '0px 10px'
+						padding: '0px 10px',
+						fontFamily: primaryFont
 					}}
 				>
 					You must sign in to view your saved drinks. Click the button below to sign in.
 				</p>
-				<button id="btn_loginFromSavedDrinksPage" onClick={() => handleLogin()}>
+				<button id="btn_loginFromSavedDrinksPage" onClick={() => handleLogin()} style={{fontFamily: primaryFont}}>
 					Sign In
 				</button>
 			</div>

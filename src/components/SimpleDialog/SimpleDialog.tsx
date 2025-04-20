@@ -34,13 +34,13 @@ const SimpleDialog = (props: SimpleDialogProps): JSX.Element => {
 	let content = <></>
 	if (isLoginDialog) {
 		content = (
-			<Dialog open={open} sx={{fontFamily: primaryFont}}>
-				<DialogTitle>You must be signed in to be able to save drinks.</DialogTitle>
+			<Dialog open={open}>
+				<DialogTitle sx={{fontFamily: primaryFont}}>You must be signed in to be able to save drinks.</DialogTitle>
 				<DialogActions>
-					<button className="btn_loginFromDrinkCard" onClick={handleSignInOnClick}>
+					<button className="btn_loginFromDrinkCard" onClick={handleSignInOnClick} style={{fontFamily: primaryFont}}>
 						Sign In
 					</button>
-					<button className="btn_loginFromDrinkCard" onClick={handleCloseOnClick}>
+					<button className="btn_loginFromDrinkCard" onClick={handleCloseOnClick} style={{fontFamily: primaryFont}}>
 						Cancel
 					</button>
 				</DialogActions>
@@ -48,8 +48,8 @@ const SimpleDialog = (props: SimpleDialogProps): JSX.Element => {
 		)
 	} else {
 		content = (
-			<Dialog open={open} sx={{fontFamily: primaryFont}}>
-				<DialogTitle color={dialogTextColor}>{dialogText}</DialogTitle>
+			<Dialog open={open}>
+				<DialogTitle sx={{fontFamily: primaryFont}} color={dialogTextColor}>{dialogText}</DialogTitle>
 			</Dialog>
 		)
 	}
