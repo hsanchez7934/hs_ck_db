@@ -14,7 +14,7 @@ img {
 	background-color: black;
 	opacity: 0.8;
 	position: absolute;
-	bottom: 0;
+	bottom: -1px;
 	display: flex;
 	/* padding: 5px; */
 	border-bottom-left-radius: 12px;
@@ -27,7 +27,7 @@ img {
 	background-color: black;
 	opacity: 0.8;
 	position: absolute;
-	top: 0;
+	top: -1px;
 	display: flex;
 	justify-content: center;
 	align-items: center;

@@ -155,14 +155,22 @@ const DrinksImageList = (props: Props) => {
 	}
 
 	const renderedMobileDrinkImages = (): ReactElement => {
+		const isDrinkSaved = (drinkID: string | null | undefined) => {
+			if (drinkID) {
+				const found = userSavedDrinks?.find((drink: any) => drink.idDrink === drinkID)
+				return found
+			}
+			return false
+		}
 		const mobileDrinkCards = renderData.map((drink: DrinkDataPoint) => {
 			const cols = drink.featured ? 2 : 1
 			const rows = drink.featured ? 2 : 1
 			const iconSize = drink.featured ? '35px' : '20px'
 			const titleSize = drink.featured ? '1.5em' : '1empx'
+			const isSaved = isDrinkSaved(drink.idDrink)
 
 			return (
-				<ImageListItem key={drink.idDrink} className="image-container" cols={cols} rows={rows} sx={{backgroundColor: 'yellow', borderRadius: '12px'}}>
+				<ImageListItem key={drink.idDrink} className="image-container" cols={cols} rows={rows} sx={{backgroundColor: 'yellow', borderRadius: '12px', marginBottom: '2px'}}>
 					<img
 						{...srcset(drink.strDrinkThumb, 250, 200, rows, cols)}
 						alt={drink.strDrink || ''}
