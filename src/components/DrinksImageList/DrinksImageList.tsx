@@ -15,11 +15,7 @@ import {updateIsModalOpen, updateModalDrink, updateDrinkMap} from '../../store'
 import {useEffect, useState} from 'react'
 import {useAppDispatch, useAppSelector} from '../../store/hooks'
 import {primaryFont} from '../../fonts/fonts'
-import {
-	FaHeartCircleMinus,
-	FaHeartCirclePlus,
-	FaEye
-} from 'react-icons/fa6'
+import {FaHeartCircleMinus, FaHeartCirclePlus, FaEye} from 'react-icons/fa6'
 import {useAuth0} from '@auth0/auth0-react'
 import SimpleDialog from '../SimpleDialog/SimpleDialog'
 import {updateTriggerRender} from '../../store'
@@ -173,7 +169,6 @@ const DrinksImageList = (props: Props) => {
 	}
 
 	const handleMobileCardSaveOnClick = (drink: any) => {
-		console.log(drink)
 		if (isAuthenticated) {
 			dispatch(updateTriggerRender(true))
 			setToggleSaved(!toggleSaved)
@@ -201,22 +196,27 @@ const DrinksImageList = (props: Props) => {
 		}
 	}
 
-	const renderFavoriteIcons = (iconSize: string, drink: DrinkDataPoint, isSaved: string | null | undefined | boolean) => {
-		const renderedSaveIcon = isAuthenticated && isSaved ? (
-			<FaHeartCirclePlus
-				title="Add/Remove from favorites"
-				color="red"
-				style={{fontSize: iconSize}}
-				onClick={() => handleMobileCardSaveOnClick(drink)}
-			/>
-		) : (
-			<FaHeartCircleMinus
-				title="Add/Remove from favorites"
-				color="white"
-				style={{fontSize: iconSize}}
-				onClick={() => handleMobileCardSaveOnClick(drink)}
-			/>
-		)
+	const renderFavoriteIcons = (
+		iconSize: string,
+		drink: DrinkDataPoint,
+		isSaved: string | null | undefined | boolean
+	) => {
+		const renderedSaveIcon =
+			isAuthenticated && isSaved ? (
+				<FaHeartCirclePlus
+					title="Add/Remove from favorites"
+					color="red"
+					style={{fontSize: iconSize}}
+					onClick={() => handleMobileCardSaveOnClick(drink)}
+				/>
+			) : (
+				<FaHeartCircleMinus
+					title="Add/Remove from favorites"
+					color="white"
+					style={{fontSize: iconSize}}
+					onClick={() => handleMobileCardSaveOnClick(drink)}
+				/>
+			)
 		return renderedSaveIcon
 	}
 
@@ -240,9 +240,9 @@ const DrinksImageList = (props: Props) => {
 				<ImageListItem
 					key={drink.idDrink}
 					className="image-container"
-					cols={cols}
-					rows={rows}
-					sx={{position: 'relative'}}
+					// cols={cols}
+					// rows={rows}
+					// sx={{position: 'relative'}}
 				>
 					<img
 						{...srcset(drink.strDrinkThumb, 250, 200, rows, cols)}
@@ -265,7 +265,13 @@ const DrinksImageList = (props: Props) => {
 							className="mobile-overlay-favorite-container"
 							style={{borderLeft: '1px solid white'}}
 						>
-							<FaEye style={{color: 'white', fontSize: iconSize}} />
+							<Link
+								key={drink.drinkMapID}
+								to={`/drink/${drink.idDrink}`}
+								state={{backgroundLocation: location}}
+							>
+								<FaEye style={{color: 'white', fontSize: iconSize}} />
+							</Link>
 						</div>
 					</div>
 					<SimpleDialog
@@ -285,15 +291,10 @@ const DrinksImageList = (props: Props) => {
 
 		return (
 			<ImageList
-				sx={{
-					width: '100%',
-					transform: 'translateZ(0)',
-					overflow: 'hidden',
-					padding: '7px',
-					margin: 0
-				}}
-				rowHeight={200}
-				// gap={10}
+				variant="standard"
+				cols={setGridColumns(windowWidth)}
+				gap={8}
+				sx={{margin: 0, padding: '7px', overflow: 'hidden', width: '100%'}}
 			>
 				{mobileDrinkCards}
 			</ImageList>
