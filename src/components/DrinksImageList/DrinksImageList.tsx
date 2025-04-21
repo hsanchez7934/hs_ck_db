@@ -20,6 +20,7 @@ import {
 	FaHeartCirclePlus,
 	FaEye
 } from 'react-icons/fa6'
+import {useAuth0} from '@auth0/auth0-react'
 
 interface Props {
 	drinksData: DrinkDataPoint[]
@@ -57,6 +58,7 @@ const removeSavedMapIDs = (drinksList: any) => {
 }
 
 const DrinksImageList = (props: Props) => {
+	const {isAuthenticated, user} = useAuth0()
 	const windowWidth = window.innerWidth
 	const {drinksData} = props
 	const [renderData, setRenderData] = useState([])
@@ -107,7 +109,7 @@ const DrinksImageList = (props: Props) => {
 			dispatch(updateDrinkMap(map))
 		}
 		setDrinkPagerMap()
-	}, [drinksData, dispatch])
+	}, [drinksData, isAuthenticated, user, dispatch])
 
 	const handleOnClickLargeCard = async (drink: DrinkDataPoint) => {
 		if (!drink.strInstructions) {
@@ -157,7 +159,6 @@ const DrinksImageList = (props: Props) => {
 			const rows = drink.featured ? 2 : 1
 			const iconSize = drink.featured ? '35px' : '20px'
 			const titleSize = drink.featured ? '1.5em' : '1empx'
-			const bottomContainerSize = drink.featured ? '50px' : '30px'
 
 			return (
 				<ImageListItem key={drink.idDrink} className="image-container" cols={cols} rows={rows} sx={{border: 'none'}}>
@@ -175,7 +176,7 @@ const DrinksImageList = (props: Props) => {
 							{drink.strDrink}
 						</p>
 					</div>
-					<div className="mobile-overlay-photo-bottom" style={{height: bottomContainerSize}}>
+					<div className="mobile-overlay-photo-bottom">
 						<div className="mobile-overlay-favorite-container">
 							<FaHeartCircleMinus style={{color: 'white', fontSize: iconSize}} />
 						</div>
