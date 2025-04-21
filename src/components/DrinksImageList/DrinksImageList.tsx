@@ -154,6 +154,10 @@ const DrinksImageList = (props: Props) => {
 		)
 	}
 
+	const handleMobileCardSaveOnClick = (drink: DrinkDataPoint) => {
+		console.log(drink)
+	}
+
 	const renderedMobileDrinkImages = (): ReactElement => {
 		const isDrinkSaved = (drinkID: string | null | undefined) => {
 			if (drinkID) {
@@ -167,16 +171,15 @@ const DrinksImageList = (props: Props) => {
 			const cols = drink.featured ? 2 : 1
 			const rows = drink.featured ? 2 : 1
 			const iconSize = drink.featured ? '35px' : '20px'
-			const titleSize = drink.featured ? '1.5em' : '1empx'
+			const titleSize = drink.featured ? '1.8em' : '1empx'
 			const isSaved = isDrinkSaved(drink.idDrink)
 
 			return (
-				<ImageListItem key={drink.idDrink} className="image-container" cols={cols} rows={rows} sx={{}}>
+				<ImageListItem key={drink.idDrink} className="image-container" cols={cols} rows={rows} sx={{position: 'relative'}}>
 					<img
 						{...srcset(drink.strDrinkThumb, 250, 200, rows, cols)}
 						alt={drink.strDrink || ''}
 						loading="lazy"
-						// style={{borderRadius: '12px'}}
 					/>
 					<div className="mobile-overlay-photo-top">
 						<p
@@ -188,7 +191,10 @@ const DrinksImageList = (props: Props) => {
 					</div>
 					<div className="mobile-overlay-photo-bottom">
 						<div className="mobile-overlay-favorite-container">
-							<FaHeartCircleMinus style={{color: saveIconColor, fontSize: iconSize}} />
+							<FaHeartCircleMinus
+								style={{color: saveIconColor, fontSize: iconSize}}
+								onClick={() => handleMobileCardSaveOnClick(drink)}
+							/>
 						</div>
 						<div
 							className="mobile-overlay-favorite-container"
@@ -211,7 +217,7 @@ const DrinksImageList = (props: Props) => {
 					margin: 0
 				}}
 				rowHeight={200}
-				gap={8}
+				// gap={10}
 			>
 				{mobileDrinkCards}
 			</ImageList>
