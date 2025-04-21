@@ -83,7 +83,7 @@ const HomePage = () => {
 
 	return (
 		// @ts-expect-error generic
-		<div ref={infiniteScrollContainer} style={{overflow: 'auto', height: 'calc(100% - 64px)'}}>
+		<div ref={infiniteScrollContainer} style={{overflow: 'hidden', height: 'calc(100% - 64px)'}}>
 			{content}
 		</div>
 	)

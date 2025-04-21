@@ -228,7 +228,8 @@ const SideBar: React.FC = () => {
 					backgroundPosition: 'center',
 					backgroundSize: 'cover',
 					backgroundRepeat: 'no-repeat',
-					padding: '0'
+					padding: '0',
+					overflow: 'hidden'
 				}}
 			>
 				<Toolbar />

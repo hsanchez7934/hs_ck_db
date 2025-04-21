@@ -10,6 +10,7 @@ import {useParams} from 'react-router-dom'
 const isMobileView = window.innerWidth < 1050
 
 const DrinkPage = (): JSX.Element => {
+	console.log('test')
 	const {id} = useParams<'id'>()
 	const {data, error, isFetching} = useFetchDrinkDataByIDQuery(id)
 
