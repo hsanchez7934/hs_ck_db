@@ -16,7 +16,7 @@ img {
 	position: absolute;
 	bottom: 0;
 	display: flex;
-	padding: 5px;
+	/* padding: 5px; */
 	border-bottom-left-radius: 12px;
 	border-bottom-right-radius: 12px;
 }

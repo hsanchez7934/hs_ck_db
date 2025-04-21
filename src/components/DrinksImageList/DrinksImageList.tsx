@@ -13,7 +13,7 @@ import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
 import generateUUID from '../../uuid'
 import {updateIsModalOpen, updateModalDrink, updateDrinkMap} from '../../store'
 import {useEffect, useState} from 'react'
-import {useAppDispatch} from '../../store/hooks'
+import {useAppDispatch, useAppSelector} from '../../store/hooks'
 import {primaryFont} from '../../fonts/fonts'
 import {
 	FaHeartCircleMinus,
@@ -64,6 +64,7 @@ const DrinksImageList = (props: Props) => {
 	const [renderData, setRenderData] = useState([])
 	const location = useLocation()
 	const dispatch = useAppDispatch()
+	const {userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
 
 	useEffect(() => {
 		const setDrinkPagerMap = () => {
@@ -161,7 +162,7 @@ const DrinksImageList = (props: Props) => {
 			const titleSize = drink.featured ? '1.5em' : '1empx'
 
 			return (
-				<ImageListItem key={drink.idDrink} className="image-container" cols={cols} rows={rows} sx={{border: 'none'}}>
+				<ImageListItem key={drink.idDrink} className="image-container" cols={cols} rows={rows} sx={{backgroundColor: 'yellow', borderRadius: '12px'}}>
 					<img
 						{...srcset(drink.strDrinkThumb, 250, 200, rows, cols)}
 						alt={drink.strDrink || ''}
