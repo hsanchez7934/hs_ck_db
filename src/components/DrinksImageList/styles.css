@@ -11,28 +11,36 @@ img {
 .mobile-overlay-photo-bottom {
 	height: auto;
 	width: 100%;
-	background-color: black;
-	opacity: 0.8;
+	background: linear-gradient(
+		to top,
+		rgba(0, 0, 0, 0.9) 0%,
+		rgba(10, 10, 10, 0.6) 50%,
+		rgba(20, 20, 20, 0.01) 100%
+	);
 	position: absolute;
 	bottom: -1px;
 	display: flex;
 	/* padding: 5px; */
-	border-bottom-left-radius: 12px;
-	border-bottom-right-radius: 12px;
+	/* border-bottom-left-radius: 12px; */
+	/* border-bottom-right-radius: 12px; */
 }
 
 .mobile-overlay-photo-top {
 	height: auto;
 	width: 100%;
-	background-color: black;
-	opacity: 0.8;
+	background: linear-gradient(
+		to bottom,
+		rgba(0, 0, 0, 0.9) 0%,
+		rgba(10, 10, 10, 0.6) 50%,
+		rgba(20, 20, 20, 0.01) 100%
+	);
 	position: absolute;
 	top: -1px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border-top-left-radius: 12px;
-	border-top-right-radius: 12px;
+	/* border-top-left-radius: 12px; */
+	/* border-top-right-radius: 12px; */
 }
 
 .mobile-overylay-photo-title {
@@ -45,6 +53,16 @@ img {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	padding: 0px 5px;
+}
+
+.mobile-overlay-favorite-container {
+	width: 50%;
+	height: 100%;
+	/* background-color: magenta; */
+	padding: 10px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .overlay-photo {
@@ -76,13 +94,4 @@ img {
 		sans-serif;
 	font-size: 1.5em;
 	padding: 5px;
-}
-
-.mobile-overlay-favorite-container {
-	width: 50%;
-	height: 100%;
-	/* background-color: yellow; */
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }

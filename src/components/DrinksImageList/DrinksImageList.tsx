@@ -3,9 +3,8 @@ import React, {ReactElement} from 'react'
 import Box from '@mui/material/Box'
 // import {DeleteForever} from '@mui/icons-material'
 import {DrinkDataPoint} from '../../types'
-import IconButton from '@mui/material/IconButton'
+// import IconButton from '@mui/material/IconButton'
 // import StarBorderIcon from '@mui/icons-material/StarBorder'
-import ImageListItemBar from '@mui/material/ImageListItemBar'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
 // import ImageListItemBar from '@mui/material/ImageListItemBar'
@@ -16,7 +15,11 @@ import {updateIsModalOpen, updateModalDrink, updateDrinkMap} from '../../store'
 import {useEffect, useState} from 'react'
 import {useAppDispatch, useAppSelector} from '../../store/hooks'
 import {primaryFont} from '../../fonts/fonts'
-import {FaHeartCircleMinus, FaHeartCirclePlus, FaEye} from 'react-icons/fa6'
+import {
+	FaHeartCircleMinus,
+	FaHeartCirclePlus,
+	FaEye
+} from 'react-icons/fa6'
 import {useAuth0} from '@auth0/auth0-react'
 
 interface Props {
@@ -167,51 +170,15 @@ const DrinksImageList = (props: Props) => {
 			const titleSize = drink.featured ? '1.5em' : '1empx'
 			const isSaved = isDrinkSaved(drink.idDrink)
 
-			// 	return (
-			// 		<ImageListItem key={drink.idDrink} className="image-container" cols={cols} rows={rows} sx={{backgroundColor: 'yellow', borderRadius: '12px', marginBottom: '2px'}}>
-			// 			<img
-			// 				{...srcset(drink.strDrinkThumb, 250, 200, rows, cols)}
-			// 				alt={drink.strDrink || ''}
-			// 				loading="lazy"
-			// 				style={{borderRadius: '12px'}}
-			// 			/>
-			// 			<div className="mobile-overlay-photo-top">
-			// 				<p
-			// 					className="mobile-overylay-photo-title"
-			// 					style={{fontFamily: primaryFont, fontSize: titleSize}}
-			// 				>
-			// 					{drink.strDrink}
-			// 				</p>
-			// 			</div>
-			// 			<div className="mobile-overlay-photo-bottom">
-			// 				<div className="mobile-overlay-favorite-container">
-			// 					<FaHeartCircleMinus style={{color: saveIconColor, fontSize: iconSize}} />
-			// 				</div>
-			// 				<div
-			// 					className="mobile-overlay-favorite-container"
-			// 					style={{borderLeft: '1px solid white'}}
-			// 				>
-			// 					<FaEye style={{color: 'white', fontSize: iconSize}} />
-			// 				</div>
-			// 			</div>
-			// 		</ImageListItem>
-			// 	)
-			// })
 			return (
-				<ImageListItem
-					key={drink.idDrink}
-					className="image-container"
-					cols={cols}
-					rows={rows}
-					sx={{backgroundColor: 'yellow', borderRadius: '12px', marginBottom: '2px'}}
-				>
+				<ImageListItem key={drink.idDrink} className="image-container" cols={cols} rows={rows} sx={{}}>
 					<img
 						{...srcset(drink.strDrinkThumb, 250, 200, rows, cols)}
 						alt={drink.strDrink || ''}
 						loading="lazy"
-						style={{borderRadius: '12px'}}
+						// style={{borderRadius: '12px'}}
 					/>
-					{/* <div className="mobile-overlay-photo-top">
+					<div className="mobile-overlay-photo-top">
 						<p
 							className="mobile-overylay-photo-title"
 							style={{fontFamily: primaryFont, fontSize: titleSize}}
@@ -229,47 +196,7 @@ const DrinksImageList = (props: Props) => {
 						>
 							<FaEye style={{color: 'white', fontSize: iconSize}} />
 						</div>
-					</div> */}
-					<ImageListItemBar
-						sx={{
-							background:
-								'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-								'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)'
-						}}
-						title={drink.strDrink}
-						position="top"
-						// actionIcon={
-						// 	<>
-						// 		<IconButton sx={{color: 'white'}}>
-						// 			<FaEye />
-						// 		</IconButton>
-						// 		<IconButton sx={{color: 'white'}}>
-						// 			<FaHeartCircleMinus />
-						// 		</IconButton>
-						// 	</>
-						// }
-						// actionPosition="left"
-					/>
-					<ImageListItemBar
-						sx={{
-							background:
-								'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-								'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)'
-						}}
-						// title={drink.strDrink}
-						position="bottom"
-						actionIcon={
-							<>
-								<IconButton sx={{color: 'white'}}>
-									<FaEye />
-								</IconButton>
-								<IconButton sx={{color: 'white'}}>
-									<FaHeartCircleMinus />
-								</IconButton>
-							</>
-						}
-						actionPosition="right"
-					/>
+					</div>
 				</ImageListItem>
 			)
 		})
