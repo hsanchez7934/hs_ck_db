@@ -80,14 +80,7 @@ const DrinksImageList = (props: Props) => {
 			let nextID = generateUUID()
 			const drinksDataToRender = removeSavedMapIDs(drinksData)
 			for (let index = 0; index < drinksDataToRender.length; index++) {
-				let featured = false
-				if (index === 0) {
-					featured = true
-				} else if (index % 5 === 0) {
-					featured = true
-				}
-
-				const data = Object.assign({...drinksDataToRender[index], drinkMapID: currentID, featured})
+				const data = Object.assign({...drinksDataToRender[index], drinkMapID: currentID})
 				const previous = drinksDataToRender[index - 1]
 					? Object.assign({...drinksDataToRender[index - 1], drinkMapID: previousID})
 					: null
@@ -197,7 +190,6 @@ const DrinksImageList = (props: Props) => {
 	}
 
 	const renderFavoriteIcons = (
-		iconSize: string,
 		drink: DrinkDataPoint,
 		isSaved: string | null | undefined | boolean
 	) => {
@@ -206,14 +198,14 @@ const DrinksImageList = (props: Props) => {
 				<FaHeartCirclePlus
 					title="Add/Remove from favorites"
 					color="red"
-					style={{fontSize: iconSize}}
+					style={{fontSize: '35px'}}
 					onClick={() => handleMobileCardSaveOnClick(drink)}
 				/>
 			) : (
 				<FaHeartCircleMinus
 					title="Add/Remove from favorites"
 					color="white"
-					style={{fontSize: iconSize}}
+					style={{fontSize: '35px'}}
 					onClick={() => handleMobileCardSaveOnClick(drink)}
 				/>
 			)
@@ -230,36 +222,36 @@ const DrinksImageList = (props: Props) => {
 		}
 		const mobileDrinkCards = renderData.map((drink: DrinkDataPoint) => {
 			// const saveIconColor = isAuthenticated && isDrinkSaved(drink.idDrink) ? 'red' : 'white'
-			const cols = drink.featured ? 2 : 1
-			const rows = drink.featured ? 2 : 1
-			const iconSize = drink.featured ? '35px' : '20px'
-			const titleSize = drink.featured ? '1.8em' : '1empx'
+			// const cols = drink.featured ? 2 : 1
+			// const rows = drink.featured ? 2 : 1
+			// const iconSize = drink.featured ? '35px' : '20px'
+			// const titleSize = drink.featured ? '1.8em' : '1empx'
 			const isSaved = isDrinkSaved(drink.idDrink)
 
 			return (
 				<ImageListItem
 					key={drink.idDrink}
 					className="image-container"
-					// cols={cols}
-					// rows={rows}
-					// sx={{position: 'relative'}}
+					sx={{borderRadius: '12px'}}
 				>
 					<img
-						{...srcset(drink.strDrinkThumb, 250, 200, rows, cols)}
+						src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
+						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
 						alt={drink.strDrink || ''}
 						loading="lazy"
+						style={{borderRadius: '12px'}}
 					/>
 					<div className="mobile-overlay-photo-top">
 						<p
 							className="mobile-overylay-photo-title"
-							style={{fontFamily: primaryFont, fontSize: titleSize}}
+							style={{fontFamily: primaryFont, fontSize: '2em'}}
 						>
 							{drink.strDrink}
 						</p>
 					</div>
 					<div className="mobile-overlay-photo-bottom">
 						<div className="mobile-overlay-favorite-container">
-							{renderFavoriteIcons(iconSize, drink, isSaved)}
+							{renderFavoriteIcons(drink, isSaved)}
 						</div>
 						<div
 							className="mobile-overlay-favorite-container"
@@ -270,7 +262,7 @@ const DrinksImageList = (props: Props) => {
 								to={`/drink/${drink.idDrink}`}
 								state={{backgroundLocation: location}}
 							>
-								<FaEye style={{color: 'white', fontSize: iconSize}} />
+								<FaEye style={{color: 'white', fontSize: '35px'}} />
 							</Link>
 						</div>
 					</div>
