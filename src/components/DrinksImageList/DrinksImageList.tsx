@@ -21,6 +21,10 @@ import {
 	FaEye
 } from 'react-icons/fa6'
 import {useAuth0} from '@auth0/auth0-react'
+import SimpleDialog from '../SimpleDialog/SimpleDialog'
+import {updateTriggerRender} from '../../store'
+import {updateUserSavedDrinks, updateGetFreshUpdate} from '../../store'
+import {saveUserDrinkInDB} from '../../firebase/firebase-user-drink-storage'
 
 interface Props {
 	drinksData: DrinkDataPoint[]
@@ -62,6 +66,11 @@ const DrinksImageList = (props: Props) => {
 	const windowWidth = window.innerWidth
 	const {drinksData} = props
 	const [renderData, setRenderData] = useState([])
+	const [toggleLoginDialog, setToggleLoginDialog] = useState(false)
+	const [toggleSaved, setToggleSaved] = useState(false)
+	const [dialogText, setDialogText] = useState('')
+	const [dialogTextColor, setDialogTextColor] = useState('')
+	const [openSavedStatedDialog, setOpenSavedStateDialog] = useState(false)
 	const location = useLocation()
 	const dispatch = useAppDispatch()
 	const {userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
@@ -154,8 +163,61 @@ const DrinksImageList = (props: Props) => {
 		)
 	}
 
-	const handleMobileCardSaveOnClick = (drink: DrinkDataPoint) => {
+	const toggleDialog = (color: string, text: string) => {
+		setDialogTextColor(color)
+		setDialogText(text)
+		setOpenSavedStateDialog(true)
+		setTimeout(() => {
+			setOpenSavedStateDialog(false)
+		}, 1500)
+	}
+
+	const handleMobileCardSaveOnClick = (drink: any) => {
 		console.log(drink)
+		if (isAuthenticated) {
+			dispatch(updateTriggerRender(true))
+			setToggleSaved(!toggleSaved)
+			if (!toggleSaved) {
+				const drinks = [...userSavedDrinks]
+
+				drinks.push(drink)
+				saveUserDrinkInDB(user?.sub, drinks).then(() => {
+					toggleDialog('green', 'Saved to favorites!')
+					dispatch(updateUserSavedDrinks(drinks))
+					dispatch(updateGetFreshUpdate(true))
+				})
+			} else {
+				const filtered = userSavedDrinks.filter(
+					(savedDrink: any) => savedDrink.idDrink !== drink.idDrink
+				)
+				saveUserDrinkInDB(user?.sub, filtered).then(() => {
+					dispatch(updateUserSavedDrinks(filtered))
+					dispatch(updateGetFreshUpdate(true))
+					toggleDialog('red', 'Removed from favorites!')
+				})
+			}
+		} else {
+			setToggleLoginDialog(true)
+		}
+	}
+
+	const renderFavoriteIcons = (iconSize: string, drink: DrinkDataPoint, isSaved: string | null | undefined | boolean) => {
+		const renderedSaveIcon = isAuthenticated && isSaved ? (
+			<FaHeartCirclePlus
+				title="Add/Remove from favorites"
+				color="red"
+				style={{fontSize: iconSize}}
+				onClick={() => handleMobileCardSaveOnClick(drink)}
+			/>
+		) : (
+			<FaHeartCircleMinus
+				title="Add/Remove from favorites"
+				color="white"
+				style={{fontSize: iconSize}}
+				onClick={() => handleMobileCardSaveOnClick(drink)}
+			/>
+		)
+		return renderedSaveIcon
 	}
 
 	const renderedMobileDrinkImages = (): ReactElement => {
@@ -167,7 +229,7 @@ const DrinksImageList = (props: Props) => {
 			return false
 		}
 		const mobileDrinkCards = renderData.map((drink: DrinkDataPoint) => {
-			const saveIconColor = isAuthenticated && isDrinkSaved(drink.idDrink) ? 'red' : 'white'
+			// const saveIconColor = isAuthenticated && isDrinkSaved(drink.idDrink) ? 'red' : 'white'
 			const cols = drink.featured ? 2 : 1
 			const rows = drink.featured ? 2 : 1
 			const iconSize = drink.featured ? '35px' : '20px'
@@ -175,7 +237,13 @@ const DrinksImageList = (props: Props) => {
 			const isSaved = isDrinkSaved(drink.idDrink)
 
 			return (
-				<ImageListItem key={drink.idDrink} className="image-container" cols={cols} rows={rows} sx={{position: 'relative'}}>
+				<ImageListItem
+					key={drink.idDrink}
+					className="image-container"
+					cols={cols}
+					rows={rows}
+					sx={{position: 'relative'}}
+				>
 					<img
 						{...srcset(drink.strDrinkThumb, 250, 200, rows, cols)}
 						alt={drink.strDrink || ''}
@@ -191,10 +259,7 @@ const DrinksImageList = (props: Props) => {
 					</div>
 					<div className="mobile-overlay-photo-bottom">
 						<div className="mobile-overlay-favorite-container">
-							<FaHeartCircleMinus
-								style={{color: saveIconColor, fontSize: iconSize}}
-								onClick={() => handleMobileCardSaveOnClick(drink)}
-							/>
+							{renderFavoriteIcons(iconSize, drink, isSaved)}
 						</div>
 						<div
 							className="mobile-overlay-favorite-container"
@@ -203,6 +268,17 @@ const DrinksImageList = (props: Props) => {
 							<FaEye style={{color: 'white', fontSize: iconSize}} />
 						</div>
 					</div>
+					<SimpleDialog
+						open={openSavedStatedDialog}
+						dialogTextColor={dialogTextColor}
+						dialogText={dialogText}
+						isLoginDialog={false}
+					/>
+					<SimpleDialog
+						open={toggleLoginDialog}
+						isLoginDialog={true}
+						onLoginDialogClose={() => setToggleLoginDialog(false)}
+					/>
 				</ImageListItem>
 			)
 		})
