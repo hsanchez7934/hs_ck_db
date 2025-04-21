@@ -1,13 +1,9 @@
 import './styles.css'
 import React, {ReactElement} from 'react'
 import Box from '@mui/material/Box'
-// import {DeleteForever} from '@mui/icons-material'
 import {DrinkDataPoint} from '../../types'
-// import IconButton from '@mui/material/IconButton'
-// import StarBorderIcon from '@mui/icons-material/StarBorder'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
-// import ImageListItemBar from '@mui/material/ImageListItemBar'
 import {Link, useLocation} from 'react-router-dom'
 import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
 import generateUUID from '../../uuid'
@@ -24,13 +20,6 @@ import {saveUserDrinkInDB} from '../../firebase/firebase-user-drink-storage'
 
 interface Props {
 	drinksData: DrinkDataPoint[]
-}
-
-const srcset = (image: string | null, width: number, height: number, rows = 1, cols = 1) => {
-	return {
-		src: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format`,
-		srcSet: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format&dpr=2 2x`
-	}
 }
 
 const setGridColumns = (width: number) => {
@@ -63,7 +52,6 @@ const DrinksImageList = (props: Props) => {
 	const {drinksData} = props
 	const [renderData, setRenderData] = useState([])
 	const [toggleLoginDialog, setToggleLoginDialog] = useState(false)
-	const [toggleSaved, setToggleSaved] = useState(false)
 	const [dialogText, setDialogText] = useState('')
 	const [dialogTextColor, setDialogTextColor] = useState('')
 	const [openSavedStatedDialog, setOpenSavedStateDialog] = useState(false)
@@ -120,7 +108,7 @@ const DrinksImageList = (props: Props) => {
 	}
 
 	const renderedLargeDrinkImages = () => {
-		const largeDrinkCard = renderData.map((drink: DrinkDataPoint) => (
+		const largeDrinkCards = renderData.map((drink: DrinkDataPoint) => (
 			<Link
 				key={drink.drinkMapID}
 				to={`/drink/${drink.idDrink}`}
@@ -140,16 +128,7 @@ const DrinksImageList = (props: Props) => {
 			</Link>
 		))
 
-		return (
-			<ImageList
-				variant="standard"
-				cols={setGridColumns(windowWidth)}
-				gap={8}
-				sx={{margin: 0, padding: '7px', overflow: 'hidden', width: '100%'}}
-			>
-				{largeDrinkCard}
-			</ImageList>
-		)
+		return largeDrinkCards
 	}
 
 	const toggleDialog = (color: string, text: string) => {
@@ -161,18 +140,17 @@ const DrinksImageList = (props: Props) => {
 		}, 1500)
 	}
 
-	const handleMobileCardSaveOnClick = (drink: any) => {
+	const handleMobileCardSaveOnClick = (drink: any, isSaved: boolean | null | undefined | string) => {
 		if (isAuthenticated) {
 			dispatch(updateTriggerRender(true))
-			setToggleSaved(!toggleSaved)
-			if (!toggleSaved) {
+			if (!isSaved) {
 				const drinks = [...userSavedDrinks]
 
 				drinks.push(drink)
 				saveUserDrinkInDB(user?.sub, drinks).then(() => {
-					toggleDialog('green', 'Saved to favorites!')
 					dispatch(updateUserSavedDrinks(drinks))
 					dispatch(updateGetFreshUpdate(true))
+					toggleDialog('green', 'Saved to favorites!')
 				})
 			} else {
 				const filtered = userSavedDrinks.filter(
@@ -199,20 +177,20 @@ const DrinksImageList = (props: Props) => {
 					title="Add/Remove from favorites"
 					color="red"
 					style={{fontSize: '35px'}}
-					onClick={() => handleMobileCardSaveOnClick(drink)}
+					onClick={() => handleMobileCardSaveOnClick(drink, isSaved)}
 				/>
 			) : (
 				<FaHeartCircleMinus
 					title="Add/Remove from favorites"
 					color="white"
 					style={{fontSize: '35px'}}
-					onClick={() => handleMobileCardSaveOnClick(drink)}
+					onClick={() => handleMobileCardSaveOnClick(drink, isSaved)}
 				/>
 			)
 		return renderedSaveIcon
 	}
 
-	const renderedMobileDrinkImages = (): ReactElement => {
+	const renderedMobileDrinkImages = (): ReactElement[] => {
 		const isDrinkSaved = (drinkID: string | null | undefined) => {
 			if (drinkID) {
 				const found = userSavedDrinks?.find((drink: any) => drink.idDrink === drinkID)
@@ -221,19 +199,10 @@ const DrinksImageList = (props: Props) => {
 			return false
 		}
 		const mobileDrinkCards = renderData.map((drink: DrinkDataPoint) => {
-			// const saveIconColor = isAuthenticated && isDrinkSaved(drink.idDrink) ? 'red' : 'white'
-			// const cols = drink.featured ? 2 : 1
-			// const rows = drink.featured ? 2 : 1
-			// const iconSize = drink.featured ? '35px' : '20px'
-			// const titleSize = drink.featured ? '1.8em' : '1empx'
 			const isSaved = isDrinkSaved(drink.idDrink)
 
 			return (
-				<ImageListItem
-					key={drink.idDrink}
-					className="image-container"
-					sx={{borderRadius: '12px'}}
-				>
+				<ImageListItem key={drink.idDrink} className="image-container" sx={{borderRadius: '12px'}}>
 					<img
 						src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
 						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
@@ -281,21 +250,19 @@ const DrinksImageList = (props: Props) => {
 			)
 		})
 
-		return (
+		return mobileDrinkCards
+	}
+
+	return (
+		<Box sx={{height: '100%', overflow: 'auto', width: '100%'}}>
 			<ImageList
 				variant="standard"
 				cols={setGridColumns(windowWidth)}
 				gap={8}
 				sx={{margin: 0, padding: '7px', overflow: 'hidden', width: '100%'}}
 			>
-				{mobileDrinkCards}
+				{windowWidth > 800 ? renderedLargeDrinkImages() : renderedMobileDrinkImages()}
 			</ImageList>
-		)
-	}
-
-	return (
-		<Box sx={{height: '100%', overflow: 'auto', width: '100%'}}>
-			{windowWidth > 800 ? renderedLargeDrinkImages() : renderedMobileDrinkImages()}
 		</Box>
 	)
 }
