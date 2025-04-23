@@ -1,5 +1,5 @@
 import './styles.css'
-import React, {ReactElement} from 'react'
+import React, {ReactElement, useRef} from 'react'
 import Box from '@mui/material/Box'
 import {DrinkDataPoint} from '../../types'
 import ImageList from '@mui/material/ImageList'
@@ -47,15 +47,18 @@ const removeSavedMapIDs = (drinksList: any) => {
 }
 
 const DrinksImageList = (props: Props) => {
+	const {drinksData} = props
+	const infiniteScrollContainer = useRef(null)
 	const {isAuthenticated, user} = useAuth0()
 	const windowWidth = window.innerWidth
-	const {drinksData} = props
+	const location = useLocation()
+
 	const [renderData, setRenderData] = useState([])
 	const [toggleLoginDialog, setToggleLoginDialog] = useState(false)
 	const [dialogText, setDialogText] = useState('')
 	const [dialogTextColor, setDialogTextColor] = useState('')
 	const [openSavedStatedDialog, setOpenSavedStateDialog] = useState(false)
-	const location = useLocation()
+
 	const dispatch = useAppDispatch()
 	const {userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
 
@@ -108,25 +111,28 @@ const DrinksImageList = (props: Props) => {
 	}
 
 	const renderedLargeDrinkImages = () => {
-		const largeDrinkCards = renderData.map((drink: DrinkDataPoint) => (
-			<Link
-				key={drink.drinkMapID}
-				to={`/drink/${drink.idDrink}`}
-				state={{backgroundLocation: location}}
-			>
-				<ImageListItem className="image-container" onClick={() => handleOnClickLargeCard(drink)}>
-					<img
-						src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
-						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
-						alt={drink.strDrink || ''}
-						loading="lazy"
-					/>
-					<div className="overlay-photo">
-						<p className="overlay-photo-text">{drink.strDrink}</p>
-					</div>
-				</ImageListItem>
-			</Link>
-		))
+		const largeDrinkCards = renderData.map((drink: DrinkDataPoint) => {
+			return (
+				<Link
+					key={drink.drinkMapID}
+					to={`/drink/${drink.idDrink}`}
+					state={{backgroundLocation: location}}
+					id={location.pathname === '/' ? drink?.elemID : drink.drinkMapID}
+				>
+					<ImageListItem onClick={() => handleOnClickLargeCard(drink)}>
+						<img
+							src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
+							srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
+							alt={drink.strDrink || ''}
+							loading="lazy"
+						/>
+						<div className="overlay-photo">
+							<p className="overlay-photo-text">{drink.strDrink}</p>
+						</div>
+					</ImageListItem>
+				</Link>
+			)
+		})
 
 		return largeDrinkCards
 	}
@@ -202,7 +208,7 @@ const DrinksImageList = (props: Props) => {
 			const isSaved = isDrinkSaved(drink.idDrink)
 
 			return (
-				<ImageListItem key={drink.idDrink} className="image-container" sx={{borderRadius: '12px'}}>
+				<ImageListItem key={drink.idDrink} sx={{borderRadius: '12px'}}>
 					<img
 						src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
 						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
@@ -229,7 +235,6 @@ const DrinksImageList = (props: Props) => {
 							<Link
 								key={drink.drinkMapID}
 								to={`/drink/${drink.idDrink}`}
-								state={{backgroundLocation: location}}
 							>
 								<FaEye style={{color: 'white', fontSize: '35px'}} />
 							</Link>
@@ -254,7 +259,7 @@ const DrinksImageList = (props: Props) => {
 	}
 
 	return (
-		<Box sx={{height: '100%', overflow: 'auto', width: '100%'}}>
+		<Box sx={{height: 'auto', overflow: 'hidden', width: '100%'}} id='imageScrollContainer' ref={infiniteScrollContainer}>
 			<ImageList
 				variant="standard"
 				cols={setGridColumns(windowWidth)}

@@ -10,7 +10,6 @@ import {useParams} from 'react-router-dom'
 const isMobileView = window.innerWidth < 1050
 
 const DrinkPage = (): JSX.Element => {
-	console.log('test')
 	const {id} = useParams<'id'>()
 	const {data, error, isFetching} = useFetchDrinkDataByIDQuery(id)
 
@@ -135,13 +134,92 @@ const DrinkPage = (): JSX.Element => {
 		)
 	}
 
+	const mobileDrinkPageComponent = (drink: any) => {
+		console.log(drink)
+		return (
+			<div style={{height: '100%'}}>
+				<div
+					style={{
+						height: '400px',
+						backgroundImage: `url(${drink.strDrinkThumb})`,
+						backgroundSize: 'cover',
+						backgroundPosition: 'center',
+						backgroundRepeat: 'no-repeat',
+						position: 'relative'
+					}}
+				>
+					<div className="mobileDrinkPageTitleContainer">
+						<h1 style={{fontFamily: primaryFont}} className="mobileDrinkPageTitle">
+							{drink.strDrink}
+						</h1>
+					</div>
+				</div>
+				<div className="mobileDrinkPageBubbleTextContainer">
+					<div className="bubble">
+						<div className="bubbleSection">
+							<p style={{fontFamily: primaryFont}} className="bubbleTitle">
+								Type
+							</p>
+							<p
+								style={{fontFamily: primaryFont}}
+								className="bubbleText truncate"
+								title={drink.strAlcoholic}
+							>
+								{drink.strAlcoholic}
+							</p>
+						</div>
+						<div className="bubbleSection" style={{borderLeft: '1px solid darkgrey'}}>
+							<p style={{fontFamily: primaryFont}} className="bubbleTitle">
+								Glass
+							</p>
+							<p
+								style={{fontFamily: primaryFont}}
+								className="bubbleText truncate"
+								title={drink.strGlass}
+							>
+								{drink.strGlass}
+							</p>
+						</div>
+						<div className="bubbleSection" style={{borderLeft: '1px solid darkgrey'}}>
+							<p style={{fontFamily: primaryFont}} className="bubbleTitle">
+								Category
+							</p>
+							<p
+								style={{fontFamily: primaryFont}}
+								className="bubbleText truncate"
+								title={drink.strCategory}
+							>
+								{drink.strCategory}
+							</p>
+						</div>
+					</div>
+				</div>
+				<div className="mobileDrinkPageIngredientsContainer">
+					<h2 style={{fontFamily: primaryFont}} className="mobileDrinkPageIngredientsHeader">
+						Ingredients
+					</h2>
+					<div className='mobileDrinkPageIngredientsListContainer'>
+						{ingredients.map((ingredient: any) => {
+							return (<div>
+								
+							</div>)
+						})}
+					</div>
+				</div>
+			</div>
+		)
+	}
+
 	let content = <LoadingSpinner />
 	if (isFetching) {
 		content = <LoadingSpinner />
 	} else if (error) {
 		return <NoDrinkDataNotice isErrorMessage={true} />
 	} else if (data && data?.drinks?.length > 0) {
-		content = renderedDrinkPageComponent(data?.drinks[0])
+		const isMobileView = window.innerWidth < 800
+		content = isMobileView
+			? mobileDrinkPageComponent(data?.drinks[0])
+			: renderedDrinkPageComponent(data?.drinks[0])
 	}
 
 	return <div style={{height: 'calc(100% - 64px)'}}>{content}</div>

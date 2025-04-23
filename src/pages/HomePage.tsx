@@ -12,12 +12,10 @@ const HomePage = () => {
 	const dispatch = useAppDispatch()
 	const infiniteScrollContainer = useRef()
 	const [drinksDataToRender, setDrinksDataToRender] = useState([])
-	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState(null)
 	const [scrollTop, setScrollTop] = useState((window.innerHeight - 64) / 2 - 100)
 
 	const fetchData = useCallback(async (isMobile: boolean) => {
-		setIsLoading(true)
 		setError(null)
 
 		try {
@@ -35,8 +33,6 @@ const HomePage = () => {
 		} catch (error) {
 			// @ts-expect-error generic
 			setError(error)
-		} finally {
-			setIsLoading(false)
 		}
 	}, [dispatch])
 
@@ -83,7 +79,7 @@ const HomePage = () => {
 
 	return (
 		// @ts-expect-error generic
-		<div ref={infiniteScrollContainer} style={{overflow: 'hidden', height: 'calc(100% - 64px)'}}>
+		<div ref={infiniteScrollContainer} style={{overflow: 'auto', height: 'calc(100% - 64px)'}}>
 			{content}
 		</div>
 	)

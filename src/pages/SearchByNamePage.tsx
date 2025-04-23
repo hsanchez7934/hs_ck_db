@@ -38,9 +38,9 @@ const SearchByNamePage = (): JSX.Element => {
 	}
 
 	return (
-		<div style={{backgroundColor: 'inherit', height: 'calc(100% - 64px)', overflow: 'hidden'}}>
+		<div style={{height: 'calc(100% - 64px)', overflow: 'hidden'}}>
 			<AlphtabetPicker isKeywordSearch={isKeywordSearch} searchKeyword={searchKeyword} />
-			<div style={{overflowY: 'scroll', height: 'calc(100% - 25px)'}}>{content}</div>
+			<div style={{overflowY: 'scroll', height: 'calc(100% - 25px)', paddingBottom: '35px'}}>{content}</div>
 		</div>
 	)
 }

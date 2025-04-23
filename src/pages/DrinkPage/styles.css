@@ -112,3 +112,102 @@
 	margin: 10px 0px 25px 0px;
 	padding: 0px 0px 30px;
 }
+
+.mobileDrinkPageTitleContainer {
+	height: auto;
+	width: 100%;
+	background: linear-gradient(
+		to top,
+		rgba(0, 0, 0, 0.9) 0%,
+		rgba(10, 10, 10, 0.6) 50%,
+		rgba(20, 20, 20, 0.01) 100%
+	);
+	position: absolute;
+	bottom: 0;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 8px 0;
+	/* border-bottom-left-radius: 12px; */
+	/* border-bottom-right-radius: 12px; */
+}
+
+.mobileDrinkPageTitleContainer h1 {
+	margin: 0 0 0 20px;
+	font-size: 2em;
+	color: #fff;
+	padding: 10px;
+}
+
+.mobileDrinkPageIngredientsContainer {
+	background-color: #000;
+	height: auto;
+}
+
+.mobileDrinkPageBubbleTextContainer {
+	height: auto;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #000;
+}
+
+.bubble {
+	width: 90%;
+	height: 90%;
+	border-radius: 25px;
+	height: 70px;
+	display: flex;
+	/* justify-content: center; */
+	/* align-items: flex-start; */
+	/* background-color: pink; */
+	backdrop-filter: blur(16px) saturate(180%);
+	-webkit-backdrop-filter: blur(16px) saturate(180%);
+	background-color: rgba(17, 25, 40, 0.25);
+	border: 1px solid rgba(255, 255, 255, 0.125);
+	filter: drop-shadow(0 6px 8px rgba(80, 80, 80, 10.125));
+	padding: 10px 0;
+}
+
+.bubbleSection {
+	width: 34.333333333333333%;
+	height: 100%;
+	padding: 5px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	/* background-color: green; */
+}
+
+.bubbleSection p {
+	text-align: center;
+	margin: 0;
+	height: 50%;
+}
+
+.bubbleTitle {
+	font-size: 11px;
+	padding: 2px;
+	/* height: 50%; */
+	color:darkgrey;
+}
+
+.bubbleText {
+	font-size: 11px;
+	/* padding: 5px; */
+	/* height: 50%; */
+	color:aqua;
+}
+
+.mobileDrinkPageIngredientsHeader {
+	font-size: 1.5em;
+	color: white;
+	margin: 0 0 0 20px;
+	padding: 20px 10px;
+}
+
+.mobileDrinkPageIngredientsListContainer {
+
+}
