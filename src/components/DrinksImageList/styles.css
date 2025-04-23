@@ -21,7 +21,6 @@
 	padding: 8px 0;
 	border-bottom-left-radius: 12px;
 	border-bottom-right-radius: 12px;
-	/* border-top: 1px solid #000; */
 }
 
 .mobile-overlay-photo-top {
@@ -40,7 +39,6 @@
 	align-items: center;
 	border-top-left-radius: 12px;
 	border-top-right-radius: 12px;
-	/* border-top: 1px solid white; */
 }
 
 .mobile-overylay-photo-title {
@@ -53,12 +51,12 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	padding: 10px;
+	font-size: 2em;
 }
 
 .mobile-overlay-favorite-container {
 	width: 50%;
 	height: 80%;
-	/* background-color: magenta; */
 	padding: 5px 0;
 	display: flex;
 	justify-content: center;

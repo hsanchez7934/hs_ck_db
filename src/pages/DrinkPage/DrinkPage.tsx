@@ -198,11 +198,20 @@ const DrinkPage = (): JSX.Element => {
 					<h2 style={{fontFamily: primaryFont}} className="mobileDrinkPageIngredientsHeader">
 						Ingredients
 					</h2>
-					<div className='mobileDrinkPageIngredientsListContainer'>
+					<div className="mobileDrinkPageIngredientsListContainer">
 						{ingredients.map((ingredient: any) => {
-							return (<div>
-								
-							</div>)
+							return (
+								<div className="mobileDrinkPageIngredientCard" key={ingredient.name}>
+									<div
+										className="mobileDrinkPageIngredientImgContainer"
+									>
+										<img src={`https://www.thecocktaildb.com/images/ingredients/${ingredient.name}-small.png`} />
+									</div>
+									<div className='mobileDrinkPageIngredientTextContainer'>
+										<p className='left'>{`${ingredient.amount} ${ingredient.name}`}</p>
+									</div>
+								</div>
+							)
 						})}
 					</div>
 				</div>
@@ -222,7 +231,7 @@ const DrinkPage = (): JSX.Element => {
 			: renderedDrinkPageComponent(data?.drinks[0])
 	}
 
-	return <div style={{height: 'calc(100% - 64px)'}}>{content}</div>
+	return <div style={{height: 'calc(100% - 64px)', overflow: 'auto'}}>{content}</div>
 }
 
 export default DrinkPage

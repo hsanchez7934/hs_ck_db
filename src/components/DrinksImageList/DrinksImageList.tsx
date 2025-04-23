@@ -219,7 +219,7 @@ const DrinksImageList = (props: Props) => {
 					<div className="mobile-overlay-photo-top">
 						<p
 							className="mobile-overylay-photo-title"
-							style={{fontFamily: primaryFont, fontSize: '2em'}}
+							style={{fontFamily: primaryFont}}
 						>
 							{drink.strDrink}
 						</p>
