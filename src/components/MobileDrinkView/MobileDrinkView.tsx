@@ -64,7 +64,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 								</div>
 								<div className="mobileDrinkPageIngredientTextContainer">
 									<p style={{fontFamily: primaryFont, color: 'darkgray'}}>
-										{'Ingredient'}
+										Ingredient
 									</p>
 									<p style={{fontFamily: primaryFont, color: 'aqua'}}>{`${ingredient.name || ''}`}</p>
 								</div>
@@ -75,7 +75,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 									<p
 										style={{fontFamily: primaryFont, color: 'darkgray', textAlign: 'right'}}
 									>
-										{'Amount'}
+										Amount
 									</p>
 									<p
 										style={{fontFamily: primaryFont, textAlign: 'right', color: 'aqua'}}
