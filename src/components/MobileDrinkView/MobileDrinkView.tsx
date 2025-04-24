@@ -63,8 +63,23 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 									/>
 								</div>
 								<div className="mobileDrinkPageIngredientTextContainer">
-									<p style={{fontFamily: primaryFont}}>{`${ingredient.amount || ''}`}</p>
-									<p style={{fontFamily: primaryFont}}>{`${ingredient.name || ''}`}</p>
+									<p style={{fontFamily: primaryFont, color: 'darkgray'}}>
+										{'Ingredient'}
+									</p>
+									<p style={{fontFamily: primaryFont, color: 'aqua'}}>{`${ingredient.name || ''}`}</p>
+								</div>
+								<div
+									className="mobileDrinkPageIngredientTextContainer"
+									style={{borderLeft: 'none'}}
+								>
+									<p
+										style={{fontFamily: primaryFont, color: 'darkgray', textAlign: 'right'}}
+									>
+										{'Amount'}
+									</p>
+									<p
+										style={{fontFamily: primaryFont, textAlign: 'right', color: 'aqua'}}
+									>{`${ingredient.amount || 'At your discretion'}`}</p>
 								</div>
 							</div>
 						)
