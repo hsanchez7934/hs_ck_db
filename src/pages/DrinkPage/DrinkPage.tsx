@@ -6,7 +6,9 @@ import NoDrinkDataNotice from '../../components/NoDrinkData'
 import {primaryFont} from '../../fonts/fonts'
 import {useFetchDrinkDataByIDQuery} from '../../store'
 import {useParams} from 'react-router-dom'
-import generateUUID from '../../uuid'
+
+import MobileDrinkView from '../../components/MobileDrinkView/MobileDrinkView'
+import { DrinkDataPoint } from '../../types'
 
 const isMobileView = window.innerWidth < 1050
 
@@ -135,107 +137,8 @@ const DrinkPage = (): JSX.Element => {
 		)
 	}
 
-	const mobileDrinkPageComponent = (drink: any) => {
-		return (
-			<div style={{height: '100%'}}>
-				<div
-					style={{
-						height: '400px',
-						backgroundImage: `url(${drink.strDrinkThumb})`,
-						backgroundSize: 'cover',
-						backgroundPosition: 'center',
-						backgroundRepeat: 'no-repeat',
-						position: 'relative'
-					}}
-				>
-					<div className="mobileDrinkPageTitleContainer">
-						<h1 style={{fontFamily: primaryFont}} className="mobileDrinkPageTitle">
-							{drink.strDrink}
-						</h1>
-					</div>
-				</div>
-				<div className="mobileDrinkPageBubbleTextContainer">
-					<div className="mobileIngredientBubble">
-						<div className="mobileIngredientBubbleSection">
-							<p style={{fontFamily: primaryFont}} className="bubbleTitle">
-								Type
-							</p>
-							<p
-								style={{fontFamily: primaryFont}}
-								className="bubbleText truncate"
-								title={drink.strAlcoholic}
-							>
-								{drink.strAlcoholic}
-							</p>
-						</div>
-						<div
-							className="mobileIngredientBubbleSection"
-							style={{borderLeft: '1px solid darkgrey'}}
-						>
-							<p style={{fontFamily: primaryFont}} className="bubbleTitle">
-								Glass
-							</p>
-							<p
-								style={{fontFamily: primaryFont}}
-								className="bubbleText truncate"
-								title={drink.strGlass}
-							>
-								{drink.strGlass}
-							</p>
-						</div>
-						<div
-							className="mobileIngredientBubbleSection"
-							style={{borderLeft: '1px solid darkgrey'}}
-						>
-							<p style={{fontFamily: primaryFont}} className="bubbleTitle">
-								Category
-							</p>
-							<p
-								style={{fontFamily: primaryFont}}
-								className="bubbleText truncate"
-								title={drink.strCategory}
-							>
-								{drink.strCategory}
-							</p>
-						</div>
-					</div>
-				</div>
-				<div className="mobileDrinkPageIngredientsContainer">
-					<h2 style={{fontFamily: primaryFont}} className="mobileDrinkPageIngredientsHeader">
-						Ingredients
-					</h2>
-					<div className="mobileDrinkPageIngredientsListContainer">
-						{ingredients.map((ingredient: any) => {
-							console.log(ingredient)
-							return (
-								<div className="mobileDrinkPageIngredientCard" key={generateUUID()}>
-									<div className="mobileDrinkPageIngredientImgContainer">
-										<img
-											src={`https://www.thecocktaildb.com/images/ingredients/${ingredient.name}-small.png`}
-										/>
-									</div>
-									<div className="mobileDrinkPageIngredientTextContainer">
-										<p className="left">{`${ingredient.amount || ''}`}</p>
-										<p className="left">{`${ingredient.name || ''}`}</p>
-									</div>
-								</div>
-							)
-						})}
-					</div>
-					<h2 style={{fontFamily: primaryFont}} className="mobileDrinkPageIngredientsHeader">
-						Instructions
-					</h2>
-					<div style={{padding: '5px 20px'}}>
-						<p
-							className="mobileDrinkPageInstructionsText"
-							style={{fontFamily: primaryFont, color: 'white'}}
-						>
-							{drink.strInstructions}
-						</p>
-					</div>
-				</div>
-			</div>
-		)
+	const mobileDrinkPageView = (drink: DrinkDataPoint) => {
+		return <MobileDrinkView drink={drink} ingredients={ingredients} />
 	}
 
 	let content = <LoadingSpinner />
@@ -246,7 +149,7 @@ const DrinkPage = (): JSX.Element => {
 	} else if (data && data?.drinks?.length > 0) {
 		const isMobileView = window.innerWidth < 800
 		content = isMobileView
-			? mobileDrinkPageComponent(data?.drinks[0])
+			? mobileDrinkPageView(data?.drinks[0])
 			: renderedDrinkPageComponent(data?.drinks[0])
 	}
 
