@@ -6,6 +6,7 @@ import NoDrinkDataNotice from '../../components/NoDrinkData'
 import {primaryFont} from '../../fonts/fonts'
 import {useFetchDrinkDataByIDQuery} from '../../store'
 import {useParams} from 'react-router-dom'
+import generateUUID from '../../uuid'
 
 const isMobileView = window.innerWidth < 1050
 
@@ -155,8 +156,8 @@ const DrinkPage = (): JSX.Element => {
 					</div>
 				</div>
 				<div className="mobileDrinkPageBubbleTextContainer">
-					<div className="bubble">
-						<div className="bubbleSection">
+					<div className="mobileIngredientBubble">
+						<div className="mobileIngredientBubbleSection">
 							<p style={{fontFamily: primaryFont}} className="bubbleTitle">
 								Type
 							</p>
@@ -168,7 +169,7 @@ const DrinkPage = (): JSX.Element => {
 								{drink.strAlcoholic}
 							</p>
 						</div>
-						<div className="bubbleSection" style={{borderLeft: '1px solid darkgrey'}}>
+						<div className="mobileIngredientBubbleSection" style={{borderLeft: '1px solid darkgrey'}}>
 							<p style={{fontFamily: primaryFont}} className="bubbleTitle">
 								Glass
 							</p>
@@ -180,7 +181,7 @@ const DrinkPage = (): JSX.Element => {
 								{drink.strGlass}
 							</p>
 						</div>
-						<div className="bubbleSection" style={{borderLeft: '1px solid darkgrey'}}>
+						<div className="mobileIngredientBubbleSection" style={{borderLeft: '1px solid darkgrey'}}>
 							<p style={{fontFamily: primaryFont}} className="bubbleTitle">
 								Category
 							</p>
@@ -200,20 +201,26 @@ const DrinkPage = (): JSX.Element => {
 					</h2>
 					<div className="mobileDrinkPageIngredientsListContainer">
 						{ingredients.map((ingredient: any) => {
+							console.log(ingredient)
 							return (
-								<div className="mobileDrinkPageIngredientCard" key={ingredient.name}>
+								<div className="mobileDrinkPageIngredientCard" key={generateUUID()}>
 									<div
 										className="mobileDrinkPageIngredientImgContainer"
 									>
 										<img src={`https://www.thecocktaildb.com/images/ingredients/${ingredient.name}-small.png`} />
 									</div>
 									<div className='mobileDrinkPageIngredientTextContainer'>
-										<p className='left'>{`${ingredient.amount} ${ingredient.name}`}</p>
+										<p className='left'>{`${ingredient.amount || ''}`}</p>
+										<p className='left'>{`${ingredient.name || ''}`}</p>
 									</div>
 								</div>
 							)
 						})}
 					</div>
+					<h2 style={{fontFamily: primaryFont}} className="mobileDrinkPageIngredientsHeader">
+						Instructions
+					</h2>
+					<p className='mobileDrinkPageInstructionsText' style={{fontFamily: primaryFont, color: 'white'}}>{drink.strInstructions}</p>
 				</div>
 			</div>
 		)
