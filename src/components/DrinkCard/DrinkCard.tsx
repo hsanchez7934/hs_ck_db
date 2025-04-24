@@ -7,21 +7,24 @@ import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Divider from '@mui/material/Divider'
-import DrinkTags from '../DrinkTags'
-import Typography from '@mui/material/Typography'
-import SimpleDialog from '../SimpleDialog/SimpleDialog'
 import {DrinkDataPoint} from '../../types'
+import DrinkTags from '../DrinkTags'
+import SimpleDialog from '../SimpleDialog/SimpleDialog'
+import Typography from '@mui/material/Typography'
 import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
 import generateUUID from '../../uuid'
 import {generatePath} from 'react-router-dom'
 import {primaryFont} from '../../fonts/fonts'
 import {useAppSelector, useAppDispatch} from '../../store/hooks'
-import {updateModalDrink} from '../../store'
-import {updateTriggerRender} from '../../store'
 import {useAuth0} from '@auth0/auth0-react'
 
 import {saveUserDrinkInDB} from '../../firebase/firebase-user-drink-storage'
-import {updateUserSavedDrinks, updateGetFreshUpdate} from '../../store'
+import {
+	updateModalDrink,
+	updateTriggerRender,
+	updateUserSavedDrinks,
+	updateGetFreshUpdate
+} from '../../store'
 
 import {
 	FaVideo,
@@ -440,13 +443,13 @@ const DrinkCard = (props: Props) => {
 							dialogText={dialogText}
 							isLoginDialog={false}
 						/>
-						{
-							toggleLoginDialog && <SimpleDialog
+						{toggleLoginDialog && (
+							<SimpleDialog
 								open={toggleLoginDialog}
 								isLoginDialog={true}
 								onLoginDialogClose={() => setToggleLoginDialog(false)}
 							/>
-						}
+						)}
 					</CardActions>
 				</CardContent>
 			</CardContent>

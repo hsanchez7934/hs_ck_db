@@ -138,7 +138,7 @@ const DrinkPage = (): JSX.Element => {
 	}
 
 	const mobileDrinkPageView = (drink: DrinkDataPoint) => {
-		return <MobileDrinkView drink={drink} ingredients={ingredients} />
+		return <MobileDrinkView drink={drink} isFreshInit={true} />
 	}
 
 	let content = <LoadingSpinner />

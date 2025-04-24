@@ -196,6 +196,15 @@ const DrinksImageList = (props: Props) => {
 		return renderedSaveIcon
 	}
 
+	const handleLinkOnClick = async (drink: any) => {
+		if (!drink.strInstructions) {
+			const response = await fetchDrinkDataByID(drink)
+			drink = {...response, ...drink}
+		}
+		dispatch(updateIsModalOpen(true))
+		dispatch(updateModalDrink(drink))
+	}
+
 	const renderedMobileDrinkImages = (): ReactElement[] => {
 		const isDrinkSaved = (drinkID: string | null | undefined) => {
 			if (drinkID) {
@@ -235,8 +244,9 @@ const DrinksImageList = (props: Props) => {
 							<Link
 								key={drink.drinkMapID}
 								to={`/drink/${drink.idDrink}`}
+								state={{backgroundLocation: location}}
 							>
-								<FaEye style={{color: 'white', fontSize: '35px'}} />
+								<FaEye style={{color: 'white', fontSize: '35px'}} onClick={() => handleLinkOnClick(drink)} />
 							</Link>
 						</div>
 					</div>
