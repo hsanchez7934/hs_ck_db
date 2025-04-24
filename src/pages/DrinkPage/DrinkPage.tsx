@@ -136,7 +136,6 @@ const DrinkPage = (): JSX.Element => {
 	}
 
 	const mobileDrinkPageComponent = (drink: any) => {
-		console.log(drink)
 		return (
 			<div style={{height: '100%'}}>
 				<div
@@ -169,7 +168,10 @@ const DrinkPage = (): JSX.Element => {
 								{drink.strAlcoholic}
 							</p>
 						</div>
-						<div className="mobileIngredientBubbleSection" style={{borderLeft: '1px solid darkgrey'}}>
+						<div
+							className="mobileIngredientBubbleSection"
+							style={{borderLeft: '1px solid darkgrey'}}
+						>
 							<p style={{fontFamily: primaryFont}} className="bubbleTitle">
 								Glass
 							</p>
@@ -181,7 +183,10 @@ const DrinkPage = (): JSX.Element => {
 								{drink.strGlass}
 							</p>
 						</div>
-						<div className="mobileIngredientBubbleSection" style={{borderLeft: '1px solid darkgrey'}}>
+						<div
+							className="mobileIngredientBubbleSection"
+							style={{borderLeft: '1px solid darkgrey'}}
+						>
 							<p style={{fontFamily: primaryFont}} className="bubbleTitle">
 								Category
 							</p>
@@ -204,14 +209,14 @@ const DrinkPage = (): JSX.Element => {
 							console.log(ingredient)
 							return (
 								<div className="mobileDrinkPageIngredientCard" key={generateUUID()}>
-									<div
-										className="mobileDrinkPageIngredientImgContainer"
-									>
-										<img src={`https://www.thecocktaildb.com/images/ingredients/${ingredient.name}-small.png`} />
+									<div className="mobileDrinkPageIngredientImgContainer">
+										<img
+											src={`https://www.thecocktaildb.com/images/ingredients/${ingredient.name}-small.png`}
+										/>
 									</div>
-									<div className='mobileDrinkPageIngredientTextContainer'>
-										<p className='left'>{`${ingredient.amount || ''}`}</p>
-										<p className='left'>{`${ingredient.name || ''}`}</p>
+									<div className="mobileDrinkPageIngredientTextContainer">
+										<p className="left">{`${ingredient.amount || ''}`}</p>
+										<p className="left">{`${ingredient.name || ''}`}</p>
 									</div>
 								</div>
 							)
@@ -220,7 +225,14 @@ const DrinkPage = (): JSX.Element => {
 					<h2 style={{fontFamily: primaryFont}} className="mobileDrinkPageIngredientsHeader">
 						Instructions
 					</h2>
-					<p className='mobileDrinkPageInstructionsText' style={{fontFamily: primaryFont, color: 'white'}}>{drink.strInstructions}</p>
+					<div style={{padding: '5px 20px'}}>
+						<p
+							className="mobileDrinkPageInstructionsText"
+							style={{fontFamily: primaryFont, color: 'white'}}
+						>
+							{drink.strInstructions}
+						</p>
+					</div>
 				</div>
 			</div>
 		)
