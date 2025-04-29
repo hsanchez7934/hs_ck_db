@@ -242,7 +242,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 			style={{
 				height: 'auto',
 				position: 'relative',
-				backgroundImage: `url(${drink.strDrinkThumb})`,
+				backgroundImage: `url(${drink?.strDrinkThumb})`,
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',
 				backgroundRepeat: 'no-repeat'
@@ -251,7 +251,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 			<div
 				style={{
 					height: '400px',
-					backgroundImage: `url(${drink.strDrinkThumb})`,
+					backgroundImage: `url(${drink?.strDrinkThumb})`,
 					backgroundSize: 'cover',
 					backgroundPosition: 'center',
 					backgroundRepeat: 'no-repeat',
@@ -260,15 +260,15 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 			>
 				<div className="mobileDrinkPageTitleContainer">
 					<h1 style={{fontFamily: primaryFont}} className="mobileDrinkPageTitle">
-						{drink.strDrink}
+						{drink?.strDrink}
 					</h1>
 				</div>
 			</div>
 			<div className="mobileDrinkPageBubbleTextContainer">
 				<div className="mobileIngredientBubble gradientFilter">
-					{renderedBubble('Type', drink.strAlcoholic, {})}
-					{renderedBubble('Glass', drink.strGlass, {borderLeft: '1px solid darkgrey'})}
-					{renderedBubble('Category', drink.strCategory, {borderLeft: '1px solid darkgrey'})}
+					{renderedBubble('Type', drink?.strAlcoholic || '', {})}
+					{renderedBubble('Glass', drink?.strGlass || '', {borderLeft: '1px solid darkgrey'})}
+					{renderedBubble('Category', drink?.strCategory || '', {borderLeft: '1px solid darkgrey'})}
 				</div>
 			</div>
 			<div className="mobileDrinkPageIngredientsContainer">
@@ -313,7 +313,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 						className="mobileDrinkPageInstructionsText gradientFilter"
 						style={{fontFamily: primaryFont, color: 'white'}}
 					>
-						{drink.strInstructions}
+						{drink?.strInstructions}
 					</p>
 				</div>
 			</div>
@@ -338,7 +338,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 						title="Copy shareable link to clipboard"
 						size="small"
 						onClick={() => {
-							if (drink?.idDrink) handleShareOnClick(drink.idDrink)
+							if (drink?.idDrink) handleShareOnClick(drink?.idDrink)
 						}}
 						sx={buttonStyles}
 					>
