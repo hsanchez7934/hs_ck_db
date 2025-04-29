@@ -34,9 +34,9 @@ const setGridColumns = (width: number) => {
 	return columns
 }
 
-const removeSavedMapIDs = (drinksList: any) => {
+const removeSavedMapIDs = (drinksList: DrinkDataPoint[]) => {
 	if (drinksList?.[0]?.drinkMapID) {
-		const cleaned = drinksList.map((drink: any) => {
+		const cleaned = drinksList.map((drink: DrinkDataPoint) => {
 			const newDrink = Object.assign({}, drink)
 			delete newDrink.drinkMapID
 			return newDrink
@@ -145,15 +145,11 @@ const DrinksImageList = (props: Props) => {
 		}, 1500)
 	}
 
-	const handleMobileCardSaveOnClick = (
-		drink: any,
-		isSaved: boolean | null | undefined | string
-	) => {
+	const handleMobileCardSaveOnClick = (drink: DrinkDataPoint, isSaved: boolean) => {
 		if (isAuthenticated) {
 			dispatch(updateTriggerRender(true))
 			if (!isSaved) {
 				const drinks = [...userSavedDrinks]
-
 				drinks.push(drink)
 				saveUserDrinkInDB(user?.sub, drinks).then(() => {
 					dispatch(updateUserSavedDrinks(drinks))
@@ -162,7 +158,7 @@ const DrinksImageList = (props: Props) => {
 				})
 			} else {
 				const filtered = userSavedDrinks.filter(
-					(savedDrink: any) => savedDrink.idDrink !== drink.idDrink
+					(savedDrink: DrinkDataPoint) => savedDrink.idDrink !== drink.idDrink
 				)
 				saveUserDrinkInDB(user?.sub, filtered).then(() => {
 					dispatch(updateUserSavedDrinks(filtered))
@@ -175,10 +171,7 @@ const DrinksImageList = (props: Props) => {
 		}
 	}
 
-	const renderFavoriteIcons = (
-		drink: DrinkDataPoint,
-		isSaved: string | null | undefined | boolean
-	) => {
+	const renderFavoriteIcons = (drink: DrinkDataPoint, isSaved: boolean) => {
 		const renderedSaveIcon =
 			isAuthenticated && isSaved ? (
 				<FaHeartCirclePlus
@@ -198,7 +191,7 @@ const DrinksImageList = (props: Props) => {
 		return renderedSaveIcon
 	}
 
-	const handleLinkOnClick = async (drink: any) => {
+	const handleLinkOnClick = async (drink: DrinkDataPoint) => {
 		if (!drink.strInstructions) {
 			const response = await fetchDrinkDataByID(drink)
 			drink = {...response, ...drink}
@@ -249,8 +242,10 @@ const DrinksImageList = (props: Props) => {
 	const renderedMobileDrinkImages = (): ReactElement[] => {
 		const isDrinkSaved = (drinkID: string | null | undefined) => {
 			if (drinkID) {
-				const found = userSavedDrinks?.find((drink: any) => drink.idDrink === drinkID)
-				return found
+				const found = userSavedDrinks?.find((drink: DrinkDataPoint) => drink.idDrink === drinkID)
+				if (found) {
+					return true
+				}
 			}
 			return false
 		}
@@ -271,7 +266,7 @@ const DrinksImageList = (props: Props) => {
 							{drink.strDrink}
 						</p>
 					</div>
-					<div className="mobile-overlay-photo-bottom">
+					<div className="mobile-drink-card-bottom">
 						<div
 							className="mobile-overlay-action-container"
 							style={{
@@ -333,7 +328,7 @@ const DrinksImageList = (props: Props) => {
 				gap={8}
 				sx={{margin: 0, padding: '7px', overflow: 'hidden', width: '100%'}}
 			>
-				{windowWidth > 800 ? renderedLargeDrinkImages() : renderedMobileDrinkImages()}
+				{windowWidth >= 800 ? renderedLargeDrinkImages() : renderedMobileDrinkImages()}
 				{windowWidth < 800 && (
 					<>
 						<SimpleDialog

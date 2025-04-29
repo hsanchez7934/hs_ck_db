@@ -1,8 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit'
+import { DrinkDataPoint } from '../types';
 
 interface SavedDrinkState {
 	triggerRender: boolean;
-	userSavedDrinks: string[]
+	userSavedDrinks: DrinkDataPoint[] | []
 	getFreshUpdate: boolean
 }
 
