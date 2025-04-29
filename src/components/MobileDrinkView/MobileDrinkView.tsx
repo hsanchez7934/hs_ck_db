@@ -30,9 +30,13 @@ import {
 	// updateGetFreshUpdate
 } from '../../store'
 
+import { redirect } from 'react-router'
+
 interface MobileDrinkViewProps {
 	drink: DrinkDataPoint | null
-	isFreshInit: boolean
+	drinkPagerMap: any
+	ingredients: {name: string; amount: string}[]
+	prevPath: string | null
 }
 
 const buttonStyles = {
@@ -44,30 +48,20 @@ const iconStyles = {
 }
 
 const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
-	const {drink, isFreshInit} = props
+	const {drink, drinkPagerMap, ingredients, prevPath} = props
+	// console.log(prevPath)
+	// console.log(drinkPagerMap)
+	// console.log(drink)
+
 	const {isAuthenticated, user} = useAuth0()
 	const dispatch = useAppDispatch()
 	const {userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
-	const {drinkPagerMap} = useAppSelector(({drinkPagerMap}) => drinkPagerMap)
-	console.log(drinkPagerMap)
 
 	const [toggleSaved, setToggleSaved] = useState(false)
 	const [dialogText, setDialogText] = useState('')
 	const [dialogTextColor, setDialogTextColor] = useState('')
 	const [openSavedStatedDialog, setOpenSavedStateDialog] = useState(false)
 	const [toggleLoginDialog, setToggleLoginDialog] = useState(false)
-
-    let counter = 1
-	const ingredients: any = []
-	if (drink) {
-		while (drink[`strIngredient${counter}`]) {
-			ingredients.push({
-				name: drink[`strIngredient${counter}`],
-				amount: drink[`strMeasure${counter}`]
-			})
-			counter = counter + 1
-		}
-	}
 
 	const isDrinkSaved = (drinkID: string | null | undefined) => {
 		if (drinkID) {
@@ -188,6 +182,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 				const {drinkMapID} = data
 				data = {...response, drinkMapID}
 			}
+			// redirect(`/drink/${Number(data.idDrink)}`)
 			// dispatch(updateModalDrink(data))
 			const currentUrl = window.location.href
 			const split = currentUrl.split('/')
@@ -196,8 +191,8 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 			window.history.replaceState(null, '', updatedURL)
 		}
 	}
-	console.log(drink)
-	console.log(drinkPagerMap)
+	// console.log(drink)
+	// console.log(drinkPagerMap)
 	const hasPrevious: boolean =
 		drinkPagerMap &&
 		drink?.drinkMapID &&
@@ -208,6 +203,9 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 		drink?.drinkMapID &&
 		drinkPagerMap[drink.drinkMapID] &&
 		drinkPagerMap[drink.drinkMapID].next !== null
+
+	console.log('hasPrev: ', hasPrevious)
+	console.log('hasNext: ', hasNext)
 
 	const renderedPagerPrevious = (
 		<Button
@@ -331,8 +329,8 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 						width: '95%'
 					}}
 				>
-					{!isFreshInit && renderedPagerPrevious}
-					{!isFreshInit && renderedPagerNext}
+					{renderedPagerPrevious}
+					{renderedPagerNext}
 					<Button size="small" onClick={() => handleSaveOnClick(drink)} sx={buttonStyles}>
 						{renderedSaveIcon}
 					</Button>

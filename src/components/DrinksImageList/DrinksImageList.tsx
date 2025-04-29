@@ -117,7 +117,6 @@ const DrinksImageList = (props: Props) => {
 					key={drink.drinkMapID}
 					to={`/drink/${drink.idDrink}`}
 					state={{backgroundLocation: location}}
-					id={location.pathname === '/' ? drink?.elemID : drink.drinkMapID}
 				>
 					<ImageListItem onClick={() => handleOnClickLargeCard(drink)}>
 						<img
@@ -197,6 +196,7 @@ const DrinksImageList = (props: Props) => {
 	}
 
 	const handleLinkOnClick = async (drink: any) => {
+		// console.log(location)
 		if (!drink.strInstructions) {
 			const response = await fetchDrinkDataByID(drink)
 			drink = {...response, ...drink}
@@ -244,7 +244,10 @@ const DrinksImageList = (props: Props) => {
 							<Link
 								key={drink.drinkMapID}
 								to={`/drink/${drink.idDrink}`}
-								state={{backgroundLocation: location}}
+								state={{
+									mobileStatePrevPath: location,
+									mobileStateDrink: drink,
+								}}
 							>
 								<FaEye style={{color: 'white', fontSize: '35px'}} onClick={() => handleLinkOnClick(drink)} />
 							</Link>

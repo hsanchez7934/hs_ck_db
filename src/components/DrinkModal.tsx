@@ -6,12 +6,6 @@ import {useNavigate} from 'react-router-dom'
 import {useAppDispatch, useAppSelector} from '../store/hooks'
 import {updateIsModalOpen, updateModalDrink} from '../store'
 
-import MobileDrinkView from './MobileDrinkView/MobileDrinkView'
-import { posix } from 'path'
-import { Widgets } from '@mui/icons-material'
-
-const isMobileView = window.innerWidth < 800
-
 const style = {
 	position: 'absolute' as 'absolute',
 	top: '50%',
@@ -23,14 +17,6 @@ const style = {
 	border: '2px solid #000',
 	boxShadow: 24,
 	p: 0
-}
-
-const mobileStyles = {
-	posix: 'absolute' as 'absolute',
-	top: '0',
-	left: '0',
-	width: window.innerWidth,
-	height: window.innerHeight,
 }
 
 const DrinkModal = (): JSX.Element => {
@@ -50,8 +36,8 @@ const DrinkModal = (): JSX.Element => {
 				open={isModalOpen}
 				onClose={handleClose}
 			>
-				<Box sx={isMobileView ? mobileStyles : style}>
-					{isMobileView ? <MobileDrinkView drink={drink} isFreshInit={false} /> : <DrinkCard drink={drink} />}
+				<Box sx={style}>
+					<DrinkCard drink={drink} />
 				</Box>
 			</Modal>
 		</div>
