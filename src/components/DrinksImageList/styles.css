@@ -7,20 +7,21 @@
 .mobile-overlay-photo-bottom {
 	height: auto;
 	width: 100%;
-	background: linear-gradient(
+	/* background: linear-gradient(
 		to top,
 		rgba(0, 0, 0, 0.9) 0%,
 		rgba(10, 10, 10, 0.6) 50%,
 		rgba(20, 20, 20, 0.01) 100%
-	);
-	position: absolute;
-	bottom: 0;
+	); */
+	/* position: absolute; */
+	/* bottom: 0; */
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	padding: 8px 0;
-	border-bottom-left-radius: 12px;
-	border-bottom-right-radius: 12px;
+	/* border-bottom-left-radius: 12px; */
+	/* border-bottom-right-radius: 12px; */
+	background-color: #000;
 }
 
 .mobile-overlay-photo-top {
@@ -37,8 +38,8 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border-top-left-radius: 12px;
-	border-top-right-radius: 12px;
+	/* border-top-left-radius: 12px; */
+	/* border-top-right-radius: 12px; */
 }
 
 .mobile-overylay-photo-title {
@@ -54,7 +55,7 @@
 	font-size: 2em;
 }
 
-.mobile-overlay-favorite-container {
+.mobile-overlay-action-container {
 	width: 50%;
 	height: 80%;
 	padding: 5px 0;

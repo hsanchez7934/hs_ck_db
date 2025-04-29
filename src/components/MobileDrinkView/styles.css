@@ -15,6 +15,34 @@
 	padding: 0;
 }
 
+.mobileDrinkPageSaveBackContainer {
+	position: absolute;
+	height: 70px;
+	width: 100%;
+	top: 0;
+	left: 0;
+	display: flex;
+}
+
+.mobileDrinkPageBackContainer {
+	height: 100%;
+	width: 50%;
+	display: flex;
+	align-items: center;
+	/* background-color: aqua; */
+	padding: 5px 0 0 20px;
+}
+
+.mobileDrinkPageSaveContainer {
+	height: 100%;
+	width: 50%;
+	display: flex;
+	align-items: center;
+	/* background-color: red; */
+	padding: 5px 20px 0 0;
+	justify-content: flex-end;
+}
+
 .mobileDrinkPageTitleContainer h1 {
 	margin: 0 0 0 15px;
 	font-size: 2.5em;
@@ -143,13 +171,4 @@
 	margin: 0px 0px 20px 0px;
 	font-size: 1em;
 	border-radius: 12px;
-}
-
-.mobileDrinkPageActionContainer {
-	background-color: #000;
-	height: 60px;
-	bottom: 0px;
-	width: 100%;
-	border-top: 1px solid darkgray;
-	position: sticky;
 }

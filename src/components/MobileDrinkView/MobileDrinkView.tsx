@@ -3,7 +3,7 @@ import React, {ReactElement, useEffect, useState} from 'react'
 import {DrinkDataPoint} from '../../types'
 import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
 import generateUUID from '../../uuid'
-import {generatePath} from 'react-router-dom'
+import {generatePath, Link} from 'react-router-dom'
 import {primaryFont} from '../../fonts/fonts'
 
 import Button from '@mui/material/Button'
@@ -20,7 +20,8 @@ import {
 	FaHeartCircleMinus,
 	FaHeartCirclePlus,
 	FaCircleArrowLeft,
-	FaCircleArrowRight
+	FaCircleArrowRight,
+	FaAngleLeft
 	// FaEye
 } from 'react-icons/fa6'
 import {
@@ -30,7 +31,7 @@ import {
 	// updateGetFreshUpdate
 } from '../../store'
 
-import { redirect } from 'react-router'
+// import { redirect } from 'react-router'
 
 interface MobileDrinkViewProps {
 	drink: DrinkDataPoint | null
@@ -41,8 +42,15 @@ interface MobileDrinkViewProps {
 
 const buttonStyles = {
 	margin: 0,
-	border: 'none'
+	borderRadius: '36px',
+	backgroundColor: 'black',
+	minHeight: '50px',
+	minWidth: '50px',
+	maxHeight: '40px',
+	maxWidth: '40px',
+	opacity: '0.8'
 }
+
 const iconStyles = {
 	fontSize: '25px'
 }
@@ -116,17 +124,17 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 		}
 	}
 
-	const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
-		const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
-		window.navigator.clipboard.writeText(path).then(
-			() => {
-				toggleDialog('green', 'Link copied to clipboard!')
-			},
-			() => {
-				toggleDialog('red', 'Oops, something went wrong! Please try again.')
-			}
-		)
-	}
+	// const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
+	// 	const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
+	// 	window.navigator.clipboard.writeText(path).then(
+	// 		() => {
+	// 			toggleDialog('green', 'Link copied to clipboard!')
+	// 		},
+	// 		() => {
+	// 			toggleDialog('red', 'Oops, something went wrong! Please try again.')
+	// 		}
+	// 	)
+	// }
 
 	const renderedBubble = (title: string, text: string | null, cssStyling: any) => {
 		return (
@@ -147,22 +155,22 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 		<FaHeartCircleMinus title="Add/Remove from favorites" color="white" style={iconStyles} />
 	)
 
-	const handleViewOnClick = (url: string | null) => {
-		if (url) {
-			window.open(url)?.focus()
-		}
-	}
+	// const handleViewOnClick = (url: string | null) => {
+	// 	if (url) {
+	// 		window.open(url)?.focus()
+	// 	}
+	// }
 
-	const renderedVideoIcon = drink?.strVideo && (
-		<Button
-			title="Open drink instruction video."
-			size="small"
-			onClick={() => handleViewOnClick(drink.strVideo)}
-			sx={buttonStyles}
-		>
-			<FaVideo color="white" style={iconStyles} />
-		</Button>
-	)
+	// const renderedVideoIcon = drink?.strVideo && (
+	// 	<Button
+	// 		title="Open drink instruction video."
+	// 		size="large"
+	// 		onClick={() => handleViewOnClick(drink.strVideo)}
+	// 		sx={buttonStyles}
+	// 	>
+	// 		<FaVideo color="white" style={iconStyles} />
+	// 	</Button>
+	// )
 
 	const handlePager = async (drink: DrinkDataPoint, direction: string) => {
 		const {drinkMapID} = drink
@@ -238,16 +246,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 	)
 
 	return (
-		<div
-			style={{
-				height: 'auto',
-				position: 'relative',
-				backgroundImage: `url(${drink?.strDrinkThumb})`,
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				backgroundRepeat: 'no-repeat'
-			}}
-		>
+		<div>
 			<div
 				style={{
 					height: '400px',
@@ -258,6 +257,24 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 					position: 'relative'
 				}}
 			>
+				<div className="mobileDrinkPageSaveBackContainer">
+					<div className="mobileDrinkPageBackContainer">
+						<Link to={prevPath || ''} state={{test: 'test'}}>
+							<Button
+							title="Navigate back to previous page."
+							size="small"
+							sx={buttonStyles}
+						>
+							<FaAngleLeft color="white" style={iconStyles} />
+						</Button>
+						</Link>
+					</div>
+					<div className="mobileDrinkPageSaveContainer">
+						<Button size="small" onClick={() => handleSaveOnClick(drink)} sx={buttonStyles}>
+							{renderedSaveIcon}
+						</Button>
+					</div>
+				</div>
 				<div className="mobileDrinkPageTitleContainer">
 					<h1 style={{fontFamily: primaryFont}} className="mobileDrinkPageTitle">
 						{drink?.strDrink}
@@ -316,59 +333,6 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 						{drink?.strInstructions}
 					</p>
 				</div>
-			</div>
-			<div className="mobileDrinkPageActionContainer">
-				<CardActions
-					sx={{
-						padding: 0,
-						margin: 0,
-						display: 'flex',
-						justifyContent: 'center',
-						alignItems: 'center',
-						height: '70%',
-						width: '95%'
-					}}
-				>
-					{renderedPagerPrevious}
-					{renderedPagerNext}
-					<Button size="small" onClick={() => handleSaveOnClick(drink)} sx={buttonStyles}>
-						{renderedSaveIcon}
-					</Button>
-					<Button
-						title="Copy shareable link to clipboard"
-						size="small"
-						onClick={() => {
-							if (drink?.idDrink) handleShareOnClick(drink?.idDrink)
-						}}
-						sx={buttonStyles}
-					>
-						<FaShare color="white" style={iconStyles} />
-					</Button>
-					{/* {renderedDetailedViewIcon} */}
-					{renderedVideoIcon}
-					{/* <SimpleDialog
-						open={openSavedStatedDialog}
-						dialogTextColor={dialogTextColor}
-						dialogText={dialogText}
-						isLoginDialog={false}
-					/>
-					<SimpleDialog
-						open={toggleLoginDialog}
-						isLoginDialog={true}
-						onLoginDialogClose={() => setToggleLoginDialog(false)}
-					/> */}
-					<SimpleDialog
-						open={openSavedStatedDialog}
-						dialogTextColor={dialogTextColor}
-						dialogText={dialogText}
-						isLoginDialog={false}
-					/>
-					<SimpleDialog
-						open={toggleLoginDialog}
-						isLoginDialog={true}
-						onLoginDialogClose={() => setToggleLoginDialog(false)}
-					/>
-				</CardActions>
 			</div>
 		</div>
 	)

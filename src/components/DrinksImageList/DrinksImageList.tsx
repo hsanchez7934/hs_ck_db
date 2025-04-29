@@ -4,14 +4,14 @@ import Box from '@mui/material/Box'
 import {DrinkDataPoint} from '../../types'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
-import {Link, useLocation} from 'react-router-dom'
+import {Link, useLocation, generatePath} from 'react-router-dom'
 import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
 import generateUUID from '../../uuid'
 import {updateIsModalOpen, updateModalDrink, updateDrinkMap} from '../../store'
 import {useEffect, useState} from 'react'
 import {useAppDispatch, useAppSelector} from '../../store/hooks'
 import {primaryFont} from '../../fonts/fonts'
-import {FaHeartCircleMinus, FaHeartCirclePlus, FaEye} from 'react-icons/fa6'
+import {FaHeartCircleMinus, FaHeartCirclePlus, FaEye, FaShare} from 'react-icons/fa6'
 import {useAuth0} from '@auth0/auth0-react'
 import SimpleDialog from '../SimpleDialog/SimpleDialog'
 import {updateTriggerRender} from '../../store'
@@ -121,7 +121,7 @@ const DrinksImageList = (props: Props) => {
 					<ImageListItem onClick={() => handleOnClickLargeCard(drink)}>
 						<img
 							src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
-							srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
+							srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=22x`}
 							alt={drink.strDrink || ''}
 							loading="lazy"
 						/>
@@ -145,7 +145,10 @@ const DrinksImageList = (props: Props) => {
 		}, 1500)
 	}
 
-	const handleMobileCardSaveOnClick = (drink: any, isSaved: boolean | null | undefined | string) => {
+	const handleMobileCardSaveOnClick = (
+		drink: any,
+		isSaved: boolean | null | undefined | string
+	) => {
 		if (isAuthenticated) {
 			dispatch(updateTriggerRender(true))
 			if (!isSaved) {
@@ -181,14 +184,14 @@ const DrinksImageList = (props: Props) => {
 				<FaHeartCirclePlus
 					title="Add/Remove from favorites"
 					color="red"
-					style={{fontSize: '35px'}}
+					style={{fontSize: '25px'}}
 					onClick={() => handleMobileCardSaveOnClick(drink, isSaved)}
 				/>
 			) : (
 				<FaHeartCircleMinus
 					title="Add/Remove from favorites"
 					color="white"
-					style={{fontSize: '35px'}}
+					style={{fontSize: '25px'}}
 					onClick={() => handleMobileCardSaveOnClick(drink, isSaved)}
 				/>
 			)
@@ -196,13 +199,24 @@ const DrinksImageList = (props: Props) => {
 	}
 
 	const handleLinkOnClick = async (drink: any) => {
-		// console.log(location)
 		if (!drink.strInstructions) {
 			const response = await fetchDrinkDataByID(drink)
 			drink = {...response, ...drink}
 		}
 		dispatch(updateIsModalOpen(true))
 		dispatch(updateModalDrink(drink))
+	}
+
+	const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
+		const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
+		window.navigator.clipboard.writeText(path).then(
+			() => {
+				toggleDialog('green', 'Link copied to clipboard!')
+			},
+			() => {
+				toggleDialog('red', 'Oops, something went wrong! Please try again.')
+			}
+		)
 	}
 
 	const renderedMobileDrinkImages = (): ReactElement[] => {
@@ -217,28 +231,30 @@ const DrinksImageList = (props: Props) => {
 			const isSaved = isDrinkSaved(drink.idDrink)
 
 			return (
-				<ImageListItem key={drink.idDrink} sx={{borderRadius: '12px'}}>
+				<ImageListItem key={drink.drinkMapID}>
 					<img
 						src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
-						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
+						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=22x`}
 						alt={drink.strDrink || ''}
 						loading="lazy"
-						style={{borderRadius: '12px'}}
 					/>
 					<div className="mobile-overlay-photo-top">
-						<p
-							className="mobile-overylay-photo-title"
-							style={{fontFamily: primaryFont}}
-						>
+						<p className="mobile-overylay-photo-title" style={{fontFamily: primaryFont}}>
 							{drink.strDrink}
 						</p>
 					</div>
 					<div className="mobile-overlay-photo-bottom">
-						<div className="mobile-overlay-favorite-container">
+						<div className="mobile-overlay-action-container" style={{borderRight: '1px solid white'}}>
+							<FaShare
+								style={{color: 'white', fontSize: '25px'}}
+								onClick={() => handleShareOnClick(drink.idDrink)}
+							/>
+						</div>
+						<div className="mobile-overlay-action-container">
 							{renderFavoriteIcons(drink, isSaved)}
 						</div>
 						<div
-							className="mobile-overlay-favorite-container"
+							className="mobile-overlay-action-container"
 							style={{borderLeft: '1px solid white'}}
 						>
 							<Link
@@ -246,24 +262,16 @@ const DrinksImageList = (props: Props) => {
 								to={`/drink/${drink.idDrink}`}
 								state={{
 									mobileStatePrevPath: location,
-									mobileStateDrink: drink,
+									mobileStateDrink: drink
 								}}
 							>
-								<FaEye style={{color: 'white', fontSize: '35px'}} onClick={() => handleLinkOnClick(drink)} />
+								<FaEye
+									style={{color: 'white', fontSize: '25px'}}
+									onClick={() => handleLinkOnClick(drink)}
+								/>
 							</Link>
 						</div>
 					</div>
-					<SimpleDialog
-						open={openSavedStatedDialog}
-						dialogTextColor={dialogTextColor}
-						dialogText={dialogText}
-						isLoginDialog={false}
-					/>
-					<SimpleDialog
-						open={toggleLoginDialog}
-						isLoginDialog={true}
-						onLoginDialogClose={() => setToggleLoginDialog(false)}
-					/>
 				</ImageListItem>
 			)
 		})
@@ -272,7 +280,11 @@ const DrinksImageList = (props: Props) => {
 	}
 
 	return (
-		<Box sx={{height: 'auto', overflow: 'hidden', width: '100%'}} id='imageScrollContainer' ref={infiniteScrollContainer}>
+		<Box
+			sx={{height: 'auto', overflow: 'hidden', width: '100%'}}
+			id="imageScrollContainer"
+			ref={infiniteScrollContainer}
+		>
 			<ImageList
 				variant="standard"
 				cols={setGridColumns(windowWidth)}
@@ -280,6 +292,21 @@ const DrinksImageList = (props: Props) => {
 				sx={{margin: 0, padding: '7px', overflow: 'hidden', width: '100%'}}
 			>
 				{windowWidth > 800 ? renderedLargeDrinkImages() : renderedMobileDrinkImages()}
+				{windowWidth < 800 && (
+					<>
+						<SimpleDialog
+							open={openSavedStatedDialog}
+							dialogTextColor={dialogTextColor}
+							dialogText={dialogText}
+							isLoginDialog={false}
+						/>
+						<SimpleDialog
+							open={toggleLoginDialog}
+							isLoginDialog={true}
+							onLoginDialogClose={() => setToggleLoginDialog(false)}
+						/>
+					</>
+				)}
 			</ImageList>
 		</Box>
 	)
