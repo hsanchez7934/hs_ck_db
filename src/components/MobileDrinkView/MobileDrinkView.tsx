@@ -119,8 +119,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 				})
 			}
 		} else {
-			console.log('not authenticated')
-			// setToggleLoginDialog(true)
+			setToggleLoginDialog(true)
 		}
 	}
 
@@ -334,6 +333,19 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 					</p>
 				</div>
 			</div>
+			<>
+				<SimpleDialog
+					open={openSavedStatedDialog}
+					dialogTextColor={dialogTextColor}
+					dialogText={dialogText}
+					isLoginDialog={false}
+				/>
+				<SimpleDialog
+					open={toggleLoginDialog}
+					isLoginDialog={true}
+					onLoginDialogClose={() => setToggleLoginDialog(false)}
+				/>
+			</>
 		</div>
 	)
 }

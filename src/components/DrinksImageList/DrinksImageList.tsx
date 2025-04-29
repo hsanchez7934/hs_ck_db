@@ -11,7 +11,7 @@ import {updateIsModalOpen, updateModalDrink, updateDrinkMap} from '../../store'
 import {useEffect, useState} from 'react'
 import {useAppDispatch, useAppSelector} from '../../store/hooks'
 import {primaryFont} from '../../fonts/fonts'
-import {FaHeartCircleMinus, FaHeartCirclePlus, FaEye, FaShare} from 'react-icons/fa6'
+import {FaHeartCircleMinus, FaHeartCirclePlus, FaEye, FaShare, FaVideo} from 'react-icons/fa6'
 import {useAuth0} from '@auth0/auth0-react'
 import SimpleDialog from '../SimpleDialog/SimpleDialog'
 import {updateTriggerRender} from '../../store'
@@ -219,6 +219,33 @@ const DrinksImageList = (props: Props) => {
 		)
 	}
 
+	const handleViewOnClick = (url: string | null) => {
+		if (url) {
+			window.open(url)?.focus()
+		}
+	}
+
+	const renderedVideoIcon = (drink: DrinkDataPoint) => {
+		if (drink.strVideo) {
+			return (
+				<div
+					className="mobile-overlay-action-container"
+					style={{borderLeft: '1px solid white', width: '25%'}}
+				>
+					<FaVideo
+						color="white"
+						style={{color: 'white', fontSize: '25px'}}
+						onClick={() => handleViewOnClick(drink.strVideo)}
+					/>
+				</div>
+			)
+		}
+	}
+
+	const setActionContainerWidth = (videoUrl: string | null) => {
+		return videoUrl ? '25%' : '33.3333333333333%'
+	}
+
 	const renderedMobileDrinkImages = (): ReactElement[] => {
 		const isDrinkSaved = (drinkID: string | null | undefined) => {
 			if (drinkID) {
@@ -233,7 +260,7 @@ const DrinksImageList = (props: Props) => {
 			return (
 				<ImageListItem key={drink.drinkMapID}>
 					<img
-						className='mobile-drink-card-image'
+						className="mobile-drink-card-image"
 						src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
 						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=22x`}
 						alt={drink.strDrink || ''}
@@ -245,18 +272,30 @@ const DrinksImageList = (props: Props) => {
 						</p>
 					</div>
 					<div className="mobile-overlay-photo-bottom">
-						<div className="mobile-overlay-action-container" style={{borderRight: '1px solid white'}}>
+						<div
+							className="mobile-overlay-action-container"
+							style={{
+								borderRight: '1px solid white',
+								width: setActionContainerWidth(drink.strVideo)
+							}}
+						>
 							<FaShare
 								style={{color: 'white', fontSize: '25px'}}
 								onClick={() => handleShareOnClick(drink.idDrink)}
 							/>
 						</div>
-						<div className="mobile-overlay-action-container">
+						<div
+							className="mobile-overlay-action-container"
+							style={{width: setActionContainerWidth(drink.strVideo)}}
+						>
 							{renderFavoriteIcons(drink, isSaved)}
 						</div>
 						<div
 							className="mobile-overlay-action-container"
-							style={{borderLeft: '1px solid white'}}
+							style={{
+								borderLeft: '1px solid white',
+								width: setActionContainerWidth(drink.strVideo)
+							}}
 						>
 							<Link
 								key={drink.drinkMapID}
@@ -265,6 +304,7 @@ const DrinksImageList = (props: Props) => {
 									mobileStatePrevPath: location,
 									mobileStateDrink: drink
 								}}
+								style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}
 							>
 								<FaEye
 									style={{color: 'white', fontSize: '25px'}}
@@ -272,6 +312,7 @@ const DrinksImageList = (props: Props) => {
 								/>
 							</Link>
 						</div>
+						{renderedVideoIcon(drink)}
 					</div>
 				</ImageListItem>
 			)
