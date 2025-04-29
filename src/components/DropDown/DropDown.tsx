@@ -1,3 +1,4 @@
+import React from 'react'
 import {primaryFont} from '../../fonts/fonts'
 import './styles.css'
 
@@ -7,13 +8,11 @@ type Props = {
 	data: string[]
 	labelText: string
 	placeholderText: string
-	parentContainerWidth?: number
-	hideLabel: boolean
+	dropDownWidth?: string
 }
 
 const DropDown = (props: Props) => {
-	const {hideLabel, handleOnChange, dropdownValue, data, labelText, placeholderText, parentContainerWidth} =
-		props
+	const {handleOnChange, dropdownValue, data, labelText, placeholderText, dropDownWidth} = props
 
 	const renderedData = data.map((item: string) => {
 		return (
@@ -23,22 +22,18 @@ const DropDown = (props: Props) => {
 		)
 	})
 
-	const renderedLabel = hideLabel ? (
-		<></>
-	) : (
-		<label className="truncate" title={labelText} style={{fontFamily: primaryFont, color: '#fff'}}>
-			{labelText}
-		</label>
-	)
-
-	const width = parentContainerWidth ? `${parentContainerWidth}px` : '100%'
-
 	return (
-		<div className="dropdown-container" style={{width}}>
-			{renderedLabel}
-			<select
+		<div className="dropdown-container">
+			<label
+				className="truncate"
+				title={labelText}
 				style={{fontFamily: primaryFont, color: '#fff'}}
-				// @ts-expect-error
+			>
+				{labelText}
+			</label>
+			<select
+				style={{fontFamily: primaryFont, width: dropDownWidth || 'auto'}}
+				// @ts-expect-error generic
 				placeholder={placeholderText || ''}
 				onChange={handleOnChange}
 				value={dropdownValue}

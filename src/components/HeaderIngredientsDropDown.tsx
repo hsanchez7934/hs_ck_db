@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {
 	useFetchDrinkByIngredientQuery,
 	useFetchIngredientsQuery,
@@ -36,9 +36,10 @@ const HeaderIngredientsDropDown = () => {
 				data={dropdownData}
 				handleOnChange={handleOnChange}
 				dropdownValue={dropdownValue}
-				labelText={'Select an ingredient:'}
+				labelText={'Ingredient:'}
 				placeholderText={'Select an ingredient...'}
-				hideLabel={window.innerWidth < 550}
+				dropDownWidth='140px'
+				// hideLabel={window.innerWidth < 550}
 			/>
 		</div>
 	)

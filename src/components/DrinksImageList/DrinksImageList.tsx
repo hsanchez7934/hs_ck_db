@@ -2,24 +2,27 @@ import './styles.css'
 import React, {ReactElement, useRef} from 'react'
 import Box from '@mui/material/Box'
 import {DrinkDataPoint} from '../../types'
+import {FaHeartCircleMinus, FaHeartCirclePlus, FaEye, FaShare, FaVideo} from 'react-icons/fa6'
 import ImageList from '@mui/material/ImageList'
 import ImageListItem from '@mui/material/ImageListItem'
-import {Link, useLocation, generatePath} from 'react-router-dom'
+import SimpleDialog from '../SimpleDialog/SimpleDialog'
 import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
 import generateUUID from '../../uuid'
+import {primaryFont} from '../../fonts/fonts'
+import {saveUserDrinkInDB} from '../../firebase/firebase-user-drink-storage'
 import {updateIsModalOpen, updateModalDrink, updateDrinkMap} from '../../store'
 import {useEffect, useState} from 'react'
 import {useAppDispatch, useAppSelector} from '../../store/hooks'
-import {primaryFont} from '../../fonts/fonts'
-import {FaHeartCircleMinus, FaHeartCirclePlus, FaEye, FaShare, FaVideo} from 'react-icons/fa6'
-import {useAuth0} from '@auth0/auth0-react'
-import SimpleDialog from '../SimpleDialog/SimpleDialog'
 import {updateTriggerRender} from '../../store'
 import {updateUserSavedDrinks, updateGetFreshUpdate} from '../../store'
-import {saveUserDrinkInDB} from '../../firebase/firebase-user-drink-storage'
+import {useAuth0} from '@auth0/auth0-react'
+import {Link, useLocation, generatePath} from 'react-router-dom'
 
 interface Props {
 	drinksData: DrinkDataPoint[]
+	scrollTop?: number;
+	fetchData?: () => any
+	isHomePage?: boolean
 }
 
 const setGridColumns = (width: number) => {
@@ -47,7 +50,7 @@ const removeSavedMapIDs = (drinksList: DrinkDataPoint[]) => {
 }
 
 const DrinksImageList = (props: Props) => {
-	const {drinksData} = props
+	const {drinksData, scrollTop, fetchData, isHomePage} = props
 	const infiniteScrollContainer = useRef(null)
 	const {isAuthenticated, user} = useAuth0()
 	const windowWidth = window.innerWidth
@@ -58,6 +61,7 @@ const DrinksImageList = (props: Props) => {
 	const [dialogText, setDialogText] = useState('')
 	const [dialogTextColor, setDialogTextColor] = useState('')
 	const [openSavedStatedDialog, setOpenSavedStateDialog] = useState(false)
+	const [observerTarget, setObserverTarget] = useState(null)
 
 	const dispatch = useAppDispatch()
 	const {userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
@@ -80,7 +84,9 @@ const DrinksImageList = (props: Props) => {
 					: null
 
 				drinks.push(data)
-
+				if (index === drinksDataToRender.length - 6) {
+					setObserverTarget(data.drinkMapID)
+				}
 				const node = {
 					data,
 					previous,
@@ -99,7 +105,38 @@ const DrinksImageList = (props: Props) => {
 			dispatch(updateDrinkMap(map))
 		}
 		setDrinkPagerMap()
-	}, [drinksData, isAuthenticated, user, dispatch])
+	}, [drinksData, isAuthenticated, user])
+
+	useEffect(() => {
+		console.log(observerTarget)
+		if (isHomePage && observerTarget) {
+			const options = {
+			root: document.querySelector('#imageScrollContainer'),
+			rootMargin: '0px',
+			threshold: 1.0
+		}
+
+		// @ts-expect-error generic
+		const callback = (entries) => {
+			// @ts-expect-error generic
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					console.log(entry)
+					if (fetchData) {
+						fetchData()
+					}
+				}
+			})
+		}
+
+		const observer = new IntersectionObserver(callback, options)
+		if (observerTarget) {
+			// @ts-expect-error generic
+			observer.observe(document.getElementById(observerTarget))
+		}
+		return () => observer.disconnect()
+		}
+	}, [observerTarget])
 
 	const handleOnClickLargeCard = async (drink: DrinkDataPoint) => {
 		if (!drink.strInstructions) {
@@ -117,6 +154,7 @@ const DrinksImageList = (props: Props) => {
 					key={drink.drinkMapID}
 					to={`/drink/${drink.idDrink}`}
 					state={{backgroundLocation: location}}
+					id={drink.drinkMapID}
 				>
 					<ImageListItem onClick={() => handleOnClickLargeCard(drink)}>
 						<img
@@ -253,7 +291,7 @@ const DrinksImageList = (props: Props) => {
 			const isSaved = isDrinkSaved(drink.idDrink)
 
 			return (
-				<ImageListItem key={drink.drinkMapID}>
+				<ImageListItem key={drink.drinkMapID} id={drink.drinkMapID}>
 					<img
 						className="mobile-drink-card-image"
 						src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
@@ -297,7 +335,8 @@ const DrinksImageList = (props: Props) => {
 								to={`/drink/${drink.idDrink}`}
 								state={{
 									mobileStatePrevPath: location,
-									mobileStateDrink: drink
+									mobileStateDrink: drink,
+									scrollTop
 								}}
 								style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}
 							>
@@ -318,7 +357,7 @@ const DrinksImageList = (props: Props) => {
 
 	return (
 		<Box
-			sx={{height: 'auto', overflow: 'hidden', width: '100%'}}
+			sx={{height: '100%', overflow: 'auto'}}
 			id="imageScrollContainer"
 			ref={infiniteScrollContainer}
 		>
@@ -326,7 +365,7 @@ const DrinksImageList = (props: Props) => {
 				variant="standard"
 				cols={setGridColumns(windowWidth)}
 				gap={8}
-				sx={{margin: 0, padding: '7px', overflow: 'hidden', width: '100%'}}
+				sx={{margin: 0, padding: '7px', width: '100%'}}
 			>
 				{windowWidth >= 800 ? renderedLargeDrinkImages() : renderedMobileDrinkImages()}
 				{windowWidth < 800 && (

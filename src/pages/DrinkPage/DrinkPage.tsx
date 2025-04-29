@@ -6,14 +6,12 @@ import NoDrinkDataNotice from '../../components/NoDrinkData'
 
 import {useFetchDrinkDataByIDQuery} from '../../store'
 import {useParams, useLocation} from 'react-router-dom'
-import {useAppSelector} from '../../store/hooks'
 
 const isMobileView = window.innerWidth < 1050
 
 const DrinkPage = (): JSX.Element => {
 	const location = useLocation()
 	const {id} = useParams<'id'>()
-	const {drinkPagerMap} = useAppSelector(({drinkPagerMap}) => drinkPagerMap)
 	const {data, error, isFetching} = useFetchDrinkDataByIDQuery(id)
 
 	let drinkDataToRender = data?.drinks[0] || {}
@@ -23,9 +21,6 @@ const DrinkPage = (): JSX.Element => {
 		drinkDataToRender = mobileStateDrink
 	}
 
-	// console.log(location)
-	// console.log(drinkPagerMap)
-	// console.log(drinkDataToRender)
 	let counter = 1
 	const ingredients: any | {name: string; amount: string}[] = []
 	if (drinkDataToRender) {
@@ -43,8 +38,8 @@ const DrinkPage = (): JSX.Element => {
 			<MobileDrinkView
 				ingredients={ingredients}
 				drink={drinkDataToRender}
-				drinkPagerMap={drinkPagerMap}
 				prevPath={location.state?.mobileStatePrevPath?.pathname || null}
+				scrollTop={location.state?.scrollTop || 0}
 			/>
 		)
 	}

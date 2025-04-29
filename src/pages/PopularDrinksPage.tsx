@@ -19,7 +19,7 @@ const PopularDrinksPage = () => {
 
 	return (
 		<div
-			style={{overflow: 'auto', height: 'calc(100% - 64px)'}}
+			style={{overflow: 'hidden', height: 'calc(100% - 64px)'}}
 		>
 			{content}
 		</div>

@@ -55,7 +55,7 @@ const SearchBySpiritsPage = () => {
 			<div
 				style={{
 					height: `calc(100% - ${window.innerWidth < 800 ? '0px' : '45px'})`,
-					overflow: 'auto'
+					overflow: 'hidden'
 				}}
 			>
 				{content}

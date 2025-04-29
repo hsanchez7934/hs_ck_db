@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import DropDown from './DropDown/DropDown'
 import {SelectChangeEvent} from '@mui/material'
 import {useAppDispatch} from '../store/hooks'
@@ -26,9 +26,10 @@ const HeaderSpiritsDropDown = () => {
 				data={spirits}
 				handleOnChange={handleOnChange}
 				dropdownValue={dropdownValue}
-				labelText="Select a spirit:"
+				labelText="Spirit:"
 				placeholderText="Select a spirit..."
-				hideLabel={window.innerWidth < 550}
+				dropDownWidth="140px"
+				// hideLabel={window.innerWidth < 550}
 			/>
 		</div>
 	)

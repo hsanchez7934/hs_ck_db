@@ -98,18 +98,17 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 		</div>
 	)
 
-	if (window.innerWidth < 700) {
+	if (window.innerWidth < 800) {
 		return (
 			<div className="alphabetPickerDropdownContainer">
-				{window.innerWidth < 600 && isKeywordSearch ? renderedSearchKeywordResults : <></>}
+				{window.innerWidth < 800 && isKeywordSearch ? renderedSearchKeywordResults : <></>}
 				<DropDown
 					handleOnChange={handleOnChange}
 					dropdownValue={dropdownValue}
 					data={alphabet}
 					labelText="Select a letter:"
 					placeholderText="Select a letter..."
-					parentContainerWidth={402}
-					hideLabel={false}
+					dropDownWidth='140px'
 				/>
 			</div>
 		)
@@ -118,7 +117,7 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 	return (
 		<div className="alphabetPickerContainer">
 			<ul>
-				{alphabet.map((letter, index) => {
+				{alphabet.map((letter) => {
 					return (
 						<li
 							className={`letter-list-item ${

@@ -1,15 +1,12 @@
 import './styles.css'
 import React, {ReactElement, useEffect, useState} from 'react'
-import {DrinkDataPoint} from '../../types'
-import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
-import generateUUID from '../../uuid'
-import {generatePath, Link} from 'react-router-dom'
-import {primaryFont} from '../../fonts/fonts'
-
 import Button from '@mui/material/Button'
-import CardActions from '@mui/material/CardActions'
+import {DrinkDataPoint} from '../../types'
+import {Link, generatePath} from 'react-router-dom'
 import SimpleDialog from '../SimpleDialog/SimpleDialog'
 
+import generateUUID from '../../uuid'
+import {primaryFont} from '../../fonts/fonts'
 import {useAppSelector, useAppDispatch} from '../../store/hooks'
 import {useAuth0} from '@auth0/auth0-react'
 import {saveUserDrinkInDB} from '../../firebase/firebase-user-drink-storage'
@@ -19,8 +16,6 @@ import {
 	FaShare,
 	FaHeartCircleMinus,
 	FaHeartCirclePlus,
-	FaCircleArrowLeft,
-	FaCircleArrowRight,
 	FaAngleLeft
 	// FaEye
 } from 'react-icons/fa6'
@@ -31,13 +26,11 @@ import {
 	// updateGetFreshUpdate
 } from '../../store'
 
-// import { redirect } from 'react-router'
-
 interface MobileDrinkViewProps {
 	drink: DrinkDataPoint | null
-	drinkPagerMap: any
 	ingredients: {name: string; amount: string}[]
 	prevPath: string | null
+	scrollTop: number
 }
 
 const buttonStyles = {
@@ -56,10 +49,7 @@ const iconStyles = {
 }
 
 const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
-	const {drink, drinkPagerMap, ingredients, prevPath} = props
-	// console.log(prevPath)
-	// console.log(drinkPagerMap)
-	// console.log(drink)
+	const {drink, ingredients, prevPath, scrollTop} = props
 
 	const {isAuthenticated, user} = useAuth0()
 	const dispatch = useAppDispatch()
@@ -74,7 +64,9 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 	const isDrinkSaved = (drinkID: string | null | undefined) => {
 		if (drinkID) {
 			const found = userSavedDrinks?.find((drink: any) => drink.idDrink === drinkID)
-			return found
+			if (found) {
+				return true
+			}
 		}
 		return false
 	}
@@ -123,18 +115,6 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 		}
 	}
 
-	// const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
-	// 	const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
-	// 	window.navigator.clipboard.writeText(path).then(
-	// 		() => {
-	// 			toggleDialog('green', 'Link copied to clipboard!')
-	// 		},
-	// 		() => {
-	// 			toggleDialog('red', 'Oops, something went wrong! Please try again.')
-	// 		}
-	// 	)
-	// }
-
 	const renderedBubble = (title: string, text: string | null, cssStyling: any) => {
 		return (
 			<div className="mobileIngredientBubbleSection" style={cssStyling}>
@@ -154,95 +134,38 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 		<FaHeartCircleMinus title="Add/Remove from favorites" color="white" style={iconStyles} />
 	)
 
-	// const handleViewOnClick = (url: string | null) => {
-	// 	if (url) {
-	// 		window.open(url)?.focus()
-	// 	}
-	// }
-
-	// const renderedVideoIcon = drink?.strVideo && (
-	// 	<Button
-	// 		title="Open drink instruction video."
-	// 		size="large"
-	// 		onClick={() => handleViewOnClick(drink.strVideo)}
-	// 		sx={buttonStyles}
-	// 	>
-	// 		<FaVideo color="white" style={iconStyles} />
-	// 	</Button>
-	// )
-
-	const handlePager = async (drink: DrinkDataPoint, direction: string) => {
-		const {drinkMapID} = drink
-		let data = null
-
-		if (drinkMapID !== undefined) {
-			if (direction === 'left') {
-				data = drinkPagerMap[drinkMapID].previous
-			} else if (direction === 'right') {
-				data = drinkPagerMap[drinkMapID].next
+	const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
+		const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
+		window.navigator.clipboard.writeText(path).then(
+			() => {
+				toggleDialog('green', 'Link copied to clipboard!')
+			},
+			() => {
+				toggleDialog('red', 'Oops, something went wrong! Please try again.')
 			}
-		}
+		)
+	}
 
-		if (data) {
-			if (!data.strInstructions) {
-				const response = await fetchDrinkDataByID(data)
-				const {drinkMapID} = data
-				data = {...response, drinkMapID}
-			}
-			// redirect(`/drink/${Number(data.idDrink)}`)
-			// dispatch(updateModalDrink(data))
-			const currentUrl = window.location.href
-			const split = currentUrl.split('/')
-			split[split.length - 1] = data.idDrink
-			const updatedURL = split.join('/')
-			window.history.replaceState(null, '', updatedURL)
+	const handleViewOnClick = (url: string | null) => {
+		if (url) {
+			window.open(url)?.focus()
 		}
 	}
-	// console.log(drink)
-	// console.log(drinkPagerMap)
-	const hasPrevious: boolean =
-		drinkPagerMap &&
-		drink?.drinkMapID &&
-		drinkPagerMap[drink.drinkMapID] &&
-		drinkPagerMap[drink.drinkMapID].previous !== null
-	const hasNext: boolean =
-		drinkPagerMap &&
-		drink?.drinkMapID &&
-		drinkPagerMap[drink.drinkMapID] &&
-		drinkPagerMap[drink.drinkMapID].next !== null
 
-	console.log('hasPrev: ', hasPrevious)
-	console.log('hasNext: ', hasNext)
-
-	const renderedPagerPrevious = (
-		<Button
-			size="small"
-			onClick={() => {
-				if (drink && hasPrevious) handlePager(drink, 'left')
-			}}
-			sx={buttonStyles}
-			disabled={hasPrevious ? false : true}
-			className="btn_disabled"
-			title="Previous Drink"
-		>
-			<FaCircleArrowLeft color={hasPrevious ? 'white' : 'gray'} style={iconStyles} />
-		</Button>
-	)
-
-	const renderedPagerNext = (
-		<Button
-			size="small"
-			onClick={() => {
-				if (drink && hasNext) handlePager(drink, 'right')
-			}}
-			sx={buttonStyles}
-			disabled={hasNext ? false : true}
-			className="btn_disabled"
-			title="Next Drink"
-		>
-			<FaCircleArrowRight color={hasNext ? 'white' : 'gray'} style={iconStyles} />
-		</Button>
-	)
+	const renderedVideoIcon = (videoUrl: string | null | undefined) => {
+		if (videoUrl) {
+			return (
+				<Button
+					title="Open drink instruction video."
+					size="small"
+					onClick={() => handleViewOnClick(videoUrl)}
+					sx={buttonStyles}
+				>
+					<FaVideo color="white" style={iconStyles} />
+				</Button>
+			)
+		}
+	}
 
 	return (
 		<div>
@@ -256,23 +179,28 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 					position: 'relative'
 				}}
 			>
-				<div className="mobileDrinkPageSaveBackContainer">
-					<div className="mobileDrinkPageBackContainer">
-						<Link to={prevPath || ''} state={{test: 'test'}}>
-							<Button
-							title="Navigate back to previous page."
-							size="small"
-							sx={buttonStyles}
-						>
+				<div className="mobileDrinkPageActionLeft">
+					<Link to={prevPath || ''} state={{scrollTop}}>
+						<Button title="Navigate back to previous page." size="small" sx={buttonStyles}>
 							<FaAngleLeft color="white" style={iconStyles} />
 						</Button>
-						</Link>
-					</div>
-					<div className="mobileDrinkPageSaveContainer">
-						<Button size="small" onClick={() => handleSaveOnClick(drink)} sx={buttonStyles}>
-							{renderedSaveIcon}
-						</Button>
-					</div>
+					</Link>
+				</div>
+
+				<div className="mobileDrinkPageActionRight">
+					<Button size="small" onClick={() => handleSaveOnClick(drink)} sx={{...buttonStyles, marginBottom: '10px'}}>
+						{renderedSaveIcon}
+					</Button>
+					<Button
+						size="small"
+						onClick={() => {
+							if (drink) handleShareOnClick(drink.idDrink)
+						}}
+						sx={{...buttonStyles, marginBottom: '10px'}}
+					>
+						<FaShare color="white" style={iconStyles} />
+					</Button>
+					{renderedVideoIcon(drink?.strVideo)}
 				</div>
 				<div className="mobileDrinkPageTitleContainer">
 					<h1 style={{fontFamily: primaryFont}} className="mobileDrinkPageTitle">

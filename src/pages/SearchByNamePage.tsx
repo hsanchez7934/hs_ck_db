@@ -37,10 +37,12 @@ const SearchByNamePage = (): JSX.Element => {
 		}
 	}
 
+	const containerHeight = window.innerWidth < 800 ? 'calc(100% - 40px)' : 'calc(100% - 25px)'
+
 	return (
 		<div style={{height: 'calc(100% - 64px)', overflow: 'hidden'}}>
 			<AlphtabetPicker isKeywordSearch={isKeywordSearch} searchKeyword={searchKeyword} />
-			<div style={{overflowY: 'scroll', height: 'calc(100% - 25px)', paddingBottom: '35px'}}>{content}</div>
+			<div style={{overflow: 'hidden', height: containerHeight}}>{content}</div>
 		</div>
 	)
 }

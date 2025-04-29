@@ -16,7 +16,7 @@ const SearchByIngredientpage = () => {
 		content = <DrinksImageList drinksData={drinksByIngredient} />
 	}
 
-	return <div style={{overflow: 'auto', height: 'calc(100% - 64px)'}}>{content}</div>
+	return <div style={{overflow: 'hidden', height: 'calc(100% - 64px)'}}>{content}</div>
 }
 
 export default SearchByIngredientpage
