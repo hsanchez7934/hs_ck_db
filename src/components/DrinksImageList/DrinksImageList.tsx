@@ -233,6 +233,7 @@ const DrinksImageList = (props: Props) => {
 			return (
 				<ImageListItem key={drink.drinkMapID}>
 					<img
+						className='mobile-drink-card-image'
 						src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
 						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=22x`}
 						alt={drink.strDrink || ''}
