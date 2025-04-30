@@ -20,7 +20,6 @@ import {HomeRounded} from '@mui/icons-material'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import MenuIcon from '@mui/icons-material/Menu'
-import MobileHomePageHeader from '../MobileHomePageHeader/MobileHomePageHeader'
 import {Search} from '@mui/icons-material'
 import SideBarListItem from '../SideBarListItem'
 import Toolbar from '@mui/material/Toolbar'
@@ -194,7 +193,7 @@ const SideBar: React.FC = () => {
 					{isSearchByNamePath && searchResultsText}
 					{isSearcByIngredientPath && <HeaderIngredientsDropDown />}
 					{renderSpiritsHeaderDropdown && <HeaderSpiritsDropDown />}
-					{renderMobileHomePageHeader && <MobileHomePageHeader />}
+					{renderMobileHomePageHeader && renderedSavedDrinksHeader('Cocktail Explorer')}
 					{renderSavedDrinksHeader && renderedSavedDrinksHeader('Saved Drinks')}
 					{renderPopularDrinksHeader && renderedSavedDrinksHeader('Popular Cocktails')}
 					{renderNonAlcoholicDrinksHeader && renderedSavedDrinksHeader('Non-Alcoholic')}

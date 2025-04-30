@@ -39,7 +39,6 @@ const HeaderIngredientsDropDown = () => {
 				labelText={'Ingredient:'}
 				placeholderText={'Select an ingredient...'}
 				dropDownWidth='140px'
-				// hideLabel={window.innerWidth < 550}
 			/>
 		</div>
 	)

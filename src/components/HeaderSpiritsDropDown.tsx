@@ -29,7 +29,6 @@ const HeaderSpiritsDropDown = () => {
 				labelText="Spirit:"
 				placeholderText="Select a spirit..."
 				dropDownWidth="140px"
-				// hideLabel={window.innerWidth < 550}
 			/>
 		</div>
 	)

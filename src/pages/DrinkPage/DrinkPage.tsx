@@ -14,12 +14,7 @@ const DrinkPage = (): JSX.Element => {
 	const {id} = useParams<'id'>()
 	const {data, error, isFetching} = useFetchDrinkDataByIDQuery(id)
 
-	let drinkDataToRender = data?.drinks[0] || {}
-
-	if (isMobileView && location.state) {
-		const {mobileStateDrink} = location.state
-		drinkDataToRender = mobileStateDrink
-	}
+	const drinkDataToRender = data?.drinks[0] || {}
 
 	let counter = 1
 	const ingredients: any | {name: string; amount: string}[] = []
