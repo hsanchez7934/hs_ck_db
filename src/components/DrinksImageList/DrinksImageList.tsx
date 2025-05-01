@@ -146,9 +146,9 @@ const DrinksImageList = (props: Props) => {
 				}
 			}
 			// @ts-expect-error generic
-			infiniteScrollContainer?.current?.addEventListener('scrollend', () => {
+			copy.addEventListener('scrollend', () => {
 				// @ts-expect-error generic
-				handleScroll(infiniteScrollContainer?.current?.scrollTop)
+				handleScroll(copy.scrollTop)
 			})
 			// @ts-expect-error generic
 			return () => copy.removeEventListener('scrollend', handleScroll)
@@ -156,10 +156,11 @@ const DrinksImageList = (props: Props) => {
 	}, [])
 
 	useEffect(() => {
+		const copy = infiniteScrollContainer?.current
 		if (window.innerWidth < 800 && useSavedScrollTop && observerTarget) {
 			const savedScrollTop = sessionStorage.getItem('savedScrollTop')
 			// @ts-expect-error generic
-			infiniteScrollContainer.current.scrollTo(0, Number(savedScrollTop))
+			copy.scrollTo(0, Number(savedScrollTop))
 		}
 	}, [observerTarget, useSavedScrollTop])
 
@@ -184,7 +185,7 @@ const DrinksImageList = (props: Props) => {
 					<ImageListItem onClick={() => handleOnClickLargeCard(drink)}>
 						<img
 							src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
-							srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=22x`}
+							srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
 							alt={drink.strDrink || ''}
 							loading="lazy"
 						/>
@@ -321,7 +322,7 @@ const DrinksImageList = (props: Props) => {
 					<img
 						className="mobile-drink-card-image"
 						src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
-						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=22x`}
+						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
 						alt={drink.strDrink || ''}
 						loading="lazy"
 					/>
