@@ -139,13 +139,16 @@ const DrinksImageList = (props: Props) => {
 
 	useEffect(() => {
 		if (window.innerWidth < 800) {
-			const copy = infiniteScrollContainer.current
-			const handleScroll = (scroll: number) =>
-				sessionStorage.setItem('savedScrollTop', scroll.toString())
+			const copy = infiniteScrollContainer?.current
+			const handleScroll = (scroll: number) => {
+				if (scroll) {
+					sessionStorage.setItem('savedScrollTop', scroll.toString())
+				}
+			}
 			// @ts-expect-error generic
-			infiniteScrollContainer.current.addEventListener('scrollend', () => {
+			infiniteScrollContainer?.current?.addEventListener('scrollend', () => {
 				// @ts-expect-error generic
-				handleScroll(infiniteScrollContainer.current.scrollTop)
+				handleScroll(infiniteScrollContainer?.current?.scrollTop)
 			})
 			// @ts-expect-error generic
 			return () => copy.removeEventListener('scrollend', handleScroll)
@@ -251,14 +254,15 @@ const DrinksImageList = (props: Props) => {
 		return renderedSaveIcon
 	}
 
-	const handleLinkOnClick = async (drink: DrinkDataPoint) => {
-		if (!drink.strInstructions) {
-			const response = await fetchDrinkDataByID(drink)
-			drink = {...response, ...drink}
-		}
-		dispatch(updateIsModalOpen(true))
-		dispatch(updateModalDrink(drink))
-	}
+	// const handleMobileCardOnClick = async (drink: DrinkDataPoint) => {
+		// console.log(isKeywordSearch, searchKeyword)
+		// if (!drink.strInstructions) {
+		// 	const response = await fetchDrinkDataByID(drink)
+		// 	drink = {...response, ...drink}
+		// }
+		// dispatch(updateIsModalOpen(true))
+		// dispatch(updateModalDrink(drink))
+	// }
 
 	const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
 		const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
@@ -362,7 +366,7 @@ const DrinksImageList = (props: Props) => {
 							>
 								<FaEye
 									style={{color: 'white', fontSize: '25px'}}
-									onClick={() => handleLinkOnClick(drink)}
+									// onClick={() => handleMobileCardOnClick(drink)}
 								/>
 							</Link>
 						</div>

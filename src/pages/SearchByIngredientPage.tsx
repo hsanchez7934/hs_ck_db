@@ -5,7 +5,7 @@ import NoDrinkDataNotice from '../components/NoDrinkData'
 import {useAppSelector} from '../store/hooks'
 
 const SearchByIngredientpage = () => {
-	const {drinksByIngredient} = useAppSelector((state) => state.drinksByIngredient)
+	const {drinksByIngredient} = useAppSelector((state) => state.drinksByIngredientState)
 
 	let content = <LoadingSpinner />
 	if (!drinksByIngredient) {

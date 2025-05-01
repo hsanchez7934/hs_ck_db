@@ -57,7 +57,7 @@ const DrinkCard = (props: Props) => {
 	const [toggleLoginDialog, setToggleLoginDialog] = useState(false)
 
 	const dispatch = useAppDispatch()
-	const {drinkPagerMap} = useAppSelector(({drinkPagerMap}) => drinkPagerMap)
+	const {drinkPagerMap} = useAppSelector(({drinkPagerMapState}) => drinkPagerMapState)
 	const {userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
 
 	const isDrinkSaved = (drinkID: string | null | undefined) => {

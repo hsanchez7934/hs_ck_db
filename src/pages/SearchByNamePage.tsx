@@ -14,7 +14,7 @@ const SearchByNamePage = (): JSX.Element => {
 		errorFetchingDrinks,
 		isKeywordSearch,
 		searchKeyword
-	} = useAppSelector(({searchDrinks}) => searchDrinks)
+	} = useAppSelector(({searchDrinksState}) => searchDrinksState)
 
 	useEffect(() => {
 		const cleanup = () => {

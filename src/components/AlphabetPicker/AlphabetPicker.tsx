@@ -1,18 +1,20 @@
-import React from 'react'
-
 import './styles.css'
+import React, { useCallback } from 'react'
 import {useState, useEffect} from 'react'
-import {useFetchDrinksByFirstLetterQuery} from '../../store'
 import {
 	updateSearchDrinks,
 	isFetchingSearchDrinkData,
 	isErrorFetchingSearchDrinksData,
 	updateIsKeywordSearch,
-	updateSearchKeyword
+	updateSearchKeyword,
+	updateUseSavedScrollTop
 } from '../../store'
 import {useAppDispatch} from '../../store/hooks'
 import {primaryFont} from '../../fonts/fonts'
 import DropDown from '../DropDown/DropDown'
+import axios from 'axios'
+
+import { useLocation } from 'react-router-dom'
 
 interface Props {
 	isKeywordSearch: boolean
@@ -21,11 +23,11 @@ interface Props {
 
 const AlphtabetPicker = (props: Props): JSX.Element => {
 	const {isKeywordSearch, searchKeyword} = props
-	const [searchLetter, setSearchLetter] = useState('a')
-	const [dropdownValue, setDropDownValue] = useState('A')
-	const {data, error, isFetching} = useFetchDrinksByFirstLetterQuery(searchLetter)
+	const [searchLetter, setSearchLetter] = useState(sessionStorage.getItem('savedAlphaPickerLetter') || 'a')
+	const [dropdownValue, setDropDownValue] = useState(sessionStorage.getItem('savedAlphaPickerLetter') || 'A')
 	const dispatch = useAppDispatch()
-
+	const location = useLocation()
+	console.log(location)
 	const alphabet = [
 		'A',
 		'B',
@@ -55,24 +57,47 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 		'Z'
 	]
 
-	useEffect(() => {
-		if (!isKeywordSearch) {
-			dispatch(isFetchingSearchDrinkData(isFetching))
+	const fetchData = useCallback((searchLetter: string) => {
+		if (window.innerWidth < 800) {
+			sessionStorage.setItem('savedSearchKeyword', '')
+		}
+		dispatch(isFetchingSearchDrinkData(true))
+		axios.get(`${process.env.REACT_APP_CK_DB_BASE_URL}${process.env.REACT_APP_CK_DB_KEY}/search.php?f=${searchLetter}`)
+		.then((response) => {
+			dispatch(updateSearchDrinks(response.data))
+			dispatch(isFetchingSearchDrinkData(false))
+		})
+		.catch((error) => {
+			dispatch(isFetchingSearchDrinkData(false))
 			if (error) {
 				dispatch(isErrorFetchingSearchDrinksData(error))
 			}
-			if (!isFetching && !error) {
-				dispatch(updateSearchDrinks(data))
+		})
+	}, [])
+
+	useEffect(() => {
+		if (!isKeywordSearch) {
+			const savedKeyword = sessionStorage.getItem('savedSearchKeyword')
+			if (window.innerWidth < 800 && savedKeyword) {
+				return
+			} else {
+				fetchData(searchLetter)
 			}
 		}
-	}, [dispatch, data, error, isFetching, isKeywordSearch])
+	}, [isKeywordSearch, searchLetter])
+
+	const setSessionStorageState = (letter: string) => {
+		sessionStorage.setItem('savedAlphaPickerLetter', letter)
+		dispatch(updateUseSavedScrollTop(false))
+	}
 
 	const handleClick = (event: MouseEvent | any) => {
 		const listItem = event.target as HTMLLIElement
 		const searchLetter = listItem?.dataset?.value?.toLowerCase()
 		if (searchLetter) {
 			setSearchLetter(searchLetter)
-			setDropDownValue('A')
+			setDropDownValue(searchLetter)
+			setSessionStorageState(searchLetter)
 		}
 		dispatch(updateIsKeywordSearch(false))
 		dispatch(updateSearchKeyword(''))
@@ -82,8 +107,10 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 		const searchLetter = event.target.value
 		setSearchLetter(searchLetter.toLowerCase())
 		setDropDownValue(searchLetter)
+		setSessionStorageState(searchLetter)
 		dispatch(updateIsKeywordSearch(false))
 		dispatch(updateSearchKeyword(''))
+		sessionStorage.setItem('savedSearchKeyword', '')
 	}
 
 	const renderedSearchKeywordResults = (

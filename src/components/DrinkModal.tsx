@@ -21,7 +21,7 @@ const style = {
 
 const DrinkModal = (): JSX.Element => {
 	const dispatch = useAppDispatch()
-	const {isModalOpen, drink} = useAppSelector(({modalDrink}) => modalDrink)
+	const {isModalOpen, drink} = useAppSelector(({modalDrinkState}) => modalDrinkState)
 	const navigate = useNavigate()
 
 	const handleClose = () => {

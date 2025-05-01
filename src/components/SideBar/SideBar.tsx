@@ -3,7 +3,8 @@ import {active} from '../../colors/colors'
 
 import * as React from 'react'
 import {Link, Outlet, useLocation} from 'react-router-dom'
-import {useAppSelector} from '../../store/hooks'
+import {useAppSelector, useAppDispatch} from '../../store/hooks'
+import {updateUseSavedScrollTop} from '../../store'
 
 import {FaCaretDown, FaCaretLeft, FaX, FaMartiniGlassEmpty} from 'react-icons/fa6'
 import {primaryFont} from '../../fonts/fonts'
@@ -26,12 +27,13 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import UserMenu from '../UserMenu/UserMenu'
 
-import { TiCoffee, TiSortAlphabetically } from "react-icons/ti"
-import { MdBlender } from "react-icons/md"
-import { GiBeerBottle } from "react-icons/gi";
+import {TiCoffee, TiSortAlphabetically} from 'react-icons/ti'
+import {MdBlender} from 'react-icons/md'
+import {GiBeerBottle} from 'react-icons/gi'
 
 const SideBar: React.FC = () => {
-	const {searchKeyword, isKeywordSearch} = useAppSelector(({searchDrinks}) => searchDrinks)
+	const dispatch = useAppDispatch()
+	const {searchKeyword, isKeywordSearch} = useAppSelector(({searchDrinksState}) => searchDrinksState)
 	const [navBarOpen, setNavBarOpen] = React.useState(false)
 	const [currentPath, setCurrentPath] = React.useState('')
 	const [showSearchLinks, setShowSearchLinks] = React.useState(false)
@@ -46,7 +48,11 @@ const SideBar: React.FC = () => {
 	const paths = [
 		{path: '/', text: 'Home', icon: <HomeRounded sx={linkIconStyles('/', false)} />},
 		{path: '/search', text: 'Search', icon: <Search sx={linkIconStyles('/search', false)} />},
-		{path: '/saveddrinks', text: 'Saved Drinks', icon: <Favorite sx={linkIconStyles('/saveddrinks', false)} />}
+		{
+			path: '/saveddrinks',
+			text: 'Saved Drinks',
+			icon: <Favorite sx={linkIconStyles('/saveddrinks', false)} />
+		}
 	]
 
 	const searchPaths = [
@@ -55,10 +61,26 @@ const SideBar: React.FC = () => {
 			text: 'Popular Cocktails',
 			icon: <FaMartiniGlassEmpty style={linkIconStyles('/search/popularcocktails', true)} />
 		},
-		{path: '/search/byname', text: 'By Name', icon: <TiSortAlphabetically style={linkIconStyles('/search/byname', false)} />},
-		{path: '/search/byspirit', text: 'By Spirit', icon: <GiBeerBottle style={linkIconStyles('/search/byspirit', false)} />},
-		{path: '/search/byingredient', text: 'By Ingredient', icon: <MdBlender style={linkIconStyles('/search/byingredient', true)} />},
-		{path: '/search/nonalcoholic', text: 'Non-Alcoholic', icon: <TiCoffee style={linkIconStyles('/search/nonalcoholic', false)} />}
+		{
+			path: '/search/byname',
+			text: 'By Name',
+			icon: <TiSortAlphabetically style={linkIconStyles('/search/byname', false)} />
+		},
+		{
+			path: '/search/byspirit',
+			text: 'By Spirit',
+			icon: <GiBeerBottle style={linkIconStyles('/search/byspirit', false)} />
+		},
+		{
+			path: '/search/byingredient',
+			text: 'By Ingredient',
+			icon: <MdBlender style={linkIconStyles('/search/byingredient', true)} />
+		},
+		{
+			path: '/search/nonalcoholic',
+			text: 'Non-Alcoholic',
+			icon: <TiCoffee style={linkIconStyles('/search/nonalcoholic', false)} />
+		}
 	]
 
 	const handleSearchLinks = () => {
@@ -77,11 +99,17 @@ const SideBar: React.FC = () => {
 		setNavBarOpen(!navBarOpen)
 	}
 
+	const handleResetUseSavedScrollTop = () => dispatch(updateUseSavedScrollTop(false))
+
 	const renderedSearchPaths = searchPaths.map((link) => {
 		const isActivePath = currentPath.split(' ')[0] === link.path ? active : '#FFF'
 		return (
 			<Link to={link.path} key={link.text} style={{textDecoration: 'none', color: isActivePath}}>
-				<SideBarListItem link={link} linkIcon={link.icon} />
+				<SideBarListItem
+					link={link}
+					linkIcon={link.icon}
+					onClick={() => handleResetUseSavedScrollTop()}
+				/>
 			</Link>
 		)
 	})
@@ -113,7 +141,11 @@ const SideBar: React.FC = () => {
 		const isActivePath = currentPath.split(' ')[0] === link.path ? active : '#FFF'
 		return (
 			<Link to={link.path} key={link.text} style={{color: isActivePath, textDecoration: 'none'}}>
-				<SideBarListItem link={link} linkIcon={link.icon} />
+				<SideBarListItem
+					link={link}
+					linkIcon={link.icon}
+					onClick={() => handleResetUseSavedScrollTop()}
+				/>
 			</Link>
 		)
 	})

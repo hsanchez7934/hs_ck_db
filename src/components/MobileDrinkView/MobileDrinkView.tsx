@@ -16,14 +16,7 @@ import {
 	updateTriggerRender,
 	updateUseSavedScrollTop
 } from '../../store'
-import {
-	FaVideo,
-	FaShare,
-	FaHeartCircleMinus,
-	FaHeartCirclePlus,
-	FaAngleLeft
-	// FaEye
-} from 'react-icons/fa6'
+import {FaVideo, FaShare, FaHeartCircleMinus, FaHeartCirclePlus, FaAngleLeft} from 'react-icons/fa6'
 
 interface MobileDrinkViewProps {
 	drink: DrinkDataPoint | null
@@ -52,7 +45,6 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 	const {isAuthenticated, user} = useAuth0()
 	const dispatch = useAppDispatch()
 	const {userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
-
 	const [toggleSaved, setToggleSaved] = useState(false)
 	const [dialogText, setDialogText] = useState('')
 	const [dialogTextColor, setDialogTextColor] = useState('')
@@ -166,7 +158,9 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 	}
 
 	const fetchFromStorageSession = prevPath === '/'
-	const handleUpdateUseSavedScrollTop = () => dispatch(updateUseSavedScrollTop(true))
+	const handleUpdateUseSavedScrollTop = () => {
+		dispatch(updateUseSavedScrollTop(true))
+	}
 
 	return (
 		<div>
@@ -181,7 +175,10 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 				}}
 			>
 				<div className="mobileDrinkPageActionLeft">
-					<Link to={prevPath} state={{fetchFromStorageSession}}>
+					<Link
+						to={prevPath}
+						state={{fetchFromStorageSession}}
+					>
 						<Button
 							title="Navigate back to previous page."
 							size="small"

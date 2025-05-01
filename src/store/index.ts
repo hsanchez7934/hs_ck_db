@@ -24,10 +24,10 @@ import {updateUseSavedScrollTop, savedScrollTopReducer} from '../slices/savedScr
 export const store = configureStore({
 	reducer: {
 		[drinksAPI.reducerPath]: drinksAPI.reducer,
-		searchDrinks: searchDrinksReducer,
-		modalDrink: modalDrinkReducer,
-		drinkPagerMap: drinkPagerReducer,
-		drinksByIngredient: ingredientsDrinksReducer,
+		searchDrinksState: searchDrinksReducer,
+		modalDrinkState: modalDrinkReducer,
+		drinkPagerMapState: drinkPagerReducer,
+		drinksByIngredientState: ingredientsDrinksReducer,
 		spiritsPageState: spiritsDrinkReducer,
 		savedDrinkState: savedDrinkReducer,
 		useSavedScrollTopState: savedScrollTopReducer
