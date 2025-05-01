@@ -7,7 +7,7 @@ import NoDrinkDataNotice from '../../components/NoDrinkData'
 import {useFetchDrinkDataByIDQuery} from '../../store'
 import {useParams, useLocation} from 'react-router-dom'
 
-const isMobileView = window.innerWidth < 1050
+const isMobileView = window.innerWidth < 800
 
 const DrinkPage = (): JSX.Element => {
 	const location = useLocation()
