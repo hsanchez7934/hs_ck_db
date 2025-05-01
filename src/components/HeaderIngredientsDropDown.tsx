@@ -8,7 +8,7 @@ import DropDown from './DropDown/DropDown'
 import {useAppDispatch} from '../store/hooks'
 
 const HeaderIngredientsDropDown = () => {
-	const [dropdownValue, setDropdownValue] = useState('Vodka')
+	const [dropdownValue, setDropdownValue] = useState(sessionStorage.getItem('savedIngredientValue') || 'Vodka')
 	const {data} = useFetchIngredientsQuery('list')
 	const datum = useFetchDrinkByIngredientQuery(dropdownValue)
 	const dispatch = useAppDispatch()
@@ -24,12 +24,15 @@ const HeaderIngredientsDropDown = () => {
 	const handleOnChange = (event: any) => {
 		const {value} = event.target as HTMLSelectElement
 		setDropdownValue(value)
+		sessionStorage.setItem('savedIngredientValue', value)
 	}
 
 	let dropdownData = []
 	if (data) {
-		dropdownData = data?.drinks.map((ingredient: any) => ingredient.strIngredient1)
+		const ingredientsList = data?.drinks.map((ingredient: {strIngredient1: string}) => ingredient.strIngredient1)
+		dropdownData = ingredientsList.sort()
 	}
+
 	return (
 		<div>
 			<DropDown
@@ -38,7 +41,7 @@ const HeaderIngredientsDropDown = () => {
 				dropdownValue={dropdownValue}
 				labelText={'Ingredient:'}
 				placeholderText={'Select an ingredient...'}
-				dropDownWidth='140px'
+				dropDownWidth={window.innerWidth < 800 ? '140px' : '240px'}
 			/>
 		</div>
 	)
