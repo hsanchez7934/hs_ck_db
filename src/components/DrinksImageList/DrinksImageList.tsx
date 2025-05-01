@@ -146,12 +146,12 @@ const DrinksImageList = (props: Props) => {
 				}
 			}
 			// @ts-expect-error generic
-			copy.addEventListener('scrollend', () => {
+			copy.addEventListener('scroll', () => {
 				// @ts-expect-error generic
 				handleScroll(copy.scrollTop)
 			})
 			// @ts-expect-error generic
-			return () => copy.removeEventListener('scrollend', handleScroll)
+			return () => copy.removeEventListener('scroll', handleScroll)
 		}
 	}, [])
 
