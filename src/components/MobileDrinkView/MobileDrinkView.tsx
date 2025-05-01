@@ -10,7 +10,12 @@ import {primaryFont} from '../../fonts/fonts'
 import {useAppSelector, useAppDispatch} from '../../store/hooks'
 import {useAuth0} from '@auth0/auth0-react'
 import {saveUserDrinkInDB} from '../../firebase/firebase-user-drink-storage'
-import {updateUserSavedDrinks, updateGetFreshUpdate} from '../../store'
+import {
+	updateUserSavedDrinks,
+	updateGetFreshUpdate,
+	updateTriggerRender,
+	updateUseSavedScrollTop
+} from '../../store'
 import {
 	FaVideo,
 	FaShare,
@@ -19,18 +24,11 @@ import {
 	FaAngleLeft
 	// FaEye
 } from 'react-icons/fa6'
-import {
-	// updateModalDrink,
-	updateTriggerRender
-	// updateUserSavedDrinks,
-	// updateGetFreshUpdate
-} from '../../store'
 
 interface MobileDrinkViewProps {
 	drink: DrinkDataPoint | null
 	ingredients: {name: string; amount: string}[]
-	prevPath: string | null
-	scrollTop: number
+	prevPath: string
 }
 
 const buttonStyles = {
@@ -49,7 +47,7 @@ const iconStyles = {
 }
 
 const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
-	const {drink, ingredients, prevPath, scrollTop} = props
+	const {drink, ingredients, prevPath} = props
 
 	const {isAuthenticated, user} = useAuth0()
 	const dispatch = useAppDispatch()
@@ -167,6 +165,9 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 		}
 	}
 
+	const fetchFromStorageSession = prevPath === '/'
+	const handleUpdateUseSavedScrollTop = () => dispatch(updateUseSavedScrollTop(true))
+
 	return (
 		<div>
 			<div
@@ -180,15 +181,24 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 				}}
 			>
 				<div className="mobileDrinkPageActionLeft">
-					<Link to={prevPath || ''} state={{scrollTop}}>
-						<Button title="Navigate back to previous page." size="small" sx={buttonStyles}>
+					<Link to={prevPath} state={{fetchFromStorageSession}}>
+						<Button
+							title="Navigate back to previous page."
+							size="small"
+							sx={buttonStyles}
+							onClick={() => handleUpdateUseSavedScrollTop()}
+						>
 							<FaAngleLeft color="white" style={iconStyles} />
 						</Button>
 					</Link>
 				</div>
 
 				<div className="mobileDrinkPageActionRight">
-					<Button size="small" onClick={() => handleSaveOnClick(drink)} sx={{...buttonStyles, marginBottom: '10px'}}>
+					<Button
+						size="small"
+						onClick={() => handleSaveOnClick(drink)}
+						sx={{...buttonStyles, marginBottom: '10px'}}
+					>
 						{renderedSaveIcon}
 					</Button>
 					<Button

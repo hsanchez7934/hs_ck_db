@@ -17,11 +17,11 @@ import {updateTriggerRender} from '../../store'
 import {updateUserSavedDrinks, updateGetFreshUpdate} from '../../store'
 import {useAuth0} from '@auth0/auth0-react'
 import {Link, useLocation, generatePath} from 'react-router-dom'
+import {DebouncedFunc} from 'lodash'
 
 interface Props {
 	drinksData: DrinkDataPoint[]
-	scrollTop?: number;
-	fetchData?: () => any
+	fetchData?: DebouncedFunc<(fetchSessionStorage: boolean) => Promise<void>>
 	isHomePage?: boolean
 }
 
@@ -50,7 +50,7 @@ const removeSavedMapIDs = (drinksList: DrinkDataPoint[]) => {
 }
 
 const DrinksImageList = (props: Props) => {
-	const {drinksData, scrollTop, fetchData, isHomePage} = props
+	const {drinksData, fetchData, isHomePage} = props
 	const infiniteScrollContainer = useRef(null)
 	const {isAuthenticated, user} = useAuth0()
 	const windowWidth = window.innerWidth
@@ -65,6 +65,7 @@ const DrinksImageList = (props: Props) => {
 
 	const dispatch = useAppDispatch()
 	const {userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
+	const {useSavedScrollTop} = useAppSelector(({useSavedScrollTopState}) => useSavedScrollTopState)
 
 	useEffect(() => {
 		const setDrinkPagerMap = () => {
@@ -108,35 +109,56 @@ const DrinksImageList = (props: Props) => {
 	}, [drinksData, isAuthenticated, user])
 
 	useEffect(() => {
-		console.log(observerTarget)
 		if (isHomePage && observerTarget) {
 			const options = {
-			root: document.querySelector('#imageScrollContainer'),
-			rootMargin: '0px',
-			threshold: 1.0
-		}
+				root: document.querySelector('#imageScrollContainer'),
+				rootMargin: '0px',
+				threshold: 1.0
+			}
 
-		// @ts-expect-error generic
-		const callback = (entries) => {
 			// @ts-expect-error generic
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					console.log(entry)
-					if (fetchData) {
-						fetchData()
+			const callback = (entries) => {
+				// @ts-expect-error generic
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						if (fetchData) {
+							fetchData(false)
+						}
 					}
-				}
-			})
-		}
+				})
+			}
 
-		const observer = new IntersectionObserver(callback, options)
-		if (observerTarget) {
-			// @ts-expect-error generic
-			observer.observe(document.getElementById(observerTarget))
-		}
-		return () => observer.disconnect()
+			const observer = new IntersectionObserver(callback, options)
+			if (observerTarget) {
+				// @ts-expect-error generic
+				observer.observe(document.getElementById(observerTarget))
+			}
+			return () => observer.disconnect()
 		}
 	}, [observerTarget])
+
+	useEffect(() => {
+		if (window.innerWidth < 800) {
+			const copy = infiniteScrollContainer.current
+			const handleScroll = (scroll: number) =>
+				sessionStorage.setItem('savedScrollTop', scroll.toString())
+			// @ts-expect-error generic
+			infiniteScrollContainer.current.addEventListener('scrollend', () => {
+				// @ts-expect-error generic
+				handleScroll(infiniteScrollContainer.current.scrollTop)
+			})
+			// @ts-expect-error generic
+			return () => copy.removeEventListener('scrollend', handleScroll)
+		}
+	}, [])
+
+	useEffect(() => {
+		if (window.innerWidth < 800 && useSavedScrollTop && observerTarget) {
+			const savedScrollTop = sessionStorage.getItem('savedScrollTop')
+			// @ts-expect-error generic
+			infiniteScrollContainer.current.scrollTo(0, Number(savedScrollTop))
+		}
+	}, [observerTarget, useSavedScrollTop])
 
 	const handleOnClickLargeCard = async (drink: DrinkDataPoint) => {
 		if (!drink.strInstructions) {
@@ -334,9 +356,7 @@ const DrinksImageList = (props: Props) => {
 								key={drink.drinkMapID}
 								to={`/drink/${drink.idDrink}`}
 								state={{
-									mobileStatePrevPath: location,
-									mobileStateDrink: drink,
-									scrollTop
+									mobileStatePrevPath: location.pathname
 								}}
 								style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}
 							>

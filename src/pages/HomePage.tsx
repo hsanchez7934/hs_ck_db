@@ -4,13 +4,22 @@ import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
 import NoDrinkDataNotice from '../components/NoDrinkData'
 import {debounce} from 'lodash'
+import {useLocation} from 'react-router-dom'
 
 const HomePage = () => {
+	const location = useLocation()
 	const [drinksDataToRender, setDrinksDataToRender] = useState([])
 	const [error, setError] = useState(null)
 
-	const fetchData = useCallback(async () => {
+	const fetchData = useCallback(async (fetchSessionStorage: boolean) => {
 		setError(null)
+		if (fetchSessionStorage) {
+			const drinks = sessionStorage.getItem('homePageDrinks')
+			if (drinks) {
+				setDrinksDataToRender(JSON.parse(drinks))
+				return
+			}
+		}
 
 		try {
 			const response = await axios.get(
@@ -18,7 +27,11 @@ const HomePage = () => {
 			)
 			const {drinks} = response.data
 			// @ts-expect-error generic
-			setDrinksDataToRender((prevItems) => [...prevItems, ...drinks])
+			setDrinksDataToRender((prevItems) => {
+				const data = [...prevItems, ...drinks]
+				sessionStorage.setItem('homePageDrinks', JSON.stringify(data))
+				return data
+			})
 		} catch (error) {
 			// @ts-expect-error generic
 			setError(error)
@@ -28,7 +41,7 @@ const HomePage = () => {
 	const debounced = debounce(fetchData, 1000)
 
 	useEffect(() => {
-		fetchData()
+		fetchData(location.state?.fetchFromStorageSession)
 	}, [])
 
 	let content = <LoadingSpinner />

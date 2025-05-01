@@ -33,8 +33,7 @@ const DrinkPage = (): JSX.Element => {
 			<MobileDrinkView
 				ingredients={ingredients}
 				drink={drinkDataToRender}
-				prevPath={location.state?.mobileStatePrevPath?.pathname || null}
-				scrollTop={location.state?.scrollTop || 0}
+				prevPath={location.state?.mobileStatePrevPath}
 			/>
 		)
 	}

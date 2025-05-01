@@ -13,8 +13,13 @@ import {updateIsModalOpen, updateModalDrink, modalDrinkReducer} from '../slices/
 import {updateDrinkMap, drinkPagerReducer} from '../slices/drinkPagerSlice'
 import {updateDrinksByIngredient, ingredientsDrinksReducer} from '../slices/ingredientsDrinksSlice'
 import {updateSelectedSpirit, spiritsDrinkReducer} from '../slices/spiritsDrinksSlice'
-import {updateTriggerRender, updateUserSavedDrinks, updateGetFreshUpdate, savedDrinkReducer} from '../slices/savedDrinkSlice'
-import {updateRenderNextSetOfDrinks, mobileHomePageReducer} from '../slices/mobileHomePageSlice'
+import {
+	updateTriggerRender,
+	updateUserSavedDrinks,
+	updateGetFreshUpdate,
+	savedDrinkReducer
+} from '../slices/savedDrinkSlice'
+import {updateUseSavedScrollTop, savedScrollTopReducer} from '../slices/savedScrollTopSlice'
 
 export const store = configureStore({
 	reducer: {
@@ -25,7 +30,7 @@ export const store = configureStore({
 		drinksByIngredient: ingredientsDrinksReducer,
 		spiritsPageState: spiritsDrinkReducer,
 		savedDrinkState: savedDrinkReducer,
-		mobileHomePageState: mobileHomePageReducer
+		useSavedScrollTopState: savedScrollTopReducer
 	},
 	middleware: (getDefaultMiddleware) => {
 		return getDefaultMiddleware().concat(drinksAPI.middleware)
@@ -59,7 +64,7 @@ export {
 	updateDrinksByIngredient,
 	updateSelectedSpirit,
 	updateTriggerRender,
-	updateRenderNextSetOfDrinks,
+	updateUseSavedScrollTop,
 	updateUserSavedDrinks,
 	updateGetFreshUpdate
 }
