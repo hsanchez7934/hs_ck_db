@@ -7,17 +7,18 @@ import {updateSelectedSpirit} from '../store'
 const spirits = ['Bourbon', 'Brandy', 'Gin', 'Rum', 'Scotch', 'Tequila', 'Vodka', 'Whiskey']
 
 const HeaderSpiritsDropDown = () => {
-	const [dropdownValue, setDropdownValue] = useState(spirits[0])
+	const [dropdownValue, setDropdownValue] = useState(sessionStorage.getItem('savedSpiritValue') || spirits[0])
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
-		dispatch(updateSelectedSpirit(spirits[0]))
+		dispatch(updateSelectedSpirit(sessionStorage.getItem('savedSpiritValue') || spirits[0]))
 	}, [dispatch])
 
 	const handleOnChange = (event: SelectChangeEvent) => {
 		const selectedSpirit = event.target.value
 		setDropdownValue(selectedSpirit)
 		dispatch(updateSelectedSpirit(selectedSpirit))
+		sessionStorage.setItem('savedSpiritValue', selectedSpirit)
 	}
 
 	return (

@@ -1,5 +1,5 @@
-
-import { primaryFont } from '../../fonts/fonts'
+import React from 'react'
+import {primaryFont} from '../../fonts/fonts'
 import './styles.css'
 
 const SpiritTabs = (props: any) => {

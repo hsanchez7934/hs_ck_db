@@ -12,17 +12,18 @@ const spirits = ['Bourbon', 'Brandy', 'Gin', 'Rum', 'Scotch', 'Tequila', 'Vodka'
 
 const SearchBySpiritsPage = () => {
 	const {selectedSpirit} = useAppSelector(({spiritsPageState}) => spiritsPageState)
-	const [activeTab, setActiveTab] = useState(spirits[0])
+	const [activeTab, setActiveTab] = useState(sessionStorage.getItem('savedSpiritValue') || spirits[0])
 	const {data, error, isFetching} = useFetchDrinksBySpiritQuery(selectedSpirit)
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
-		dispatch(updateSelectedSpirit(spirits[0]))
+		dispatch(updateSelectedSpirit(sessionStorage.getItem('savedSpiritValue') || spirits[0]))
 	}, [dispatch])
 
 	const handleTabsOnClick = (spirit: string): void => {
 		setActiveTab(spirit)
 		dispatch(updateSelectedSpirit(spirit))
+		sessionStorage.setItem('savedSpiritValue', spirit)
 	}
 
 	const renderedSpiritTabs = spirits.map((spirit) => {
