@@ -2,19 +2,66 @@
 	height: 100%;
 }
 
-.drinkPageImage {
-	width: 50%;
+.drinkPageMainContainerHeader {
+	height: 600px;
+	background-color: #000;
+	display: flex;
+}
+
+.drinkPageHeaderDetailsContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 30px;
+}
+
+.drinkPageHeaderDetailsContainer h1 {
+	font-size: 4em;
+	margin: 0 0 20px 0;
+	padding-left: 10px;
+	color: #fff;
+	text-align: center;
+}
+
+.drinkPageImageContainer img {
+	width: 100%;
 	height: 100%;
-	background-repeat: no-repeat;
-	background-size: cover;
+	object-fit: cover;
 }
 
-.drinkPageHalf {
-	width: 50%;
+.mainPageBubble {
+	width:100%;
+	display: flex;
+	padding: 10px 0;
+	margin-bottom: 20px;
 }
 
-.drinkPageFull {
-	width: 100%
+.largeIngredientBubbleSection {
+	width: 34.333333333333333%;
+	height: 100%;
+	padding: 5px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.largeIngredientBubbleSection p {
+	text-align: center;
+	margin: 0;
+	height: 50%;
+	width: 95%;
+}
+
+.largeViewBubbleTitle {
+	font-size: 16px;
+	padding: 2px;
+	color: darkgrey;
+}
+
+.largeViewBubbleText {
+	font-size: 18px;
+	color: aqua;
 }
 
 .drinkPageDrinkDetails {

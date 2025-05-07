@@ -8,7 +8,7 @@ import DropDown from './DropDown/DropDown'
 import {useAppDispatch} from '../store/hooks'
 
 const HeaderIngredientsDropDown = () => {
-	const [dropdownValue, setDropdownValue] = useState(sessionStorage.getItem('savedIngredientValue') || 'Vodka')
+	const [dropdownValue, setDropdownValue] = useState(sessionStorage.getItem('savedIngredientValue') || '151 proof rum')
 	const {data} = useFetchIngredientsQuery('list')
 	const datum = useFetchDrinkByIngredientQuery(dropdownValue)
 	const dispatch = useAppDispatch()

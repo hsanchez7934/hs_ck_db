@@ -216,7 +216,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 				</div>
 			</div>
 			<div className="mobileDrinkPageBubbleTextContainer">
-				<div className="mobileIngredientBubble gradientFilter">
+				<div className="mobileIngredientBubble ingredientsBubbleGradientFilter">
 					{renderedBubble('Type', drink?.strAlcoholic || '', {})}
 					{renderedBubble('Glass', drink?.strGlass || '', {borderLeft: '1px solid darkgrey'})}
 					{renderedBubble('Category', drink?.strCategory || '', {borderLeft: '1px solid darkgrey'})}
@@ -229,7 +229,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 				<div className="mobileDrinkPageIngredientsListContainer">
 					{ingredients.map((ingredient: {amount: string; name: string}) => {
 						return (
-							<div className="mobileDrinkPageIngredientCard gradientFilter" key={generateUUID()}>
+							<div className="mobileDrinkPageIngredientCard ingredientsBubbleGradientFilter" key={generateUUID()}>
 								<div className="mobileDrinkPageIngredientImgContainer">
 									<img
 										src={`https://www.thecocktaildb.com/images/ingredients/${ingredient.name}-small.png`}
@@ -261,7 +261,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 				</h2>
 				<div style={{padding: '5px 20px'}}>
 					<p
-						className="mobileDrinkPageInstructionsText gradientFilter"
+						className="mobileDrinkPageInstructionsText ingredientsBubbleGradientFilter"
 						style={{fontFamily: primaryFont, color: 'white'}}
 					>
 						{drink?.strInstructions}

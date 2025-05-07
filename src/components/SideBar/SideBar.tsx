@@ -33,7 +33,9 @@ import {GiBeerBottle} from 'react-icons/gi'
 
 const SideBar: React.FC = () => {
 	const dispatch = useAppDispatch()
-	const {searchKeyword, isKeywordSearch} = useAppSelector(({searchDrinksState}) => searchDrinksState)
+	const {searchKeyword, isKeywordSearch} = useAppSelector(
+		({searchDrinksState}) => searchDrinksState
+	)
 	const [navBarOpen, setNavBarOpen] = React.useState(false)
 	const [currentPath, setCurrentPath] = React.useState('')
 	const [showSearchLinks, setShowSearchLinks] = React.useState(false)
@@ -205,7 +207,7 @@ const SideBar: React.FC = () => {
 	return (
 		<Box sx={{display: 'flex', height: '100vh'}}>
 			<CssBaseline />
-			<AppBar position="fixed">
+			<AppBar position="fixed" id="foobarspaz">
 				<Toolbar
 					sx={{
 						backgroundColor: '#000',

@@ -1,3 +1,4 @@
+import React from 'react'
 import Chip from '@mui/material/Chip'
 import { primaryFont } from '../fonts/fonts'
 
@@ -17,7 +18,7 @@ const DrinkTags = ({tags}: TagsList) => {
 							backgroundSize: 'cover',
 							backgroundRepeat: 'no-repeat',
 							margin: '10px 10px 0 0',
-							color: '#FFF',
+							color: 'lightgray',
 							fontFamily: primaryFont
 						}}
 					/>

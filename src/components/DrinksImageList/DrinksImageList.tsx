@@ -184,7 +184,7 @@ const DrinksImageList = (props: Props) => {
 				>
 					<ImageListItem onClick={() => handleOnClickLargeCard(drink)}>
 						<img
-							src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
+							src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
 							srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
 							alt={drink.strDrink || ''}
 							loading="lazy"
@@ -321,7 +321,7 @@ const DrinksImageList = (props: Props) => {
 				<ImageListItem key={drink.drinkMapID} id={drink.drinkMapID}>
 					<img
 						className="mobile-drink-card-image"
-						src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
+						src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
 						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
 						alt={drink.strDrink || ''}
 						loading="lazy"
@@ -390,7 +390,7 @@ const DrinksImageList = (props: Props) => {
 				variant="standard"
 				cols={setGridColumns(windowWidth)}
 				gap={8}
-				sx={{margin: 0, padding: '7px', width: '100%'}}
+				sx={{margin: 0, padding: '7px', width: '100%', overflow: 'hidden'}}
 			>
 				{windowWidth >= 800 ? renderedLargeDrinkImages() : renderedMobileDrinkImages()}
 				{windowWidth < 800 && (
