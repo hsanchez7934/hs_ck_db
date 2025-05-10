@@ -1,27 +1,22 @@
 import './styles.css'
-import React, {ReactElement, useEffect, useState} from 'react'
+import React, {ReactElement} from 'react'
 import Button from '@mui/material/Button'
 import {DrinkDataPoint} from '../../types'
-import {Link, generatePath} from 'react-router-dom'
-import SimpleDialog from '../SimpleDialog/SimpleDialog'
-
+import {Link} from 'react-router-dom'
 import generateUUID from '../../uuid'
 import {primaryFont} from '../../fonts/fonts'
-import {useAppSelector, useAppDispatch} from '../../store/hooks'
-import {useAuth0} from '@auth0/auth0-react'
-import {saveUserDrinkInDB} from '../../firebase/firebase-user-drink-storage'
-import {
-	updateUserSavedDrinks,
-	updateGetFreshUpdate,
-	updateTriggerRender,
-	updateUseSavedScrollTop
-} from '../../store'
+import {useAppDispatch} from '../../store/hooks'
+import {updateUseSavedScrollTop} from '../../store'
 import {FaVideo, FaShare, FaHeartCircleMinus, FaHeartCirclePlus, FaAngleLeft} from 'react-icons/fa6'
 
 interface MobileDrinkViewProps {
 	drink: DrinkDataPoint | null
 	ingredients: {name: string; amount: string}[]
 	prevPath: string
+	handleSaveOnClick: (drink: any) => void
+	handleShareOnClick: (drink: any) => void
+	handleViewOnClick: (drink: any) => void
+	toggleSaved: boolean
 }
 
 const buttonStyles = {
@@ -40,70 +35,17 @@ const iconStyles = {
 }
 
 const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
-	const {drink, ingredients, prevPath} = props
+	const {
+		drink,
+		ingredients,
+		prevPath,
+		handleSaveOnClick,
+		handleViewOnClick,
+		handleShareOnClick,
+		toggleSaved
+	} = props
 
-	const {isAuthenticated, user} = useAuth0()
 	const dispatch = useAppDispatch()
-	const {userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
-	const [toggleSaved, setToggleSaved] = useState(false)
-	const [dialogText, setDialogText] = useState('')
-	const [dialogTextColor, setDialogTextColor] = useState('')
-	const [openSavedStatedDialog, setOpenSavedStateDialog] = useState(false)
-	const [toggleLoginDialog, setToggleLoginDialog] = useState(false)
-
-	const isDrinkSaved = (drinkID: string | null | undefined) => {
-		if (drinkID) {
-			const found = userSavedDrinks?.find((drink: any) => drink.idDrink === drinkID)
-			if (found) {
-				return true
-			}
-		}
-		return false
-	}
-
-	useEffect(() => {
-		if (isAuthenticated && isDrinkSaved(drink?.idDrink)) {
-			setToggleSaved(true)
-		} else {
-			setToggleSaved(false)
-		}
-	}, [drink?.idDrink, isAuthenticated, user])
-
-	const toggleDialog = (color: string, text: string) => {
-		setDialogTextColor(color)
-		setDialogText(text)
-		setOpenSavedStateDialog(true)
-		setTimeout(() => {
-			setOpenSavedStateDialog(false)
-		}, 1500)
-	}
-
-	const handleSaveOnClick = (drink: any) => {
-		if (isAuthenticated) {
-			dispatch(updateTriggerRender(true))
-			setToggleSaved(!toggleSaved)
-			if (!toggleSaved) {
-				const drinks = [...userSavedDrinks]
-				drinks.push(drink)
-				saveUserDrinkInDB(user?.sub, drinks).then(() => {
-					toggleDialog('green', 'Saved to favorites!')
-					dispatch(updateUserSavedDrinks(drinks))
-					dispatch(updateGetFreshUpdate(true))
-				})
-			} else {
-				const filtered = userSavedDrinks.filter(
-					(savedDrink: any) => savedDrink.idDrink !== drink.idDrink
-				)
-				saveUserDrinkInDB(user?.sub, filtered).then(() => {
-					dispatch(updateUserSavedDrinks(filtered))
-					dispatch(updateGetFreshUpdate(true))
-					toggleDialog('red', 'Removed from favorites!')
-				})
-			}
-		} else {
-			setToggleLoginDialog(true)
-		}
-	}
 
 	const renderedBubble = (title: string, text: string | null, cssStyling: any) => {
 		return (
@@ -123,24 +65,6 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 	) : (
 		<FaHeartCircleMinus title="Add/Remove from favorites" color="white" style={iconStyles} />
 	)
-
-	const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
-		const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
-		window.navigator.clipboard.writeText(path).then(
-			() => {
-				toggleDialog('green', 'Link copied to clipboard!')
-			},
-			() => {
-				toggleDialog('red', 'Oops, something went wrong! Please try again.')
-			}
-		)
-	}
-
-	const handleViewOnClick = (url: string | null) => {
-		if (url) {
-			window.open(url)?.focus()
-		}
-	}
 
 	const renderedVideoIcon = (videoUrl: string | null | undefined) => {
 		if (videoUrl) {
@@ -175,10 +99,7 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 				}}
 			>
 				<div className="mobileDrinkPageActionLeft">
-					<Link
-						to={prevPath}
-						state={{fetchFromStorageSession}}
-					>
+					<Link to={prevPath} state={{fetchFromStorageSession}}>
 						<Button
 							title="Navigate back to previous page."
 							size="small"
@@ -229,7 +150,10 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 				<div className="mobileDrinkPageIngredientsListContainer">
 					{ingredients.map((ingredient: {amount: string; name: string}) => {
 						return (
-							<div className="mobileDrinkPageIngredientCard ingredientsBubbleGradientFilter" key={generateUUID()}>
+							<div
+								className="mobileDrinkPageIngredientCard ingredientsBubbleGradientFilter"
+								key={generateUUID()}
+							>
 								<div className="mobileDrinkPageIngredientImgContainer">
 									<img
 										src={`https://www.thecocktaildb.com/images/ingredients/${ingredient.name}-small.png`}
@@ -268,19 +192,6 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 					</p>
 				</div>
 			</div>
-			<>
-				<SimpleDialog
-					open={openSavedStatedDialog}
-					dialogTextColor={dialogTextColor}
-					dialogText={dialogText}
-					isLoginDialog={false}
-				/>
-				<SimpleDialog
-					open={toggleLoginDialog}
-					isLoginDialog={true}
-					onLoginDialogClose={() => setToggleLoginDialog(false)}
-				/>
-			</>
 		</div>
 	)
 }

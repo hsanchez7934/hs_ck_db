@@ -3,54 +3,68 @@ import React, {useEffect, useState} from 'react'
 import {DrinkDataPoint} from '../../types'
 import DrinkTags from '../../components/DrinkTags'
 import {primaryFont} from '../../fonts/fonts'
-
-// import picture from './pexels-splitshire-1526.jpg'
 import axios from 'axios'
-// import {primary} from '../../colors/colors'
+import {Link} from 'react-router-dom'
+import {ImageListItem, ImageList, Button} from '@mui/material'
+import {FaVideo, FaShare, FaHeartCircleMinus, FaHeartCirclePlus} from 'react-icons/fa6'
+import LargeViewDetailedIngredients from '../LargeViewDetailedIngredients/LargeViewDetailedIngredients'
 
 interface LargeDrinkProps {
 	ingredients: {name: string; amount: string}[]
 	drink: DrinkDataPoint | null
+	handleSaveOnClick: (drink: any) => void
+	handleShareOnClick: (drink: any) => void
+	handleViewOnClick: (drink: any) => void
+	toggleSaved: boolean
 }
 
 interface IngredientDetailsReponse {
-	ingredients: [
-		{
-			idIngredient: string
-			strABV: string
-			strAlcohol: string
-			strDescription: string
-			strIngredient: string
-			strType: string
-		}
-	]
+	idIngredient: string
+	strABV: string
+	strAlcohol: string
+	strDescription: string
+	strIngredient: string
+	strType: string
 }
 
-const spirits = [
-	'bourbon',
-	'brandy',
-	'gin',
-	'rum',
-	'scotch',
-	'tequila',
-	'vodka',
-	'whiskey',
-	'light rum',
-	'dark rum'
-]
+const buttonStyles = {
+	margin: 0,
+	borderRadius: '36px',
+	backgroundColor: 'black',
+	minHeight: '50px',
+	minWidth: '50px',
+	maxHeight: '40px',
+	maxWidth: '40px',
+	opacity: '0.8'
+}
+
+const iconStyles = {
+	fontSize: '40px'
+}
 
 const LargeDrinkView = (props: LargeDrinkProps) => {
-	const {ingredients, drink} = props
-	const [spiritsDetailDataToRender, setSpiritsDetailDataToRender] = useState([])
+	const {
+		ingredients,
+		drink,
+		toggleSaved,
+		handleSaveOnClick,
+		handleShareOnClick,
+		handleViewOnClick
+	} = props
+	const [ingredientsDetailedDataToRender, setIngredientsDetailedDataToRender] = useState([])
 	const [relatedSpiritsDrinksDataToRender, setRelatedSpiritsDrinksDataToRender] = useState({})
+	const [twentyRandomDrinks, setTwentyRandomDrinks] = useState([])
 
-	const fetchSpiritData = (spirit: string): Promise<IngredientDetailsReponse | undefined> =>
+	const fetchSpiritData = (spirit: string): Promise<IngredientDetailsReponse | null> =>
 		axios
 			.get(
 				`${process.env.REACT_APP_CK_DB_BASE_URL}${process.env.REACT_APP_CK_DB_KEY}/search.php?i=${spirit}`
 			)
 			.then((response) => {
-				return response.data
+				if (response.data.ingredients) {
+					return response.data.ingredients[0]
+				}
+				return null
 			})
 			.catch((error) => {
 				throw error
@@ -62,80 +76,57 @@ const LargeDrinkView = (props: LargeDrinkProps) => {
 				`${process.env.REACT_APP_CK_DB_BASE_URL}${process.env.REACT_APP_CK_DB_KEY}/filter.php?i=${spirit}`
 			)
 			.then((response) => {
-				// console.log(response)
-				return response.data.drinks
+				const relatedDrinkData: {[key: string]: DrinkDataPoint[]} = {}
+				relatedDrinkData[spirit] = response.data.drinks
+				return relatedDrinkData
 			})
 			.catch((error) => {
 				throw error
 			})
 
+	const fetchTenRandomDrinks = () => {
+		return axios
+			.get(
+				`${process.env.REACT_APP_CK_DB_BASE_URL}${process.env.REACT_APP_CK_DB_KEY}/randomselection.php`
+			)
+			.then((response) => {
+				return response.data.drinks
+			})
+			.catch((error) => {
+				throw error
+			})
+	}
+
 	useEffect(() => {
 		const ingredientsNameList = ingredients.map(({name}: {name: string}) => name.toLowerCase())
-		const includedSpirits: string[] = []
-		spirits.forEach((spirit: string) => {
-			if (ingredientsNameList.includes(spirit.toLowerCase())) {
-				includedSpirits.push(spirit)
-			}
-		})
-		if (includedSpirits.length > 0) {
-			Promise.all(includedSpirits.map((spirit: string) => fetchSpiritData(spirit))).then(
+		if (ingredientsNameList.length > 0) {
+			Promise.all(ingredientsNameList.map((spirit: string) => fetchSpiritData(spirit))).then(
 				(response) => {
+					console.log(response)
 					// @ts-expect-error generic
-					setSpiritsDetailDataToRender(response)
+					setIngredientsDetailedDataToRender(response)
 				}
 			)
 
-			const relatedDrinksMap = {}
-			// const response = fetchRelatedSpiritsDrinks('Gin')
-			// console.log(response)
-			includedSpirits.forEach(async (spirit: string) => {
-				fetchRelatedSpiritsDrinks(spirit).then((response) => {
-					// @ts-expect-error generic
-					relatedDrinksMap[spirit] = response
-					setRelatedSpiritsDrinksDataToRender(relatedDrinksMap)
+			Promise.all(
+				ingredientsNameList.map((spirit: string) => {
+					return fetchRelatedSpiritsDrinks(spirit)
 				})
+			).then((response) => {
+				const map = {}
+				response.forEach((datum) => {
+					const key = Object.keys(datum)
+					// @ts-expect-error generic
+					map[key] = datum[key]
+				})
+				setRelatedSpiritsDrinksDataToRender(map)
 			})
 		}
-	}, [])
-
-	// console.log(drink)
-	// const renderedIngredientContainers = () => {
-	// 	return ingredients.map((ingredient: {name: string; amount: string}, index: number) => {
-	// 		return (
-	// 			<div className="drinksPageIngredientCard drinksPageIngredientCardFull" key={index}>
-	// 				<img
-	// 					className="drinksPageIngredientImage"
-	// 					alt={ingredient.name}
-	// 					title={ingredient.name}
-	// 					src={`https://www.thecocktaildb.com/images/ingredients/${ingredient.name}.png`}
-	// 				></img>
-	// 				<div
-	// 					className="drinksPageIngredientsCardTextContainer"
-	// 					title={`${ingredient.amount}, ${ingredient.name}`}
-	// 				>
-	// 					<p style={{margin: 0, fontFamily: primaryFont}}>{ingredient.amount}</p>
-	// 					<p style={{margin: 0, fontFamily: primaryFont}}>{ingredient.name}</p>
-	// 				</div>
-	// 			</div>
-	// 		)
-	// 	})
-	// }
-
-	// const getDrinkDetailHeader = (label: string, value: string | null) => {
-	// 	if (label !== '' || !label) {
-	// 		return (
-	// 			<div className="drinkDetailHeader">
-	// 				<p className="drinkDetailHeaderLabel truncate" style={{fontFamily: primaryFont}}>
-	// 					{label}
-	// 				</p>
-	// 				<p className="drinkDetailHeaderValue truncate" style={{fontFamily: primaryFont}}>
-	// 					{value || ''}
-	// 				</p>
-	// 			</div>
-	// 		)
-	// 	}
-	// 	return <></>
-	// }
+		Promise.all([fetchTenRandomDrinks(), fetchTenRandomDrinks()]).then(([firstSet, secondSet]) => {
+			// @ts-expect-error generic
+			setTwentyRandomDrinks([...firstSet, ...secondSet])
+		})
+	}, [drink, ingredients])
 
 	const renderedBubble = (title: string, text: string | null, cssStyling: any) => {
 		return (
@@ -159,6 +150,7 @@ const LargeDrinkView = (props: LargeDrinkProps) => {
 				<div style={{display: 'flex', width: '100%', padding: '20px 30px 20px 0'}} key={index}>
 					<div>
 						<img
+							alt={ingredient.name}
 							src={`https://www.thecocktaildb.com/images/ingredients/${ingredient.name}-medium.png`}
 						/>
 					</div>
@@ -207,102 +199,108 @@ const LargeDrinkView = (props: LargeDrinkProps) => {
 		})
 	}
 
-	const renderedRelatedDrinks = (strIngredient: string) => {
-		// @ts-expect-error generic
-		if (relatedSpiritsDrinksDataToRender[strIngredient.toLowerCase()]) {
-			// @ts-expect-error generic
-			return relatedSpiritsDrinksDataToRender[strIngredient.toLowerCase()].map((drink) => {
-				return (
-					<img
-						src={drink.strDrinkThumb}
-						style={{height: '100%', width: 'auto'}}
-						key={drink.idDrink}
-					/>
-				)
-			})
-		}
-	}
-
-	const renderedSpiritDetails = () => {
-		return spiritsDetailDataToRender.length === 0 ? (
+	const renderedIngredientsDetailedMarkup = () => {
+		return ingredientsDetailedDataToRender.length === 0 ? (
 			<></>
 		) : (
-			spiritsDetailDataToRender.map((ingredientData: IngredientDetailsReponse) => {
-				const [ingredientDatum] = ingredientData.ingredients
-				const {idIngredient, strIngredient, strDescription, strABV} = ingredientDatum
-
-				return (
-					<div
-						style={{
-							height: 'auto',
-							padding: '20px'
-						}}
-						key={idIngredient}
-					>
-						<h2
-							style={{
-								fontFamily: primaryFont,
-								margin: 0,
-								color: 'white',
-								fontSize: '3.3em',
-								backgroundColor: '#000',
-								padding: '30px 30px 0px 30px',
-								borderTopRightRadius: '12px',
-								borderTopLeftRadius: '12px'
-							}}
-						>
-							This drink contains {strIngredient}
-						</h2>
-						<div
-							style={{
-								height: 'auto',
-								backgroundColor: '#000',
-								padding: '20px 20px 50px 20px',
-								borderBottomRightRadius: '12px',
-								borderBottomLeftRadius: '12px'
-							}}
-						>
-							<div style={{display: 'flex'}}>
-								<div style={{height: '100%', width: '20%'}}>
-									<img
-										src={`https://www.thecocktaildb.com/images/ingredients/${strIngredient}-medium.png`}
-										className='relatedDrinksImage'
-									/>
-								</div>
-								<div style={{height: '100%', width: '80%'}}>
-									<h3 style={{color: 'white', fontFamily: primaryFont, margin: 0}}>
-										Drinks that contain {strIngredient}
-									</h3>
-									<div
-										style={{
-											backgroundColor: 'red',
-											height: '300px',
-											overflowX: 'scroll',
-											display: 'flex',
-											border: '5px solid aqua',
-											borderRadius: '12px'
-										}}
-									>
-										{renderedRelatedDrinks(strIngredient)}
-									</div>
-								</div>
-							</div>
-							<p
-								style={{
-									fontFamily: primaryFont,
-									color: 'white',
-									fontSize: '1.6em',
-									margin: 0,
-									padding: '0px 10px'
-								}}
-							>
-								{strDescription}
-							</p>s
-						</div>
-					</div>
-				)
+			ingredientsDetailedDataToRender.map((ingredientData: IngredientDetailsReponse) => {
+				if (ingredientData && ingredientData.strDescription) {
+					const {idIngredient, strIngredient, strDescription} = ingredientData
+					return (
+						<LargeViewDetailedIngredients
+							idIngredient={idIngredient}
+							key={idIngredient}
+							strIngredient={strIngredient}
+							strDescription={strDescription}
+							ingredientsDetailedDataToRender={ingredientsDetailedDataToRender}
+							relatedSpiritsDrinksDataToRender={relatedSpiritsDrinksDataToRender}
+						/>
+					)
+				} else {
+					return <></>
+				}
 			})
 		)
+	}
+
+	const renderedRandomDrinks = () => {
+		const drinkImageList = twentyRandomDrinks.map((drink: DrinkDataPoint) => {
+			return (
+				<Link key={drink.drinkMapID} to={`/drink/${drink.idDrink}`} id={drink.drinkMapID}>
+					<ImageListItem sx={{height: '100%'}}>
+						<img
+							src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
+							srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
+							alt={drink.strDrink || ''}
+							loading="lazy"
+						/>
+						<div className="overlay-photo">
+							<p className="overlay-photo-text">{drink.strDrink}</p>
+						</div>
+					</ImageListItem>
+				</Link>
+			)
+		})
+
+		return (
+			<div
+				style={{
+					height: 'auto',
+					padding: '20px'
+				}}
+			>
+				<h2
+					style={{
+						fontFamily: primaryFont,
+						margin: 0,
+						paddingBottom: '10px',
+						color: 'white',
+						fontSize: '3.3em',
+						backgroundColor: '#000',
+						padding: '30px 30px 0px 30px',
+						borderTopRightRadius: '12px',
+						borderTopLeftRadius: '12px'
+					}}
+				>
+					Random Drinks
+				</h2>
+				<ImageList
+					variant="standard"
+					cols={4}
+					gap={5}
+					sx={{
+						height: 'auto',
+						backgroundColor: '#000',
+						margin: 0,
+						borderBottomLeftRadius: '12px',
+						borderBottomRightRadius: '12px'
+					}}
+				>
+					{drinkImageList}
+				</ImageList>
+			</div>
+		)
+	}
+
+	const renderedSaveIcon = toggleSaved ? (
+		<FaHeartCirclePlus title="Add/Remove from favorites" color="red" style={iconStyles} />
+	) : (
+		<FaHeartCircleMinus title="Add/Remove from favorites" color="white" style={iconStyles} />
+	)
+
+	const renderedVideoIcon = (videoUrl: string | null | undefined) => {
+		if (videoUrl) {
+			return (
+				<Button
+					title="Open drink instruction video."
+					size="medium"
+					onClick={() => handleViewOnClick(videoUrl)}
+					sx={{...buttonStyles, marginBottom: '10px'}}
+				>
+					<FaVideo color="white" style={iconStyles} />
+				</Button>
+			)
+		}
 	}
 
 	const renderedDrinkPageComponent = () => {
@@ -318,7 +316,7 @@ const LargeDrinkView = (props: LargeDrinkProps) => {
 				<div className="drinkPageMainContainerHeader">
 					<div className="drinkPageHeaderDetailsContainer" style={{width: '50%'}}>
 						<div style={{height: 'auto', width: '100%'}}>
-							<div style={{}}>
+							<div>
 								<h1 style={{fontFamily: primaryFont}}>{drink?.strDrink}</h1>
 							</div>
 							<div>
@@ -331,12 +329,45 @@ const LargeDrinkView = (props: LargeDrinkProps) => {
 										borderLeft: '1px solid darkgrey'
 									})}
 								</div>
-								<div style={{display: 'flex', justifyContent: 'center'}}>{renderedTags}</div>
+								<div style={{display: 'flex', justifyContent: 'center', marginBottom: '30px'}}>
+									{renderedTags}
+								</div>
+								<div
+									style={{
+										height: '60px',
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center'
+									}}
+								>
+									<div style={{width: 'auto'}}>
+										<Button
+											size="medium"
+											onClick={() => handleSaveOnClick(drink)}
+											sx={{...buttonStyles, marginBottom: '10px', marginRight: '20px'}}
+										>
+											{renderedSaveIcon}
+										</Button>
+										<Button
+											size="medium"
+											onClick={() => {
+												if (drink) handleShareOnClick(drink.idDrink)
+											}}
+											sx={{...buttonStyles, marginBottom: '10px', marginRight: '20px'}}
+										>
+											<FaShare color="white" style={iconStyles} />
+										</Button>
+										{renderedVideoIcon(drink?.strVideo)}
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div className="drinkPageImageContainer" style={{width: '50%'}}>
-						<img src={`${drink?.strDrinkThumb}?&fit=crop&auto=format&dpr=2 2x`} />
+						<img
+							src={`${drink?.strDrinkThumb}?&fit=crop&auto=format&dpr=2 2x`}
+							alt={drink?.strDrink || ''}
+						/>
 					</div>
 				</div>
 
@@ -405,7 +436,8 @@ const LargeDrinkView = (props: LargeDrinkProps) => {
 						</p>
 					</div>
 				</div>
-				{renderedSpiritDetails()}
+				{renderedIngredientsDetailedMarkup()}
+				{renderedRandomDrinks()}
 			</main>
 		)
 	}
