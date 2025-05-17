@@ -6,7 +6,7 @@ import {Link, Outlet, useLocation} from 'react-router-dom'
 import {useAppSelector, useAppDispatch} from '../../store/hooks'
 import {updateUseSavedScrollTop} from '../../store'
 
-import {FaCaretDown, FaCaretLeft, FaX, FaMartiniGlassEmpty} from 'react-icons/fa6'
+import {FaCaretDown, FaCaretLeft, FaX, FaMartiniGlassEmpty, FaCirclePlus} from 'react-icons/fa6'
 import {primaryFont} from '../../fonts/fonts'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -54,7 +54,8 @@ const SideBar: React.FC = () => {
 			path: '/saveddrinks',
 			text: 'Saved Drinks',
 			icon: <Favorite sx={linkIconStyles('/saveddrinks', false)} />
-		}
+		},
+		{path: '/create', text: 'Create', icon: <FaCirclePlus style={linkIconStyles('/create', false)} />}
 	]
 
 	const searchPaths = [

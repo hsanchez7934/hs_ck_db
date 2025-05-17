@@ -102,16 +102,16 @@ const DrinkCard = (props: Props) => {
 				<Typography
 					variant="body2"
 					color="text.secondary"
-					sx={{marginRight: '5px', fontFamily: primaryFont, color: '#fff'}}
+					sx={{fontFamily: primaryFont, color: '#fff'}}
 				>
-					{amount}
+					{name}
 				</Typography>
 				<Typography
 					variant="body2"
 					color="text.secondary"
-					sx={{fontFamily: primaryFont, color: '#fff'}}
+					sx={{marginRight: '5px', fontFamily: primaryFont, color: '#fff'}}
 				>
-					{name}
+					{amount}
 				</Typography>
 			</div>
 		)

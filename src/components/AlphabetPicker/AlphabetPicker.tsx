@@ -14,8 +14,6 @@ import {primaryFont} from '../../fonts/fonts'
 import DropDown from '../DropDown/DropDown'
 import axios from 'axios'
 
-import { useLocation } from 'react-router-dom'
-
 interface Props {
 	isKeywordSearch: boolean
 	searchKeyword: string
@@ -26,8 +24,7 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 	const [searchLetter, setSearchLetter] = useState(sessionStorage.getItem('savedAlphaPickerLetter') || 'a')
 	const [dropdownValue, setDropDownValue] = useState(sessionStorage.getItem('savedAlphaPickerLetter') || 'A')
 	const dispatch = useAppDispatch()
-	const location = useLocation()
-	console.log(location)
+
 	const alphabet = [
 		'A',
 		'B',

@@ -11,7 +11,7 @@ import {updateTriggerRender} from '../../store'
 
 const SavedDrinksPage = () => {
 	const {loginWithPopup} = useAuth0()
-	const {user, isAuthenticated} = useAuth0()
+	const {user, isAuthenticated, isLoading} = useAuth0()
 	const [dataToRender, setDataToRender] = useState([])
 	const {triggerRender, userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
 	const dispatch = useAppDispatch()
@@ -27,7 +27,7 @@ const SavedDrinksPage = () => {
 		if (triggerRender) {
 			dispatch(updateTriggerRender(false))
 		}
-	}, [triggerRender, user, userSavedDrinks, dispatch])
+	}, [triggerRender, user, userSavedDrinks, dispatch, isAuthenticated])
 
 	const renderLoginNotice = () => {
 		return (
@@ -39,7 +39,7 @@ const SavedDrinksPage = () => {
 					justifyContent: 'center',
 					alignItems: 'center',
 					backgroundColor: '#000',
-					flexDirection: 'column',
+					flexDirection: 'column'
 				}}
 			>
 				<p
@@ -53,7 +53,11 @@ const SavedDrinksPage = () => {
 				>
 					You must sign in to view your saved drinks. Click the button below to sign in.
 				</p>
-				<button id="btn_loginFromSavedDrinksPage" onClick={() => handleLogin()} style={{fontFamily: primaryFont}}>
+				<button
+					id="btn_loginFromSavedDrinksPage"
+					onClick={() => handleLogin()}
+					style={{fontFamily: primaryFont}}
+				>
 					Sign In
 				</button>
 			</div>
@@ -61,14 +65,16 @@ const SavedDrinksPage = () => {
 	}
 
 	let content = <LoadingSpinner />
-	if (!isAuthenticated) {
+	if (isLoading) {
+		content = <LoadingSpinner />
+	} else if (!isAuthenticated) {
 		content = renderLoginNotice()
 	} else if (dataToRender.length > 0) {
 		content = <DrinkImageList drinksData={dataToRender} />
 	} else if (dataToRender.length === 0) {
 		content = <NoDrinkDataNotice isSavedDrinksPage={true} />
 	}
-	return <div style={{overflow: 'auto', height: 'calc(100% - 64px)'}}>{content}</div>
+	return <div style={{overflow: 'hidden', height: 'calc(100% - 64px)'}}>{content}</div>
 }
 
 export default SavedDrinksPage

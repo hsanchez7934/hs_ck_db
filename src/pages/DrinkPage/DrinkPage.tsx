@@ -49,7 +49,7 @@ const DrinkPage = (): JSX.Element => {
 			} else {
 				setToggleSaved(false)
 			}
-		}, [isAuthenticated, user])
+		}, [isAuthenticated, user, userSavedDrinks, drinkDataToRender?.idDrink])
 
 	const toggleDialog = (color: string, text: string) => {
 		setDialogTextColor(color)

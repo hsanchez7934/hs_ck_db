@@ -1,0 +1,56 @@
+.create-form-section {
+	height: auto;
+	margin: 40px 0;
+	background-color: inherit;
+}
+
+.create-form-input {
+	border: 1px solid #ececec;
+	display: block;
+	width: 100%;
+	background-color: inherit;
+	height: 50px;
+	font-size: 1.7em;
+	color: #fff;
+}
+
+.create-form-textarea {
+	border: 1px solid #ececec;
+	display: block;
+	width: 100%;
+	background-color: inherit;
+	height: 150px;
+	font-size: 1.7em;
+	color: #fff;
+}
+
+.create-form-input:focus,
+.create-form-select:focus,
+.create-form-textarea:focus {
+	outline: 2px solid aqua;
+}
+
+.create-form-input:disabled,
+.create-form-select:disabled {
+	cursor: not-allowed;
+}
+
+/* .create-form button {
+	width: 50px;
+	background-color: inherit;
+	border: none;
+	outline-color: #aaabb8;
+	color: #ececec;
+}
+
+.create-form button:hover {
+	cursor: pointer;
+	background-color: #ececec;
+	color: black;
+}
+
+.create-form button:disabled {
+	cursor: not-allowed;
+	background-color: inherit;
+	color: #ececec;
+} */
