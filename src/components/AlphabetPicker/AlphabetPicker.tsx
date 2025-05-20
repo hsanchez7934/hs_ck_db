@@ -23,6 +23,7 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 	const {isKeywordSearch, searchKeyword} = props
 	const [searchLetter, setSearchLetter] = useState(sessionStorage.getItem('savedAlphaPickerLetter') || 'a')
 	const [dropdownValue, setDropDownValue] = useState(sessionStorage.getItem('savedAlphaPickerLetter') || 'A')
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 	const dispatch = useAppDispatch()
 
 	const alphabet = [
@@ -83,6 +84,22 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 		}
 	}, [isKeywordSearch, searchLetter])
 
+	useEffect(() => {
+		const alphabetPickerContainer = document.querySelector('.alphabetPickerContainer')
+		if (alphabetPickerContainer) {
+			const resizeObserver = new ResizeObserver((entries: any) => {
+				for (const entry of entries) {
+					const width = entry.contentRect.width
+					setWindowWidth(width)
+				}
+			})
+			resizeObserver.observe(alphabetPickerContainer)
+			return () => {
+				resizeObserver.disconnect()
+			}
+		}
+	}, [])
+
 	const setSessionStorageState = (letter: string) => {
 		sessionStorage.setItem('savedAlphaPickerLetter', letter)
 		dispatch(updateUseSavedScrollTop(false))
@@ -122,10 +139,10 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 		</div>
 	)
 
-	if (window.innerWidth < 500) {
+	if (windowWidth < 900) {
 		return (
 			<div className="alphabetPickerDropdownContainer">
-				{window.innerWidth < 500 && isKeywordSearch ? renderedSearchKeywordResults : <></>}
+				{windowWidth < 900 && isKeywordSearch ? renderedSearchKeywordResults : <></>}
 				<DropDown
 					handleOnChange={handleOnChange}
 					dropdownValue={dropdownValue}

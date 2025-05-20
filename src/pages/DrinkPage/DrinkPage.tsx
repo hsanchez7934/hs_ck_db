@@ -60,6 +60,9 @@ const DrinkPage = (): JSX.Element => {
 				}
 			})
 			resizeObserver.observe(drinkPageContainer)
+			return () => {
+				resizeObserver.disconnect()
+			}
 		}
 	}, [])
 

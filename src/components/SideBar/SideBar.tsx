@@ -40,6 +40,23 @@ const SideBar: React.FC = () => {
 	const [navBarOpen, setNavBarOpen] = React.useState(false)
 	const [currentPath, setCurrentPath] = React.useState('')
 	const [showSearchLinks, setShowSearchLinks] = React.useState(false)
+	const [windowWidth, setWindowWidth] = React.useState(window.innerWidth)
+
+	React.useEffect(() => {
+		const alphabetPickerContainer = document.querySelector('.full')
+		if (alphabetPickerContainer) {
+			const resizeObserver = new ResizeObserver((entries: any) => {
+				for (const entry of entries) {
+					const width = entry.contentRect.width
+					setWindowWidth(width)
+				}
+			})
+			resizeObserver.observe(alphabetPickerContainer)
+			return () => {
+				resizeObserver.disconnect()
+			}
+		}
+	}, [])
 
 	const drawerWidth = 240
 	const linkIconStyles = (path: string, isSecondary: boolean) => ({
@@ -182,7 +199,7 @@ const SideBar: React.FC = () => {
 		</div>
 	)
 
-	const renderSearchText = isKeywordSearch && searchKeyword && window.innerWidth >= 600
+	const renderSearchText = isKeywordSearch && searchKeyword && windowWidth >= 900
 	const searchResultsText = renderSearchText && (
 		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}}>
 			Displaying search results for: "{searchKeyword}"
@@ -194,14 +211,14 @@ const SideBar: React.FC = () => {
 	const isSearcByIngredientPath = currentPath.split(' ')[0] === '/search/byingredient'
 	const isSearchBySpiritsPath = currentPath.split(' ')[0] === '/search/byspirit'
 	const isRootPath = currentPath.split(' ')[0] === '/'
-	const renderSpiritsHeaderDropdown = window.innerWidth < 500 && isSearchBySpiritsPath
-	const renderMobileHomePageHeader = window.innerWidth < 500 && isRootPath
+	const renderSpiritsHeaderDropdown = windowWidth < 900 && isSearchBySpiritsPath
+	const renderMobileHomePageHeader = windowWidth < 900 && isRootPath
 	const renderSavedDrinksHeader =
-		window.innerWidth < 500 && currentPath.split(' ')[0] === '/saveddrinks'
+		windowWidth < 900 && currentPath.split(' ')[0] === '/saveddrinks'
 	const renderPopularDrinksHeader =
-		window.innerWidth < 500 && currentPath.split(' ')[0] === '/search/popularcocktails'
+		windowWidth < 900 && currentPath.split(' ')[0] === '/search/popularcocktails'
 	const renderNonAlcoholicDrinksHeader =
-		window.innerWidth < 500 && currentPath.split(' ')[0] === '/search/nonalcoholic'
+		windowWidth < 900 && currentPath.split(' ')[0] === '/search/nonalcoholic'
 
 	const renderedSavedDrinksHeader = (textToRender: string): React.ReactElement => (
 		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}}>{textToRender}</Typography>

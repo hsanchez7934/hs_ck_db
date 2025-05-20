@@ -6,7 +6,6 @@ import {primaryFont} from '../../fonts/fonts'
 
 const UserProfile = () => {
 	const {user, isAuthenticated, isLoading} = useAuth0()
-	console.log(user)
 
 	const renderedProfileData = () => {
 		return (

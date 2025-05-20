@@ -169,14 +169,17 @@ const DrinksImageList = (props: Props) => {
 
 		const imageListContainer = document.querySelector('#imageScrollContainer')
 		if (imageListContainer) {
-			const resizeOberserver = new ResizeObserver((entries: any) => {
+			const resizeObserver = new ResizeObserver((entries: any) => {
 				for (const entry of entries) {
 					const width = entry.contentRect.width
 					setGridColumns(width)
 					setWindowWidth(width)
 				}
 			})
-			resizeOberserver.observe(imageListContainer)
+			resizeObserver.observe(imageListContainer)
+			return () => {
+				resizeObserver.disconnect()
+			}
 		}
 	}, [])
 
