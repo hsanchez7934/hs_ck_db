@@ -5,9 +5,12 @@ import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
+import {MenuItem, Typography} from '@mui/material'
 import LoginButton from '../LoginButton/LoginButton'
 import LogoutButton from '../LogoutButton/LogoutButton'
 import Tooltip from '@mui/material/Tooltip'
+import {primaryFont} from '../../fonts/fonts'
+import {Link} from 'react-router-dom'
 
 import {addUserData} from '../../firebase/firebase-users'
 
@@ -31,6 +34,18 @@ const UserMenu: React.FC = () => {
 		setAnchorElUser(null)
 	}
 
+	const renderedUserNickname = () => {
+		return (
+			<Link to={'/profile'} style={{textDecoration: 'none', color: '#000'}}>
+				<MenuItem>
+					<Typography textAlign="center" sx={{fontFamily: primaryFont}}>
+						Profile
+					</Typography>
+				</MenuItem>
+			</Link>
+		)
+	}
+
 	return (
 		<Box sx={{flexGrow: 1, display: 'flex', justifyContent: 'flex-end'}}>
 			<Tooltip title="Open settings">
@@ -46,6 +61,7 @@ const UserMenu: React.FC = () => {
 				open={Boolean(anchorElUser)}
 				onClose={handleCloseUserMenu}
 			>
+				{isAuthenticated && renderedUserNickname()}
 				{isAuthenticated ? <LogoutButton /> : <LoginButton />}
 			</Menu>
 		</Box>

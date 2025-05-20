@@ -1,0 +1,42 @@
+#profileMainContainer {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: #000;
+}
+
+#profileMainContainer img {
+	height: 150px;
+	width: 150px;
+	border-radius: 50%;
+}
+
+#profileMainContainer h1 {
+	color: #fff;
+	font-size: 1em;
+}
+
+@media screen and (min-width: 480px) {
+	#profileMainContainer h1 {
+		font-size: 1.5em;
+	}
+}
+
+@media screen and (min-width: 750px) {
+	#profileMainContainer img {
+		height: 250px;
+		width: 250px;
+		border-radius: 50%;
+	}
+	#profileMainContainer h1 {
+		font-size: 2em;
+	}
+}
+
+@media screen and (min-width: 1000px) {
+	#profileMainContainer h1 {
+		font-size: 2.5em;
+	}
+}

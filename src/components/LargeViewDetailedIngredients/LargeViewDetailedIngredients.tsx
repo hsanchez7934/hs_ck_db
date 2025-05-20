@@ -39,7 +39,7 @@ const LargeViewDetailedIngredients = (props: LargeViewDetailedIngredientsProps) 
 				return relatedSpiritsDrinksDataToRender[strIngredient.toLowerCase()].map((drink) => {
 					return (
 						<Link key={drink.drinkMapID} to={`/drink/${drink.idDrink}`} id={drink.drinkMapID}>
-							<ImageListItem sx={{height: '100%'}}>
+							<ImageListItem sx={{height: '100%'}} key={drink.drinkMapID}>
 								<img
 									src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
 									srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}

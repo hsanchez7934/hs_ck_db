@@ -102,7 +102,6 @@ const LargeDrinkView = (props: LargeDrinkProps) => {
 		if (ingredientsNameList.length > 0) {
 			Promise.all(ingredientsNameList.map((spirit: string) => fetchSpiritData(spirit))).then(
 				(response) => {
-					console.log(response)
 					// @ts-expect-error generic
 					setIngredientsDetailedDataToRender(response)
 				}
@@ -227,7 +226,7 @@ const LargeDrinkView = (props: LargeDrinkProps) => {
 		const drinkImageList = twentyRandomDrinks.map((drink: DrinkDataPoint) => {
 			return (
 				<Link key={drink.drinkMapID} to={`/drink/${drink.idDrink}`} id={drink.drinkMapID}>
-					<ImageListItem sx={{height: '100%'}}>
+					<ImageListItem sx={{height: '100%'}} key={drink.drinkMapID}>
 						<img
 							src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
 							srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}

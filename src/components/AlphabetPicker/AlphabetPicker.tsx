@@ -55,7 +55,7 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 	]
 
 	const fetchData = useCallback((searchLetter: string) => {
-		if (window.innerWidth < 800) {
+		if (window.innerWidth < 500) {
 			sessionStorage.setItem('savedSearchKeyword', '')
 		}
 		dispatch(isFetchingSearchDrinkData(true))
@@ -75,7 +75,7 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 	useEffect(() => {
 		if (!isKeywordSearch) {
 			const savedKeyword = sessionStorage.getItem('savedSearchKeyword')
-			if (window.innerWidth < 800 && savedKeyword) {
+			if (window.innerWidth < 500 && savedKeyword) {
 				return
 			} else {
 				fetchData(searchLetter)
@@ -122,10 +122,10 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 		</div>
 	)
 
-	if (window.innerWidth < 800) {
+	if (window.innerWidth < 500) {
 		return (
 			<div className="alphabetPickerDropdownContainer">
-				{window.innerWidth < 800 && isKeywordSearch ? renderedSearchKeywordResults : <></>}
+				{window.innerWidth < 500 && isKeywordSearch ? renderedSearchKeywordResults : <></>}
 				<DropDown
 					handleOnChange={handleOnChange}
 					dropdownValue={dropdownValue}

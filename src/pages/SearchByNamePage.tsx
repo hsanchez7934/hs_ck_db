@@ -37,7 +37,7 @@ const SearchByNamePage = (): JSX.Element => {
 		}
 	}
 
-	const containerHeight = window.innerWidth < 800 ? 'calc(100% - 40px)' : 'calc(100% - 25px)'
+	const containerHeight = window.innerWidth < 500 ? 'calc(100% - 40px)' : 'calc(100% - 25px)'
 
 	return (
 		<div style={{height: 'calc(100% - 64px)', overflow: 'hidden'}}>

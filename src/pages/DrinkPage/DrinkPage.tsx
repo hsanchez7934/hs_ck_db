@@ -13,8 +13,6 @@ import {useParams, useLocation, generatePath} from 'react-router-dom'
 import {updateUserSavedDrinks, updateGetFreshUpdate, updateTriggerRender} from '../../store'
 import {saveUserDrinkInDB} from '../../firebase/firebase-user-drink-storage'
 
-const isMobileView = window.innerWidth < 800
-
 const DrinkPage = (): JSX.Element => {
 	const {isAuthenticated, user} = useAuth0()
 	const location = useLocation()
@@ -42,6 +40,7 @@ const DrinkPage = (): JSX.Element => {
 	const [dialogTextColor, setDialogTextColor] = useState('')
 	const [openSavedStatedDialog, setOpenSavedStateDialog] = useState(false)
 	const [toggleLoginDialog, setToggleLoginDialog] = useState(false)
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
 	useEffect(() => {
 			if (isAuthenticated && isDrinkSaved(drinkDataToRender?.idDrink)) {
@@ -50,6 +49,19 @@ const DrinkPage = (): JSX.Element => {
 				setToggleSaved(false)
 			}
 		}, [isAuthenticated, user, userSavedDrinks, drinkDataToRender?.idDrink])
+
+	useEffect(() => {
+		const drinkPageContainer = document.getElementById('drinkPageContainer')
+		if (drinkPageContainer) {
+			const resizeObserver = new ResizeObserver((entries) => {
+				for (const entry of entries) {
+					const width = entry.contentRect.width
+					setWindowWidth(width)
+				}
+			})
+			resizeObserver.observe(drinkPageContainer)
+		}
+	}, [])
 
 	const toggleDialog = (color: string, text: string) => {
 		setDialogTextColor(color)
@@ -148,11 +160,11 @@ const DrinkPage = (): JSX.Element => {
 	} else if (error) {
 		return <NoDrinkDataNotice isErrorMessage={true} />
 	} else {
-		content = isMobileView ? mobileDrinkPageView() : largeDrinkPageView()
+		content = windowWidth < 900 ? mobileDrinkPageView() : largeDrinkPageView()
 	}
 
 	return (
-		<div style={{height: 'calc(100% - 64px)', overflow: 'auto'}}>
+		<div id="drinkPageContainer" style={{height: 'calc(100% - 64px)', overflow: 'auto'}}>
 			{content}
 			<SimpleDialog
 				open={openSavedStatedDialog}

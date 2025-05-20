@@ -6,7 +6,8 @@ import {Link, Outlet, useLocation} from 'react-router-dom'
 import {useAppSelector, useAppDispatch} from '../../store/hooks'
 import {updateUseSavedScrollTop} from '../../store'
 
-import {FaCaretDown, FaCaretLeft, FaX, FaMartiniGlassEmpty, FaCirclePlus} from 'react-icons/fa6'
+import {FaCaretDown, FaCaretLeft, FaX, FaMartiniGlassEmpty} from 'react-icons/fa6'
+// import {FaCirclePlus} from 'react-icons/fa6'
 import {primaryFont} from '../../fonts/fonts'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -55,7 +56,7 @@ const SideBar: React.FC = () => {
 			text: 'Saved Drinks',
 			icon: <Favorite sx={linkIconStyles('/saveddrinks', false)} />
 		},
-		{path: '/create', text: 'Create', icon: <FaCirclePlus style={linkIconStyles('/create', false)} />}
+		// {path: '/create', text: 'Create', icon: <FaCirclePlus style={linkIconStyles('/create', false)} />}
 	]
 
 	const searchPaths = [
@@ -188,18 +189,19 @@ const SideBar: React.FC = () => {
 		</Typography>
 	)
 
+	const isUserProfilePath = currentPath.split(' ')[0] === '/profile'
 	const isSearchByNamePath = currentPath.split(' ')[0] === '/search/byname'
 	const isSearcByIngredientPath = currentPath.split(' ')[0] === '/search/byingredient'
 	const isSearchBySpiritsPath = currentPath.split(' ')[0] === '/search/byspirit'
 	const isRootPath = currentPath.split(' ')[0] === '/'
-	const renderSpiritsHeaderDropdown = window.innerWidth < 800 && isSearchBySpiritsPath
-	const renderMobileHomePageHeader = window.innerWidth < 800 && isRootPath
+	const renderSpiritsHeaderDropdown = window.innerWidth < 500 && isSearchBySpiritsPath
+	const renderMobileHomePageHeader = window.innerWidth < 500 && isRootPath
 	const renderSavedDrinksHeader =
-		window.innerWidth < 800 && currentPath.split(' ')[0] === '/saveddrinks'
+		window.innerWidth < 500 && currentPath.split(' ')[0] === '/saveddrinks'
 	const renderPopularDrinksHeader =
-		window.innerWidth < 800 && currentPath.split(' ')[0] === '/search/popularcocktails'
+		window.innerWidth < 500 && currentPath.split(' ')[0] === '/search/popularcocktails'
 	const renderNonAlcoholicDrinksHeader =
-		window.innerWidth < 800 && currentPath.split(' ')[0] === '/search/nonalcoholic'
+		window.innerWidth < 500 && currentPath.split(' ')[0] === '/search/nonalcoholic'
 
 	const renderedSavedDrinksHeader = (textToRender: string): React.ReactElement => (
 		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}}>{textToRender}</Typography>
@@ -228,6 +230,7 @@ const SideBar: React.FC = () => {
 					{isSearchByNamePath && searchResultsText}
 					{isSearcByIngredientPath && <HeaderIngredientsDropDown />}
 					{renderSpiritsHeaderDropdown && <HeaderSpiritsDropDown />}
+					{isUserProfilePath && renderedSavedDrinksHeader('Cocktail Explorer')}
 					{renderMobileHomePageHeader && renderedSavedDrinksHeader('Cocktail Explorer')}
 					{renderSavedDrinksHeader && renderedSavedDrinksHeader('Saved Drinks')}
 					{renderPopularDrinksHeader && renderedSavedDrinksHeader('Popular Cocktails')}

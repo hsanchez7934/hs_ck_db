@@ -48,14 +48,14 @@ const SearchBySpiritsPage = () => {
 
 	return (
 		<div style={{height: 'calc(100% - 64px)'}}>
-			{window.innerWidth < 800 ? (
+			{window.innerWidth < 500 ? (
 				<></>
 			) : (
 				<div style={{height: '45px', display: 'flex'}}>{renderedSpiritTabs}</div>
 			)}
 			<div
 				style={{
-					height: `calc(100% - ${window.innerWidth < 800 ? '0px' : '45px'})`,
+					height: `calc(100% - ${window.innerWidth < 500 ? '0px' : '45px'})`,
 					overflow: 'hidden'
 				}}
 			>

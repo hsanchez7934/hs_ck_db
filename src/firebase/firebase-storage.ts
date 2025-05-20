@@ -1,15 +1,16 @@
-import { upload } from '@testing-library/user-event/dist/upload'
 import {storage} from './firebaseConfig'
-import {getStorage, ref, uploadBytes} from 'firebase/storage'
+import {ref, uploadBytes, getDownloadURL} from 'firebase/storage'
+import generateUUID from '../uuid'
 
 export const uploadDrinkImage = (imageName: string, file: any) => {
-    // const imageReference = ref(storage, imageName)
-    const metaData = {
-        contentType: 'image/jpeg'
-    }
-    const imageRef = ref(storage, `images/${imageName}`)
+	const metaData = {
+		contentType: 'image/jpeg'
+	}
+	const imageRef = ref(storage, `images/${generateUUID()}_${imageName}`)
 
-    uploadBytes(imageRef, file, metaData).then((snapshot) => {
-        console.log(snapshot)
-    })
+	return uploadBytes(imageRef, file, metaData).then((snapshot) => {
+		return getDownloadURL(snapshot.ref).then((downloadURL) => {
+			return downloadURL
+		})
+	})
 }

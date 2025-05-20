@@ -1,16 +1,20 @@
 import './styles.css'
 import React, {useEffect, useState} from 'react'
-import {Button} from '@mui/material'
-import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
-import {primaryFont} from '../../fonts/fonts'
-import {useAppSelector, useAppDispatch} from '../../store/hooks'
-import {useAuth0} from '@auth0/auth0-react'
-import axios from 'axios'
-import CreateFormIngredient from '../../components/CreateFormIngredient/CreateFormIngredient'
-import SimpleDialog from '../../components/SimpleDialog/SimpleDialog'
 
-import {FaPlus, FaCheck} from 'react-icons/fa6'
-import {has} from 'lodash'
+import {Button} from '@mui/material'
+import CreateFormIngredient from '../../components/CreateFormIngredient/CreateFormIngredient'
+import {FaPlus, FaCheck, FaX, FaAngleLeft} from 'react-icons/fa6'
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
+import SimpleDialog from '../../components/SimpleDialog/SimpleDialog'
+import axios from 'axios'
+import generateUUID from '../../uuid'
+import {primaryFont} from '../../fonts/fonts'
+import {uploadDrinkImage} from '../../firebase/firebase-storage'
+import {useAuth0} from '@auth0/auth0-react'
+import {
+	getUserCreatedDrinksFromDB,
+	saveDrinkToFirestoreDB
+} from '../../firebase/firebase-user-drinks'
 
 const fetchCategorySelectItems = (): Promise<any | null> =>
 	axios
@@ -61,6 +65,8 @@ const CreateDrinkPage = () => {
 	const {loginWithPopup} = useAuth0()
 	const {user, isAuthenticated, isLoading} = useAuth0()
 
+	const [renderCreateForm, setRenderCreateForm] = useState(false)
+
 	const [drinkNameValue, setDrinkNameValue] = useState('')
 
 	const [categorySelectItems, setCategorySelectItems] = useState([])
@@ -80,6 +86,10 @@ const CreateDrinkPage = () => {
 	const [openValidationDialog, setOpenValidationDialog] = useState(false)
 	const [addValidationDialogText, setAddValidationDialogText] = useState('')
 	const [addValidationDialogTextColor, setAddValidationDialogTextColor] = useState('')
+
+	const [imageDataURL, setImageDataURL] = useState('')
+	const [imageFileData, setImageFileData] = useState({})
+	const [userCreatedDrinks, setUserCreatedDrinks] = useState([])
 
 	useEffect(() => {
 		fetchCategorySelectItems().then((response) => {
@@ -117,6 +127,10 @@ const CreateDrinkPage = () => {
 					ingredient: ''
 				}
 			])
+		})
+		getUserCreatedDrinksFromDB(user?.sub).then((userCreatedDrinks) => {
+			setUserCreatedDrinks(userCreatedDrinks)
+			console.log(userCreatedDrinks)
 		})
 	}, [])
 
@@ -165,9 +179,13 @@ const CreateDrinkPage = () => {
 		setIngredientsNodeList(newNodeList)
 	}
 
-	const handleOnSubmit = () => {
+	const handleOnSubmit = async () => {
 		if (drinkNameValue === '') {
 			toggleDialog('red', 'Please enter a name for your drink.')
+			return
+		}
+		if (!imageDataURL) {
+			toggleDialog('red', 'Please upload an image for your drink.')
 			return
 		}
 		let hasIngredients = true
@@ -186,19 +204,32 @@ const CreateDrinkPage = () => {
 		}
 
 		const drinkDataPoint = {
+			idDrink: generateUUID(),
 			strDrink: drinkNameValue,
 			strCategory: selectedCategoryValue,
 			strGlass: selectedGlassTypeValue,
 			strAlcoholic: selectedDrinkTypeValue,
-			strInstructions: drinkInstructionsValue,
+			strInstructions: drinkInstructionsValue
 		}
+
 		ingredientsNodeList.forEach((node: {amount: string; ingredient: string}, idx: number) => {
 			// @ts-expect-error generic
 			drinkDataPoint[`strIngredient${idx + 1}`] = node?.ingredient
 			// @ts-expect-error generic
 			drinkDataPoint[`strMeasure${idx + 1}`] = node?.amount
 		})
-		console.log(drinkDataPoint)
+
+		// @ts-expect-error generic
+		const imageDownloadURL = await uploadDrinkImage(imageFileData?.name, imageFileData)
+		// @ts-expect-error generic
+		drinkDataPoint['strDrinkThumb'] = imageDownloadURL
+		// @ts-expect-error generic
+		userCreatedDrinks.push(drinkDataPoint)
+		setUserCreatedDrinks(userCreatedDrinks)
+		saveDrinkToFirestoreDB(user?.sub, userCreatedDrinks).then(() => {
+			toggleDialog('green', 'Drink successfully created!')
+			setRenderCreateForm(false)
+		})
 	}
 
 	const renderedIngredientsFormList = () => {
@@ -280,6 +311,39 @@ const CreateDrinkPage = () => {
 		}
 	}
 
+	const renderedDrinkImage = () => {
+		return imageDataURL ? (
+			<img alt="drink" src={imageDataURL} style={{width: '250px', height: '250px'}} />
+		) : (
+			<></>
+		)
+	}
+
+	const displayImage = (imageDataURL: string | ArrayBuffer | null) => {
+		// @ts-expect-error generic
+		setImageDataURL(imageDataURL)
+	}
+
+	const uploadImage = (file: any) => {
+		console.log(file)
+		const reader = new FileReader()
+		reader.onload = (event) => {
+			// @ts-expect-error generic
+			const imageDataURL = event.target.result
+			displayImage(imageDataURL)
+			setImageFileData(file)
+		}
+		reader.readAsDataURL(file)
+	}
+
+	const handleFileInputOnChange = (event: any) => {
+		// console.log(event)
+		const file = event.target.files[0]
+		if (file) {
+			uploadImage(file)
+		}
+	}
+
 	const renderedForm = () => {
 		const labelStyles = {
 			fontFamily: primaryFont,
@@ -318,6 +382,28 @@ const CreateDrinkPage = () => {
 						id="drinkName"
 					/>
 					{renderDrinkNameValidationMessage()}
+				</div>
+
+				<div className="create-form-section">
+					<div style={{display: 'flex'}}>
+						<div style={{height: '100%'}}>
+							<label style={labelStyles}>Drink Image:</label>
+							<input
+								type="file"
+								id="imageUpload"
+								accept="image/*"
+								style={{
+									fontFamily: primaryFont,
+									height: '50px',
+									width: '250px',
+									color: 'white',
+									border: '1px solid darkgray'
+								}}
+								onChange={(event) => handleFileInputOnChange(event)}
+							/>
+						</div>
+						<div style={{height: '100%', marginLeft: '20px'}}>{renderedDrinkImage()}</div>
+					</div>
 				</div>
 
 				<div className="create-form-section">
@@ -435,12 +521,25 @@ const CreateDrinkPage = () => {
 								color: 'white',
 								fontSize: '24px',
 								border: '1px solid darkgray',
-								margin: '5px 0 0 5px'
+								margin: '5px 10px 0 0'
 							}}
 							onClick={() => handleOnSubmit()}
 						>
 							Submit
 							<FaCheck style={{marginLeft: '5px'}} />
+						</Button>
+
+						<Button
+							sx={{
+								color: 'white',
+								fontSize: '24px',
+								border: '1px solid darkgray',
+								margin: '5px 0 0 5px'
+							}}
+							onClick={() => setRenderCreateForm(false)}
+						>
+							Cancel
+							<FaX style={{marginLeft: '5px'}} />
 						</Button>
 					</div>
 				</div>
@@ -448,8 +547,55 @@ const CreateDrinkPage = () => {
 		)
 	}
 
+	const renderedHeaderBtn = () => {
+		return renderCreateForm ? (
+			<Button
+				sx={{color: 'white', fontSize: '18px', border: '1px solid white'}}
+				onClick={() => setRenderCreateForm(false)}
+			>
+				<FaAngleLeft style={{marginRight: '5px'}} />
+				Back
+			</Button>
+		) : (
+			<Button
+				sx={{color: 'white', fontSize: '18px', border: '1px solid white'}}
+				onClick={() => setRenderCreateForm(true)}
+			>
+				Add Drink
+				<FaPlus style={{marginLeft: '5px'}} />
+			</Button>
+		)
+	}
+
+	const renderedDrinksList = () => {
+		if (userCreatedDrinks.length === 0) {
+			return (
+				<div
+					style={{
+						backgroundColor: '#000',
+						height: '100%',
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						flexDirection: 'column'
+					}}
+				>
+					<p style={{fontFamily: primaryFont, color: '#fff'}}>No drinks have been created yet!</p>
+				</div>
+			)
+		}
+		const renderedDrinks = userCreatedDrinks.map((drink: any) => {
+			return (
+				<div key={drink.idDrink}>
+					<p style={{fontFamily: primaryFont, color: '#fff'}}>{drink.strDrink}</p>
+				</div>
+			)
+		})
+		return renderedDrinks
+	}
+
 	const renderedCreateContent = (content: any) => {
-		content = renderedForm()
+		content = renderCreateForm ? renderedForm() : renderedDrinksList()
 		return (
 			<div style={{height: '100%'}}>
 				<div
@@ -457,15 +603,14 @@ const CreateDrinkPage = () => {
 						height: '70px',
 						backgroundColor: '#000',
 						borderTop: '1px solid darkgray',
-						borderBottom: '1px solid darkgray'
+						borderBottom: '1px solid darkgray',
+						display: 'flex',
+						justifyContent: 'flex-start',
+						alignItems: 'center',
+						paddingLeft: '10px'
 					}}
 				>
-					<Button
-						sx={{color: 'white', fontSize: '18px', border: '1px solid white'}}
-					>
-						Add Drink
-						<FaPlus style={{marginLeft: '5px'}} />
-					</Button>
+					{renderedHeaderBtn()}
 				</div>
 				<div style={{height: 'calc(100% - 70px)', overflow: 'auto'}}>{content}</div>
 			</div>

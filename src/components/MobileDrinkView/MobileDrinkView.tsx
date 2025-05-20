@@ -90,13 +90,13 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 		<div>
 			<div
 				style={{
-					height: '400px',
 					backgroundImage: `url(${drink?.strDrinkThumb})`,
 					backgroundSize: 'cover',
 					backgroundPosition: 'center',
 					backgroundRepeat: 'no-repeat',
 					position: 'relative'
 				}}
+				id="mobileDrinkPageImageContainer"
 			>
 				<div className="mobileDrinkPageActionLeft">
 					<Link to={prevPath} state={{fetchFromStorageSession}}>

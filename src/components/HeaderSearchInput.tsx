@@ -45,7 +45,7 @@ const HeaderSearchInput = (props: Props): JSX.Element => {
 	}, [isKeywordSearch, searchKeyword])
 
 	useEffect(() => {
-		if (window.innerWidth < 800) {
+		if (window.innerWidth < 500) {
 			const sessionStoredSearchKeyword = sessionStorage.getItem('savedSearchKeyword')
 			if (!sessionStoredSearchKeyword) {
 				return
@@ -62,7 +62,7 @@ const HeaderSearchInput = (props: Props): JSX.Element => {
 		setInputValue('')
 		dispatch(updateIsKeywordSearch(true))
 		dispatch(updateSearchKeyword(inputValue))
-		if (window.innerWidth < 800) {
+		if (window.innerWidth < 500) {
 			sessionStorage.setItem('savedSearchKeyword', inputValue)
 		}
 	}

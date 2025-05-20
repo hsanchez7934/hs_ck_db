@@ -17,24 +17,12 @@ import {updateTriggerRender} from '../../store'
 import {updateUserSavedDrinks, updateGetFreshUpdate} from '../../store'
 import {useAuth0} from '@auth0/auth0-react'
 import {Link, useLocation, generatePath} from 'react-router-dom'
-import {DebouncedFunc} from 'lodash'
+import {DebouncedFunc, set} from 'lodash'
 
 interface Props {
 	drinksData: DrinkDataPoint[]
 	fetchData?: DebouncedFunc<(fetchSessionStorage: boolean) => Promise<void>>
 	isHomePage?: boolean
-}
-
-const setGridColumns = (width: number) => {
-	let columns = 4
-	if (width < 500) {
-		columns = 1
-	} else if (width < 700) {
-		columns = 2
-	} else if (width < 900) {
-		columns = 3
-	}
-	return columns
 }
 
 const removeSavedMapIDs = (drinksList: DrinkDataPoint[]) => {
@@ -53,7 +41,6 @@ const DrinksImageList = (props: Props) => {
 	const {drinksData, fetchData, isHomePage} = props
 	const infiniteScrollContainer = useRef(null)
 	const {isAuthenticated, user} = useAuth0()
-	const windowWidth = window.innerWidth
 	const location = useLocation()
 
 	const [renderData, setRenderData] = useState([])
@@ -62,6 +49,8 @@ const DrinksImageList = (props: Props) => {
 	const [dialogTextColor, setDialogTextColor] = useState('')
 	const [openSavedStatedDialog, setOpenSavedStateDialog] = useState(false)
 	const [observerTarget, setObserverTarget] = useState(null)
+	const [gridColumnsNum, setGridColumnsNum] = useState(4)
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
 	const dispatch = useAppDispatch()
 	const {userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
@@ -138,7 +127,7 @@ const DrinksImageList = (props: Props) => {
 	}, [observerTarget])
 
 	useEffect(() => {
-		if (window.innerWidth < 800) {
+		if (window.innerWidth < 500) {
 			const copy = infiniteScrollContainer?.current
 			const handleScroll = (scroll: number) => {
 				if (scroll) {
@@ -157,12 +146,39 @@ const DrinksImageList = (props: Props) => {
 
 	useEffect(() => {
 		const copy = infiniteScrollContainer?.current
-		if (window.innerWidth < 800 && useSavedScrollTop && observerTarget) {
+		if (window.innerWidth < 500 && useSavedScrollTop && observerTarget) {
 			const savedScrollTop = sessionStorage.getItem('savedScrollTop')
 			// @ts-expect-error generic
 			copy.scrollTo(0, Number(savedScrollTop))
 		}
 	}, [observerTarget, useSavedScrollTop])
+
+	useEffect(() => {
+		const setGridColumns = (width: number) => {
+			let columns = 4
+			if (width <= 900) {
+				columns = 1
+			} else if (width <= 1000) {
+				columns = 2
+			} else if (width <= 1100) {
+				columns = 3
+			}
+			setGridColumnsNum(columns)
+			return columns
+		}
+
+		const imageListContainer = document.querySelector('#imageScrollContainer')
+		if (imageListContainer) {
+			const resizeOberserver = new ResizeObserver((entries: any) => {
+				for (const entry of entries) {
+					const width = entry.contentRect.width
+					setGridColumns(width)
+					setWindowWidth(width)
+				}
+			})
+			resizeOberserver.observe(imageListContainer)
+		}
+	}, [])
 
 	const handleOnClickLargeCard = async (drink: DrinkDataPoint) => {
 		if (!drink.strInstructions) {
@@ -182,7 +198,7 @@ const DrinksImageList = (props: Props) => {
 					state={{backgroundLocation: location}}
 					id={drink.drinkMapID}
 				>
-					<ImageListItem onClick={() => handleOnClickLargeCard(drink)}>
+					<ImageListItem onClick={() => handleOnClickLargeCard(drink)} key={drink.drinkMapID}>
 						<img
 							src={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format&dpr=2 2x`}
 							srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
@@ -254,16 +270,6 @@ const DrinksImageList = (props: Props) => {
 			)
 		return renderedSaveIcon
 	}
-
-	// const handleMobileCardOnClick = async (drink: DrinkDataPoint) => {
-		// console.log(isKeywordSearch, searchKeyword)
-		// if (!drink.strInstructions) {
-		// 	const response = await fetchDrinkDataByID(drink)
-		// 	drink = {...response, ...drink}
-		// }
-		// dispatch(updateIsModalOpen(true))
-		// dispatch(updateModalDrink(drink))
-	// }
 
 	const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
 		const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
@@ -367,7 +373,6 @@ const DrinksImageList = (props: Props) => {
 							>
 								<FaEye
 									style={{color: 'white', fontSize: '25px'}}
-									// onClick={() => handleMobileCardOnClick(drink)}
 								/>
 							</Link>
 						</div>
@@ -388,12 +393,12 @@ const DrinksImageList = (props: Props) => {
 		>
 			<ImageList
 				variant="standard"
-				cols={setGridColumns(windowWidth)}
+				cols={gridColumnsNum}
 				gap={8}
 				sx={{margin: 0, padding: '7px', width: '100%', overflow: 'hidden'}}
 			>
-				{windowWidth >= 800 ? renderedLargeDrinkImages() : renderedMobileDrinkImages()}
-				{windowWidth < 800 && (
+				{windowWidth >= 901 ? renderedLargeDrinkImages() : renderedMobileDrinkImages()}
+				{windowWidth <= 900 && (
 					<>
 						<SimpleDialog
 							open={openSavedStatedDialog}
