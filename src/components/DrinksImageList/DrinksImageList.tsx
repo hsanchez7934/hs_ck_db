@@ -313,8 +313,6 @@ const DrinksImageList = (props: Props) => {
 		return videoUrl ? '25%' : '33.3333333333333%'
 	}
 
-	console.log(location.pathname)
-
 	const renderedMobileDrinkImages = (): ReactElement[] => {
 		const isDrinkSaved = (drinkID: string | null | undefined) => {
 			if (drinkID) {
