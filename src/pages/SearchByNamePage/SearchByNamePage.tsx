@@ -40,7 +40,7 @@ const SearchByNamePage = (): JSX.Element => {
 	return (
 		<div style={{height: 'calc(100% - 64px)', overflow: 'hidden'}} id="searchByNamePageContainer">
 			<AlphtabetPicker isKeywordSearch={isKeywordSearch} updateClearHeaderSearchInputText={updateClearHeaderSearchInputText} />
-			<div id="searchByNamePageImageListContainer" className='bg-red-300'>{content}</div>
+			<div id="searchByNamePageImageListContainer">{content}</div>
 		</div>
 	)
 }

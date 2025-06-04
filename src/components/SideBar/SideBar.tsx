@@ -257,7 +257,9 @@ const SideBar: React.FC = () => {
 				sx={{
 					flexGrow: 1,
 					p: 3,
-					width: {sm: '100%'},
+					// width: {sm: '100%'},
+					width: '100%',
+					height: '100%',
 					backgroundImage: 'linear-gradient(to top, #434343 0%, black 100%)',
 					backgroundPosition: 'center',
 					backgroundSize: 'cover',
