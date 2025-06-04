@@ -7,7 +7,8 @@ import {
 	isFetchingSearchDrinkData,
 	isErrorFetchingSearchDrinksData,
 	updateIsKeywordSearch,
-	updateSearchKeyword
+	updateSearchKeyword,
+	updateClearHeaderSearchInputText
 } from '../slices/searchDrinksSlice'
 import {updateIsModalOpen, updateModalDrink, modalDrinkReducer} from '../slices/modalDrinkSlice'
 import {updateDrinkMap, drinkPagerReducer} from '../slices/drinkPagerSlice'
@@ -57,6 +58,7 @@ export {
 	isFetchingSearchDrinkData,
 	isErrorFetchingSearchDrinksData,
 	updateIsKeywordSearch,
+	updateClearHeaderSearchInputText,
 	updateSearchKeyword,
 	updateIsModalOpen,
 	updateModalDrink,

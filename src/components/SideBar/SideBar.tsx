@@ -40,23 +40,6 @@ const SideBar: React.FC = () => {
 	const [navBarOpen, setNavBarOpen] = React.useState(false)
 	const [currentPath, setCurrentPath] = React.useState('')
 	const [showSearchLinks, setShowSearchLinks] = React.useState(false)
-	const [windowWidth, setWindowWidth] = React.useState(window.innerWidth)
-
-	React.useEffect(() => {
-		const alphabetPickerContainer = document.querySelector('.full')
-		if (alphabetPickerContainer) {
-			const resizeObserver = new ResizeObserver((entries: any) => {
-				for (const entry of entries) {
-					const width = entry.contentRect.width
-					setWindowWidth(width)
-				}
-			})
-			resizeObserver.observe(alphabetPickerContainer)
-			return () => {
-				resizeObserver.disconnect()
-			}
-		}
-	}, [])
 
 	const drawerWidth = 240
 	const linkIconStyles = (path: string, isSecondary: boolean) => ({
@@ -199,9 +182,9 @@ const SideBar: React.FC = () => {
 		</div>
 	)
 
-	const renderSearchText = isKeywordSearch && searchKeyword && windowWidth >= 900
+	const renderSearchText = isKeywordSearch && searchKeyword
 	const searchResultsText = renderSearchText && (
-		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}}>
+		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}} id="largeViewSearchResultsText">
 			Displaying search results for: "{searchKeyword}"
 		</Typography>
 	)
@@ -211,14 +194,11 @@ const SideBar: React.FC = () => {
 	const isSearcByIngredientPath = currentPath.split(' ')[0] === '/search/byingredient'
 	const isSearchBySpiritsPath = currentPath.split(' ')[0] === '/search/byspirit'
 	const isRootPath = currentPath.split(' ')[0] === '/'
-	const renderSpiritsHeaderDropdown = windowWidth < 900 && isSearchBySpiritsPath
-	const renderMobileHomePageHeader = windowWidth < 900 && isRootPath
-	const renderSavedDrinksHeader =
-		windowWidth < 900 && currentPath.split(' ')[0] === '/saveddrinks'
-	const renderPopularDrinksHeader =
-		windowWidth < 900 && currentPath.split(' ')[0] === '/search/popularcocktails'
-	const renderNonAlcoholicDrinksHeader =
-		windowWidth < 900 && currentPath.split(' ')[0] === '/search/nonalcoholic'
+	const renderSpiritsHeaderDropdown = isSearchBySpiritsPath
+	const renderMobileHomePageHeader = isRootPath
+	const renderSavedDrinksHeader = currentPath.split(' ')[0] === '/saveddrinks'
+	const renderPopularDrinksHeader = currentPath.split(' ')[0] === '/search/popularcocktails'
+	const renderNonAlcoholicDrinksHeader = currentPath.split(' ')[0] === '/search/nonalcoholic'
 
 	const renderedSavedDrinksHeader = (textToRender: string): React.ReactElement => (
 		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}}>{textToRender}</Typography>
@@ -227,7 +207,7 @@ const SideBar: React.FC = () => {
 	return (
 		<Box sx={{display: 'flex', height: '100vh'}}>
 			<CssBaseline />
-			<AppBar position="fixed" id="foobarspaz">
+			<AppBar position="fixed">
 				<Toolbar
 					sx={{
 						backgroundColor: '#000',

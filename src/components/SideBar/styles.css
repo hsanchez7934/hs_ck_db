@@ -1,5 +1,11 @@
-.hidden {
+#largeViewSearchResultsText {
 	display: none;
+}
+
+@media (min-width: 768px) {
+	#largeViewSearchResultsText {
+		display: block;
+	}
 }
 
 .visible {

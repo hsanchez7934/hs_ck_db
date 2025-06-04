@@ -12,10 +12,13 @@
 	background-color: inherit;
 	color: #ececec;
 	font-size: 14px;
+	padding: 3px 3px 3px 7px;
 }
 
 .search-input-container input:focus {
-	border-bottom: 1px solid #ececec;
+	box-shadow: 0px 6px 5px -3px rgba(81,216,235,0.75);
+	-webkit-box-shadow: 0px 6px 5px -3px rgba(81,216,235,0.75);
+	-moz-box-shadow: 0px 6px 5px -3px rgba(81,216,235,0.75);
 }
 
 .search-input-container button {
@@ -24,6 +27,9 @@
 	border: none;
 	outline-color: #aaabb8;
 	color: #ececec;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .search-input-container button:hover {

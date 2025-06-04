@@ -16,10 +16,21 @@
 .alphabetPickerDropdownContainer {
 	height: auto;
 	padding: 5px;
+	position: fixed;
+	z-index: 1000;
+	width: 100%;
+	background-color: #000;
 }
 
 .alphabetPickerContainer {
 	height: 25px;
+	display: none;
+}
+
+@media (min-width: 768px) {
+	.alphabetPickerContainer {
+		display: block;
+	}
 }
 
 .alphabetPickerContainer ul {

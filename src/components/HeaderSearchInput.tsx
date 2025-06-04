@@ -5,10 +5,12 @@ import {
 	isFetchingSearchDrinkData,
 	isErrorFetchingSearchDrinksData,
 	updateIsKeywordSearch,
-	updateSearchKeyword
+	updateSearchKeyword,
+	updateClearHeaderSearchInputText
 } from '../store'
 import SearchInput from './SearchInput/SearchInput'
 import axios from 'axios'
+import { useAppSelector } from '../store/hooks'
 
 interface Props {
 	isKeywordSearch: boolean
@@ -20,11 +22,14 @@ const HeaderSearchInput = (props: Props): JSX.Element => {
 	const [searchKeyword, setSearchKeyword] = useState('')
 	const dispatch = useAppDispatch()
 
+	const {
+			clearHeaderSearchInputText
+		} = useAppSelector(({searchDrinksState}) => searchDrinksState)
+
 	const fetchData = useCallback((searchKeyword: string) => {
 		dispatch(isFetchingSearchDrinkData(true))
 		axios.get(`${process.env.REACT_APP_CK_DB_BASE_URL}${process.env.REACT_APP_CK_DB_KEY}/search.php?s=${searchKeyword}`)
 		.then((response) => {
-			console.log(response.data)
 			dispatch(updateSearchDrinks(response.data))
 			dispatch(isFetchingSearchDrinkData(false))
 		})
@@ -45,31 +50,39 @@ const HeaderSearchInput = (props: Props): JSX.Element => {
 	}, [isKeywordSearch, searchKeyword])
 
 	useEffect(() => {
-		if (window.innerWidth < 500) {
-			const sessionStoredSearchKeyword = sessionStorage.getItem('savedSearchKeyword')
-			if (!sessionStoredSearchKeyword) {
-				return
-			}
-			setSearchKeyword(sessionStoredSearchKeyword)
-			setInputValue('')
-			dispatch(updateIsKeywordSearch(true))
-			dispatch(updateSearchKeyword(sessionStoredSearchKeyword))
+		const sessionStoredSearchKeyword = sessionStorage.getItem('savedSearchKeyword')
+		if (!sessionStoredSearchKeyword) {
+			return
 		}
+		setSearchKeyword(sessionStoredSearchKeyword)
+		setInputValue(sessionStoredSearchKeyword)
+		dispatch(updateIsKeywordSearch(true))
+		dispatch(updateSearchKeyword(sessionStoredSearchKeyword))
 	}, [])
+
+	useEffect(() => {
+		if (clearHeaderSearchInputText) {
+			setInputValue('')
+			dispatch(updateClearHeaderSearchInputText(false))
+			dispatch(updateIsKeywordSearch(false))
+			dispatch(updateSearchKeyword(''))
+			sessionStorage.setItem('savedSearchKeyword', '')
+		}
+	}, [clearHeaderSearchInputText])
 
 	const executeSearch = () => {
 		setSearchKeyword(inputValue)
-		setInputValue('')
 		dispatch(updateIsKeywordSearch(true))
 		dispatch(updateSearchKeyword(inputValue))
-		if (window.innerWidth < 500) {
-			sessionStorage.setItem('savedSearchKeyword', inputValue)
-		}
+		sessionStorage.setItem('savedSearchKeyword', inputValue)
 	}
 
 	const handleOnInput = (event: React.FormEvent<HTMLInputElement>) => {
 		const {value} = event.target as HTMLInputElement
 		setInputValue(value)
+		if (value === '') {
+			sessionStorage.setItem('savedSearchKeyword', '')
+		}
 	}
 
 	const handleOnKeyDown = (event: React.FormEvent<HTMLInputElement>) => {

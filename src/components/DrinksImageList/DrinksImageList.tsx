@@ -313,6 +313,8 @@ const DrinksImageList = (props: Props) => {
 		return videoUrl ? '25%' : '33.3333333333333%'
 	}
 
+	console.log(location.pathname)
+
 	const renderedMobileDrinkImages = (): ReactElement[] => {
 		const isDrinkSaved = (drinkID: string | null | undefined) => {
 			if (drinkID) {
@@ -390,9 +392,10 @@ const DrinksImageList = (props: Props) => {
 
 	return (
 		<Box
-			sx={{height: '100%', overflow: 'auto'}}
+			sx={{overflow: 'auto'}}
 			id="imageScrollContainer"
 			ref={infiniteScrollContainer}
+			className={`h-full ${location.pathname === '/search/byname' ? 'pt-12 pb-16' : ''} md:pt-0`}
 		>
 			<ImageList
 				variant="standard"

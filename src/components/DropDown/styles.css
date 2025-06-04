@@ -7,6 +7,7 @@
 
 .dropdown-container label {
 	margin-right: 15px;
+	padding: 0 0 0 15px;
 }
 
 .dropdown-container select {
@@ -14,9 +15,9 @@
 	width: 50%;
 	background-color: #000;
 	color: #fff;
-	border: 1px solid #fff;
-	border-radius: 12px;
-	padding: 3px;
+	border: 1px solid darkgray;
+	border-radius: 10px;
+	padding: 3px 3px 3px 7px;
 }
 
 .dropdown-container select:hover {
@@ -29,6 +30,8 @@
 }
 
 .dropdown-container select:focus {
-	border-bottom: 1px solid #fff;
-	outline: none;
+	outline: 1px solid aqua;
+	box-shadow: 0px 0px 8px 3px rgba(81,216,235,0.75);
+	-webkit-box-shadow: 0px 0px 8px 3px rgba(81,216,235,0.75);
+	-moz-box-shadow: 0px 0px 8px 3px rgba(81,216,235,0.75);
 }

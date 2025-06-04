@@ -7,7 +7,8 @@ const searchDrinksSlice = createSlice({
 		isFetchingDrinks: false,
 		errorFetchingDrinks: null,
 		isKeywordSearch: false,
-		searchKeyword: ''
+		searchKeyword: '',
+		clearHeaderSearchInputText: false
 	},
 	reducers: {
 		updateSearchDrinks: (state, action: {type: string; payload: any}) => {
@@ -25,6 +26,9 @@ const searchDrinksSlice = createSlice({
 		},
 		updateSearchKeyword: (state, action: {type: string; payload: string}) => {
 			state.searchKeyword = action.payload
+		},
+		updateClearHeaderSearchInputText: (state, action: {type: string; payload: boolean}) => {
+			state.clearHeaderSearchInputText = action.payload
 		}
 	}
 })
@@ -35,5 +39,6 @@ export const {
 	isFetchingSearchDrinkData,
 	isErrorFetchingSearchDrinksData,
 	updateIsKeywordSearch,
-	updateSearchKeyword
+	updateSearchKeyword,
+	updateClearHeaderSearchInputText
 } = searchDrinksSlice.actions

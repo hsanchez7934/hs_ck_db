@@ -1,5 +1,5 @@
 import './styles.css'
-import React, { useCallback } from 'react'
+import React, {useCallback} from 'react'
 import {useState, useEffect} from 'react'
 import {
 	updateSearchDrinks,
@@ -7,23 +7,31 @@ import {
 	isErrorFetchingSearchDrinksData,
 	updateIsKeywordSearch,
 	updateSearchKeyword,
-	updateUseSavedScrollTop
+	updateUseSavedScrollTop,
+	updateClearHeaderSearchInputText
 } from '../../store'
 import {useAppDispatch} from '../../store/hooks'
 import {primaryFont} from '../../fonts/fonts'
 import DropDown from '../DropDown/DropDown'
 import axios from 'axios'
+import {ActionCreatorWithPayload} from '@reduxjs/toolkit'
 
 interface Props {
 	isKeywordSearch: boolean
-	searchKeyword: string
+	updateClearHeaderSearchInputText: ActionCreatorWithPayload<
+		boolean,
+		'searchDrinks/updateClearHeaderSearchInputText'
+	>
 }
 
 const AlphtabetPicker = (props: Props): JSX.Element => {
-	const {isKeywordSearch, searchKeyword} = props
-	const [searchLetter, setSearchLetter] = useState(sessionStorage.getItem('savedAlphaPickerLetter') || 'a')
-	const [dropdownValue, setDropDownValue] = useState(sessionStorage.getItem('savedAlphaPickerLetter') || 'A')
-	const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+	const {isKeywordSearch} = props
+	const [searchLetter, setSearchLetter] = useState(
+		sessionStorage.getItem('savedAlphaPickerLetter') || 'A'
+	)
+	const [dropdownValue, setDropDownValue] = useState(
+		sessionStorage.getItem('savedAlphaPickerLetter') || 'A'
+	)
 	const dispatch = useAppDispatch()
 
 	const alphabet = [
@@ -56,49 +64,33 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 	]
 
 	const fetchData = useCallback((searchLetter: string) => {
-		if (window.innerWidth < 500) {
-			sessionStorage.setItem('savedSearchKeyword', '')
-		}
 		dispatch(isFetchingSearchDrinkData(true))
-		axios.get(`${process.env.REACT_APP_CK_DB_BASE_URL}${process.env.REACT_APP_CK_DB_KEY}/search.php?f=${searchLetter}`)
-		.then((response) => {
-			dispatch(updateSearchDrinks(response.data))
-			dispatch(isFetchingSearchDrinkData(false))
-		})
-		.catch((error) => {
-			dispatch(isFetchingSearchDrinkData(false))
-			if (error) {
-				dispatch(isErrorFetchingSearchDrinksData(error))
-			}
-		})
+		axios
+			.get(
+				`${process.env.REACT_APP_CK_DB_BASE_URL}${process.env.REACT_APP_CK_DB_KEY}/search.php?f=${searchLetter}`
+			)
+			.then((response) => {
+				dispatch(updateSearchDrinks(response.data))
+				dispatch(isFetchingSearchDrinkData(false))
+			})
+			.catch((error) => {
+				dispatch(isFetchingSearchDrinkData(false))
+				if (error) {
+					dispatch(isErrorFetchingSearchDrinksData(error))
+				}
+			})
 	}, [])
 
 	useEffect(() => {
 		if (!isKeywordSearch) {
 			const savedKeyword = sessionStorage.getItem('savedSearchKeyword')
-			if (window.innerWidth < 500 && savedKeyword) {
+			if (savedKeyword) {
 				return
 			} else {
 				fetchData(searchLetter)
 			}
 		}
 	}, [isKeywordSearch, searchLetter])
-
-	useEffect(() => {
-		const alphabetPickerContainer = document.querySelector('.alphabetPickerContainer')
-		if (alphabetPickerContainer) {
-			const resizeObserver = new ResizeObserver((entries: any) => {
-				for (const entry of entries) {
-					const width = entry.contentRect.width
-					setWindowWidth(width)
-				}
-			})
-			resizeObserver.observe(alphabetPickerContainer)
-			return () => {
-				resizeObserver.disconnect()
-			}
-		}
-	}, [])
 
 	const setSessionStorageState = (letter: string) => {
 		sessionStorage.setItem('savedAlphaPickerLetter', letter)
@@ -107,7 +99,7 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 
 	const handleClick = (event: MouseEvent | any) => {
 		const listItem = event.target as HTMLLIElement
-		const searchLetter = listItem?.dataset?.value?.toLowerCase()
+		const searchLetter = listItem?.dataset?.value
 		if (searchLetter) {
 			setSearchLetter(searchLetter)
 			setDropDownValue(searchLetter)
@@ -115,66 +107,52 @@ const AlphtabetPicker = (props: Props): JSX.Element => {
 		}
 		dispatch(updateIsKeywordSearch(false))
 		dispatch(updateSearchKeyword(''))
+		dispatch(updateClearHeaderSearchInputText(true))
 	}
 
 	const handleOnChange = (event: InputEvent | any) => {
 		const searchLetter = event.target.value
-		setSearchLetter(searchLetter.toLowerCase())
+		setSearchLetter(searchLetter)
 		setDropDownValue(searchLetter)
 		setSessionStorageState(searchLetter)
 		dispatch(updateIsKeywordSearch(false))
 		dispatch(updateSearchKeyword(''))
-		sessionStorage.setItem('savedSearchKeyword', '')
+		dispatch(updateClearHeaderSearchInputText(true))
 	}
 
-	const renderedSearchKeywordResults = (
-		<div style={{height: '30px', padding: '0px 0px 0px 15px'}}>
-			<p
-				className="truncate"
-				style={{margin: 0, color: '#fff', fontFamily: primaryFont}}
-				title={`Displaying search results for: "${searchKeyword}"`}
-			>
-				Displaying search results for: "{searchKeyword}"
-			</p>
-		</div>
-	)
+	return (
+		<>
+			<div className="alphabetPickerContainer">
+				<ul>
+					{alphabet.map((letter) => {
+						return (
+							<li
+								className={`letter-list-item ${
+									searchLetter === letter && !isKeywordSearch ? 'letter-active' : ''
+								}`}
+								key={letter}
+								onClick={handleClick}
+								data-value={letter}
+								style={{fontFamily: primaryFont}}
+							>
+								{letter}
+							</li>
+						)
+					})}
+				</ul>
+			</div>
 
-	if (windowWidth < 900) {
-		return (
-			<div className="alphabetPickerDropdownContainer">
-				{windowWidth < 900 && isKeywordSearch ? renderedSearchKeywordResults : <></>}
+			<div className="alphabetPickerDropdownContainer block md:hidden">
 				<DropDown
 					handleOnChange={handleOnChange}
 					dropdownValue={dropdownValue}
 					data={alphabet}
 					labelText="Select a letter:"
 					placeholderText="Select a letter..."
-					dropDownWidth='140px'
+					dropDownWidth="140px"
 				/>
 			</div>
-		)
-	}
-
-	return (
-		<div className="alphabetPickerContainer">
-			<ul>
-				{alphabet.map((letter) => {
-					return (
-						<li
-							className={`letter-list-item ${
-								searchLetter === letter.toLowerCase() && !isKeywordSearch ? 'letter-active' : ''
-							}`}
-							key={letter}
-							onClick={handleClick}
-							data-value={letter}
-							style={{fontFamily: primaryFont}}
-						>
-							{letter}
-						</li>
-					)
-				})}
-			</ul>
-		</div>
+		</>
 	)
 }
 
