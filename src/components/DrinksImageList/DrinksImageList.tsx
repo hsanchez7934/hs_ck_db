@@ -127,7 +127,7 @@ const DrinksImageList = (props: Props) => {
 	}, [observerTarget])
 
 	useEffect(() => {
-		if (window.innerWidth < 500) {
+		if (window.innerWidth <= 768) {
 			const copy = infiniteScrollContainer?.current
 			const handleScroll = (scroll: number) => {
 				if (scroll) {
@@ -146,7 +146,7 @@ const DrinksImageList = (props: Props) => {
 
 	useEffect(() => {
 		const copy = infiniteScrollContainer?.current
-		if (window.innerWidth < 500 && useSavedScrollTop && observerTarget) {
+		if (window.innerWidth < 768 && useSavedScrollTop && observerTarget) {
 			const savedScrollTop = sessionStorage.getItem('savedScrollTop')
 			// @ts-expect-error generic
 			copy.scrollTo(0, Number(savedScrollTop))
@@ -155,13 +155,17 @@ const DrinksImageList = (props: Props) => {
 
 	useEffect(() => {
 		const setGridColumns = (width: number) => {
-			let columns = 4
-			if (width <= 900) {
+			let columns = 6
+			if (width <= 768) {
 				columns = 1
 			} else if (width <= 1000) {
 				columns = 2
 			} else if (width <= 1100) {
 				columns = 3
+			} else if (width <= 1200) {
+				columns = 4
+			} else if (width <= 1400) {
+				columns = 5
 			}
 			setGridColumnsNum(columns)
 			return columns
@@ -393,17 +397,16 @@ const DrinksImageList = (props: Props) => {
 			sx={{overflow: 'auto'}}
 			id="imageScrollContainer"
 			ref={infiniteScrollContainer}
-			// className={`h-full ${location.pathname === '/search/byname' ? 'pt-12' : ''} pb-24 md:pt-0 md:pb-0`}
 			className={`h-full ${location.pathname === '/search/byname' ? 'pt-12' : ''} md:pt-0 md:pb-0`}
 		>
 			<ImageList
 				variant="standard"
 				cols={gridColumnsNum}
 				gap={8}
-				sx={{margin: 0, padding: '7px', width: '100%', height: 'auto', overflow: 'hidden'}}
+				sx={{margin: 0, width: '100%', height: 'auto', overflow: 'hidden', padding: '5px'}}
 			>
-				{windowWidth >= 901 ? renderedLargeDrinkImages() : renderedMobileDrinkImages()}
-				{windowWidth <= 900 && (
+				{windowWidth > 768 ? renderedLargeDrinkImages() : renderedMobileDrinkImages()}
+				{windowWidth <= 768 && (
 					<>
 						<SimpleDialog
 							open={openSavedStatedDialog}

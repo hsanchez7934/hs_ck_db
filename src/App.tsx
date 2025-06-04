@@ -11,7 +11,7 @@ import NonAlcoholicDrinksPage from './pages/NonAlcoholicDrinksPage'
 import PopularDrinksPage from './pages/PopularDrinksPage'
 import SavedDrinksPage from './pages/SavedDrinksPage/SavedDrinksPage'
 import SearchByNamePage from './pages/SearchByNamePage/SearchByNamePage'
-import SearchBySpiritsPage from './pages/SearchBySpiritsPage'
+import SearchBySpiritsPage from './pages/SearchBySpiritsPage/SearchBySpiritsPage'
 import SearchByIngredientPage from './pages/SearchByIngredientPage'
 import UserProfile from './pages/UserProfile/UserProfile'
 

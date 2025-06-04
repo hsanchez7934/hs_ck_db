@@ -1,0 +1,19 @@
+#searchBySpiritsPageImageListContainer {
+	height: 100%;
+	overflow: hidden;
+}
+
+#spiritsTabsContainer {
+	display: none;
+	height: 45px;
+}
+
+@media (min-width: 768px) {
+	#searchBySpiritsPageImageListContainer {
+		height: calc(100% - 45px);
+	}
+
+	#spiritsTabsContainer {
+		display: flex;
+	}
+}

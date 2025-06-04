@@ -200,7 +200,7 @@ const SideBar: React.FC = () => {
 	const renderPopularDrinksHeader = currentPath.split(' ')[0] === '/search/popularcocktails'
 	const renderNonAlcoholicDrinksHeader = currentPath.split(' ')[0] === '/search/nonalcoholic'
 
-	const renderedSavedDrinksHeader = (textToRender: string): React.ReactElement => (
+	const renderHeaderText = (textToRender: string): React.ReactElement => (
 		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}}>{textToRender}</Typography>
 	)
 
@@ -227,11 +227,11 @@ const SideBar: React.FC = () => {
 					{isSearchByNamePath && searchResultsText}
 					{isSearcByIngredientPath && <HeaderIngredientsDropDown />}
 					{renderSpiritsHeaderDropdown && <HeaderSpiritsDropDown />}
-					{isUserProfilePath && renderedSavedDrinksHeader('Cocktail Explorer')}
-					{renderMobileHomePageHeader && renderedSavedDrinksHeader('Cocktail Explorer')}
-					{renderSavedDrinksHeader && renderedSavedDrinksHeader('Saved Drinks')}
-					{renderPopularDrinksHeader && renderedSavedDrinksHeader('Popular Cocktails')}
-					{renderNonAlcoholicDrinksHeader && renderedSavedDrinksHeader('Non-Alcoholic')}
+					{isUserProfilePath && renderHeaderText('Profile')}
+					{renderMobileHomePageHeader && renderHeaderText('Cocktail Explorer')}
+					{renderSavedDrinksHeader && renderHeaderText('Saved Drinks')}
+					{renderPopularDrinksHeader && renderHeaderText('Popular Cocktails')}
+					{renderNonAlcoholicDrinksHeader && renderHeaderText('Non-Alcoholic')}
 					<UserMenu />
 				</Toolbar>
 			</AppBar>
@@ -256,17 +256,13 @@ const SideBar: React.FC = () => {
 				component="main"
 				sx={{
 					flexGrow: 1,
-					p: 3,
-					// width: {sm: '100%'},
 					width: '100%',
 					height: '100%',
-					backgroundImage: 'linear-gradient(to top, #434343 0%, black 100%)',
-					backgroundPosition: 'center',
-					backgroundSize: 'cover',
-					backgroundRepeat: 'no-repeat',
-					padding: '0',
+					padding: '0px',
+					margin: '0px',
 					overflow: 'hidden'
 				}}
+				className='bg-black md:bg-gradient-to-t from-[#434343] to-black md:bg-center md:bg-cover md:bg-no-repeat'
 			>
 				<Toolbar />
 				<Outlet />
