@@ -393,8 +393,7 @@ const DrinksImageList = (props: Props) => {
 			sx={{overflow: 'auto'}}
 			id="imageScrollContainer"
 			ref={infiniteScrollContainer}
-			// className={`h-full ${location.pathname === '/search/byname' ? 'pt-12 pb-24' : ''} md:pt-0 md:pb-0`}
-			className={`h-full`}
+			className={`h-full ${location.pathname === '/search/byname' ? 'pt-12 pb-24' : ''} md:pt-0 md:pb-0`}
 		>
 			<ImageList
 				variant="standard"
