@@ -393,13 +393,14 @@ const DrinksImageList = (props: Props) => {
 			sx={{overflow: 'auto'}}
 			id="imageScrollContainer"
 			ref={infiniteScrollContainer}
-			className={`h-full ${location.pathname === '/search/byname' ? 'pt-12 pb-24' : ''} md:pt-0 md:pb-0`}
+			// className={`h-full ${location.pathname === '/search/byname' ? 'pt-12 pb-24' : ''} md:pt-0 md:pb-0`}
+			className={`h-full`}
 		>
 			<ImageList
 				variant="standard"
 				cols={gridColumnsNum}
 				gap={8}
-				sx={{margin: 0, padding: '7px', width: '100%', overflow: 'hidden'}}
+				sx={{margin: 0, padding: '7px', width: '100%', height: 'auto', overflow: 'hidden'}}
 			>
 				{windowWidth >= 901 ? renderedLargeDrinkImages() : renderedMobileDrinkImages()}
 				{windowWidth <= 900 && (

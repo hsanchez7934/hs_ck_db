@@ -1,0 +1,10 @@
+#searchByNamePageImageListContainer {
+	height: 100%;
+	overflow: hidden;
+}
+
+@media (min-width: 768px) {
+	#searchByNamePageImageListContainer {
+		height: calc(100% - 40px);
+	}
+}
