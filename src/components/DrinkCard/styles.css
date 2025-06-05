@@ -3,24 +3,24 @@
 }
 
 .drinkCardSecondaryTitle {
-	font-size: 20px;
+	font-size: 20px !important;
 }
 
 .drinkCardDescText {
-	font-size: 14px;
+	font-size: 14px !important;
 }
 
 @media screen and (min-width: 1024px) {
 	#drinkCardTitle {
-		font-size: 44px;
+		font-size: 40px;
 	}
 
 	.drinkCardSecondaryTitle {
-		font-size: 24px;
+		font-size: 24px !important;
 	}
 
 	.drinkCardDescText {
-		font-size: 18px;
+		font-size: 18px !important;
 	}
 }
 
@@ -30,39 +30,39 @@
 	}
 
 	.drinkCardSecondaryTitle {
-		font-size: 24px;
+		font-size: 24px !important;
 	}
 
 	.drinkCardDescText {
-		font-size: 18px;
+		font-size: 18px !important;
 	}
 } */
 
 @media screen and (min-width: 1536px) {
 	#drinkCardTitle {
-		font-size: 52px;
+		font-size: 44px;
 	}
 
 	.drinkCardSecondaryTitle {
-		font-size: 28px;
+		font-size: 28px !important;
 	}
 
 	.drinkCardDescText {
-		font-size: 20px;
+		font-size: 20px !important;
 	}
 }
 
 @media screen and (min-width: 1850px) {
 	#drinkCardTitle {
-		font-size: 60px;
+		font-size: 54px;
 	}
 
 	.drinkCardSecondaryTitle {
-		font-size: 34px;
+		font-size: 38px !important;
 	}
 
 	.drinkCardDescText {
-		font-size: 24px;
+		font-size: 24px !important;
 	}
 }
 
