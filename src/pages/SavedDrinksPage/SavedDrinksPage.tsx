@@ -47,8 +47,9 @@ const SavedDrinksPage = () => {
 						fontSize: '1.8em',
 						color: '#fff',
 						textAlign: 'center',
-						padding: '0px 10px',
-						fontFamily: primaryFont
+						padding: '0px 20px',
+						fontFamily: primaryFont,
+						marginBottom: '20px'
 					}}
 				>
 					You must sign in to view your saved drinks. Click the button below to sign in.
