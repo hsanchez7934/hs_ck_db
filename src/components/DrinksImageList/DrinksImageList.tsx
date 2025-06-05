@@ -338,7 +338,7 @@ const DrinksImageList = (props: Props) => {
 						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
 						alt={drink.strDrink || ''}
 						loading="lazy"
-						style={{minHeight:'300px'}}
+						style={{minHeight:'300px', height: 'auto'}}
 					/>
 					<div className="mobile-overlay-photo-top">
 						<p className="mobile-overylay-photo-title" style={{fontFamily: primaryFont}}>
