@@ -4,11 +4,12 @@
 	border: none;
 	color: #ececec;
 	font-size: 1em;
-	padding: 5px;
+	padding: 9px 12px;
+	border-radius: 6px;
 }
 
 .btn_loginFromDrinkCard:hover {
 	cursor: pointer;
-	background-color: #ececec;
+	background-color: darkgray;
 	color: black;
 }

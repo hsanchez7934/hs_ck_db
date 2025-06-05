@@ -18,11 +18,11 @@
 	}
 } */
 
-@media screen and (min-width: 1600px) {
-	.drinkPageMainContainerHeader {
+/* @media screen and (min-height: 1200px) { */
+	/* .drinkPageMainContainerHeader { */
 		/* height: 800px; */
-	}
-}
+	/* } */
+/* } */
 
 .drinkPageHeaderDetailsContainer {
 	display: flex;
