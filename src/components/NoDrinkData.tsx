@@ -1,10 +1,12 @@
 import React from 'react'
 import {primaryFont} from '../fonts/fonts'
+import {useLocation} from 'react-router-dom'
 
 type Props = {isSavedDrinksPage?: boolean; isErrorMessage?: boolean}
 
 const NoDrinkDataNotice = (props: Props) => {
 	const {isSavedDrinksPage, isErrorMessage} = props
+	const location = useLocation()
 
 	let text = ''
 	if (isSavedDrinksPage) {
@@ -22,9 +24,10 @@ const NoDrinkDataNotice = (props: Props) => {
 				width: '100%',
 				display: 'flex',
 				justifyContent: 'center',
-				alignItems: window.innerWidth < 600 ? 'start' :'center',
+				alignItems: window.innerWidth < 768 ? 'start' :'center',
 				backgroundColor: '#000'
 			}}
+			className={`${location.pathname === '/search/byname' ? 'pt-12' : ''} md:pt-0 `}
 		>
 			<p
 				style={{

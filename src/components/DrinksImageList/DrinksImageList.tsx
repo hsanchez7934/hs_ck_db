@@ -17,7 +17,7 @@ import {updateTriggerRender} from '../../store'
 import {updateUserSavedDrinks, updateGetFreshUpdate} from '../../store'
 import {useAuth0} from '@auth0/auth0-react'
 import {Link, useLocation, generatePath} from 'react-router-dom'
-import {DebouncedFunc, set} from 'lodash'
+import {DebouncedFunc} from 'lodash'
 
 interface Props {
 	drinksData: DrinkDataPoint[]
@@ -146,7 +146,7 @@ const DrinksImageList = (props: Props) => {
 
 	useEffect(() => {
 		const copy = infiniteScrollContainer?.current
-		if (window.innerWidth < 768 && useSavedScrollTop && observerTarget) {
+		if (window.innerWidth <= 768 && useSavedScrollTop && observerTarget) {
 			const savedScrollTop = sessionStorage.getItem('savedScrollTop')
 			// @ts-expect-error generic
 			copy.scrollTo(0, Number(savedScrollTop))
@@ -155,18 +155,18 @@ const DrinksImageList = (props: Props) => {
 
 	useEffect(() => {
 		const setGridColumns = (width: number) => {
-			let columns = 6
+			let columns = 5
+
 			if (width <= 768) {
 				columns = 1
-			} else if (width <= 1000) {
+			} else if (width <= 1024) {
 				columns = 2
-			} else if (width <= 1100) {
+			} else if (width <= 1280) {
 				columns = 3
-			} else if (width <= 1200) {
+			} else if (width <= 1536) {
 				columns = 4
-			} else if (width <= 1400) {
-				columns = 5
 			}
+
 			setGridColumnsNum(columns)
 			return columns
 		}
@@ -338,6 +338,7 @@ const DrinksImageList = (props: Props) => {
 						srcSet={`${drink.strDrinkThumb}?w=248&fit=crop&auto=format`}
 						alt={drink.strDrink || ''}
 						loading="lazy"
+						style={{minHeight:'300px'}}
 					/>
 					<div className="mobile-overlay-photo-top">
 						<p className="mobile-overylay-photo-title" style={{fontFamily: primaryFont}}>

@@ -163,7 +163,7 @@ const DrinkPage = (): JSX.Element => {
 	} else if (error) {
 		return <NoDrinkDataNotice isErrorMessage={true} />
 	} else {
-		content = windowWidth < 900 ? mobileDrinkPageView() : largeDrinkPageView()
+		content = windowWidth < 768 ? mobileDrinkPageView() : largeDrinkPageView()
 	}
 
 	return (

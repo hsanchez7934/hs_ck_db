@@ -1,0 +1,32 @@
+#drinkModalContainer {
+	width: 100%;
+	height: 520px;
+}
+
+@media screen and (min-width: 1024px) {
+	#drinkModalContainer {
+		width: 90%;
+		height: 580px;
+	}
+}
+
+@media screen and (min-width: 1280px) {
+	#drinkModalContainer {
+		width: 80%;
+		height: 630px;
+	}
+}
+
+@media screen and (min-width: 1536px) {
+	#drinkModalContainer {
+		width: 70%;
+		height: 680px;
+	}
+}
+
+@media screen and (min-width: 1850px) {
+	#drinkModalContainer {
+		width: 1500px;
+		height: 730px;
+	}
+}

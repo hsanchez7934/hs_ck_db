@@ -37,10 +37,11 @@ import {
 } from 'react-icons/fa6'
 
 type Props = {drink: DrinkDataPoint | null}
-const buttonStyles = {
-	margin: 0,
-	border: 'none'
-}
+// const buttonStyles = {
+// 	margin: 0,
+// 	border: 'none'
+// }
+// const buttonClasses = ''
 const iconStyles = {
 	fontSize: '25px'
 }
@@ -99,16 +100,11 @@ const DrinkCard = (props: Props) => {
 				}}
 				key={id}
 			>
-				<Typography
-					variant="body2"
-					color="text.secondary"
-					sx={{fontFamily: primaryFont, color: '#fff'}}
-				>
+				<Typography sx={{fontFamily: primaryFont, color: '#fff'}} className="drinkCardDescText">
 					{name}
 				</Typography>
 				<Typography
-					variant="body2"
-					color="text.secondary"
+					className="drinkCardDescText"
 					sx={{marginRight: '5px', fontFamily: primaryFont, color: '#fff'}}
 				>
 					{amount}
@@ -210,9 +206,9 @@ const DrinkCard = (props: Props) => {
 
 	const renderedGlassType = drink?.strDrink && (
 		<Typography
-			variant="h6"
 			color="text.secondary"
 			sx={{marginTop: '10px', fontFamily: primaryFont, color: '#fff'}}
+			className="drinkCardSecondaryTitle"
 		>
 			{drink?.strGlass}
 		</Typography>
@@ -242,12 +238,15 @@ const DrinkCard = (props: Props) => {
 			onClick={() => {
 				if (drink && hasPrevious) handlePager(drink, 'left')
 			}}
-			sx={buttonStyles}
+			// sx={buttonStyles}
 			disabled={hasPrevious ? false : true}
 			className="btn_disabled"
 			title="Previous Drink"
 		>
-			<FaCircleArrowLeft color={hasPrevious ? 'white' : 'gray'} style={iconStyles} />
+			<FaCircleArrowLeft
+				color={hasPrevious ? 'white' : 'gray'}
+				className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11"
+			/>
 		</Button>
 	)
 
@@ -257,19 +256,30 @@ const DrinkCard = (props: Props) => {
 			onClick={() => {
 				if (drink && hasNext) handlePager(drink, 'right')
 			}}
-			sx={buttonStyles}
+			// sx={buttonStyles}
 			disabled={hasNext ? false : true}
 			className="btn_disabled"
 			title="Next Drink"
 		>
-			<FaCircleArrowRight color={hasNext ? 'white' : 'gray'} style={iconStyles} />
+			<FaCircleArrowRight
+				color={hasNext ? 'white' : 'gray'}
+				className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11"
+			/>
 		</Button>
 	)
 
 	const renderedSaveIcon = toggleSaved ? (
-		<FaHeartCirclePlus title="Add/Remove from favorites" color="red" style={iconStyles} />
+		<FaHeartCirclePlus
+			title="Add/Remove from favorites"
+			color="red"
+			className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11"
+		/>
 	) : (
-		<FaHeartCircleMinus title="Add/Remove from favorites" color="white" style={iconStyles} />
+		<FaHeartCircleMinus
+			title="Add/Remove from favorites"
+			color="white"
+			className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11"
+		/>
 	)
 
 	const renderedDetailedViewIcon = (
@@ -277,7 +287,7 @@ const DrinkCard = (props: Props) => {
 			title="Open drink detailed view in new browser tab"
 			onClick={() => handleOpenDetailedView(drink?.idDrink)}
 		>
-			<FaEye color="white" style={iconStyles} />
+			<FaEye color="white" className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11" />
 		</Button>
 	)
 
@@ -286,9 +296,9 @@ const DrinkCard = (props: Props) => {
 			title="Open drink instruction video."
 			size="small"
 			onClick={() => handleViewOnClick(drink.strVideo)}
-			sx={buttonStyles}
+			// sx={buttonStyles}
 		>
-			<FaVideo color="white" style={iconStyles} />
+			<FaVideo color="white" className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11" />
 		</Button>
 	)
 
@@ -307,11 +317,11 @@ const DrinkCard = (props: Props) => {
 			<CardContent sx={{width: '60%'}}>
 				<Typography
 					gutterBottom
-					variant="h4"
 					component="div"
 					sx={{fontFamily: primaryFont, margin: '0', color: '#fff'}}
 					className="truncate"
 					title={`${drink?.strDrink}`}
+					id="drinkCardTitle"
 				>
 					{drink?.strDrink}
 				</Typography>
@@ -319,35 +329,33 @@ const DrinkCard = (props: Props) => {
 				<Divider sx={{backgroundColor: '#fff'}} />
 				<CardContent sx={{overflow: 'auto', height: '70%', padding: '7px 3px 0px 0px'}}>
 					<Typography
-						variant="h6"
-						color="text.secondary"
 						sx={{margin: '0', fontFamily: primaryFont, color: '#fff'}}
+						className="drinkCardSecondaryTitle"
 					>
 						Ingredients
 					</Typography>
 					<div style={{marginBottom: '20px'}}>{renderedIngredients}</div>
 					<Divider sx={{backgroundColor: '#fff'}} />
 					<Typography
-						variant="h6"
-						color="text.secondary"
 						sx={{fontFamily: primaryFont, marginTop: '10px', color: '#fff'}}
+						className="drinkCardSecondaryTitle"
 					>
 						Instructions
 					</Typography>
-					<Typography
-						variant="body2"
-						color="text.secondary"
-						sx={{fontFamily: primaryFont, color: '#fff'}}
-					>
+					<Typography className="drinkCardDescText" sx={{fontFamily: primaryFont, color: '#fff'}}>
 						{drink?.strInstructions}
 					</Typography>
 					{renderedTags}
 				</CardContent>
-				<CardContent sx={{padding: 0, margin: '10px 0 0 0'}}>
-					<CardActions sx={{padding: 0, margin: 0}}>
+				<CardContent sx={{padding: '5px 0px'}} className='flex'>
+					<CardActions sx={{padding: '5px 0px'}} className='flex w-[95%]'>
 						{renderedPagerPrevious}
 						{renderedPagerNext}
-						<Button size="small" onClick={() => handleSaveOnClick(drink)} sx={buttonStyles}>
+						<Button
+							size="small"
+							onClick={() => handleSaveOnClick(drink)}
+							// sx={buttonStyles}
+						>
 							{renderedSaveIcon}
 						</Button>
 						<Button
@@ -356,9 +364,12 @@ const DrinkCard = (props: Props) => {
 							onClick={() => {
 								if (drink?.idDrink) handleShareOnClick(drink.idDrink)
 							}}
-							sx={buttonStyles}
+							// sx={buttonStyles}
 						>
-							<FaShare color="white" style={iconStyles} />
+							<FaShare
+								color="white"
+								className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11"
+							/>
 						</Button>
 						{renderedDetailedViewIcon}
 						{renderedVideoIcon}

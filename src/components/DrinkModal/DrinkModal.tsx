@@ -1,22 +1,17 @@
+import './styles.css'
 import React from 'react'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
-import DrinkCard from './DrinkCard/DrinkCard'
+import DrinkCard from '../DrinkCard/DrinkCard'
 import {useNavigate} from 'react-router-dom'
-import {useAppDispatch, useAppSelector} from '../store/hooks'
-import {updateIsModalOpen, updateModalDrink} from '../store'
+import {useAppDispatch, useAppSelector} from '../../store/hooks'
+import {updateIsModalOpen, updateModalDrink} from '../../store'
 
 const style = {
 	position: 'absolute' as 'absolute',
 	top: '50%',
 	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: window.innerWidth >= 1000 ? '900px': '80%',
-	height:'470px',
-	bgcolor: 'background.paper',
-	border: '2px solid #000',
-	boxShadow: 24,
-	p: 0
+	transform: 'translate(-50%, -50%)'
 }
 
 const DrinkModal = (): JSX.Element => {
@@ -36,7 +31,7 @@ const DrinkModal = (): JSX.Element => {
 				open={isModalOpen}
 				onClose={handleClose}
 			>
-				<Box sx={style}>
+				<Box sx={style} id="drinkModalContainer">
 					<DrinkCard drink={drink} />
 				</Box>
 			</Modal>

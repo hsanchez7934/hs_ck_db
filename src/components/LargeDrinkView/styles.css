@@ -3,14 +3,24 @@
 }
 
 .drinkPageMainContainerHeader {
-	height: 600px;
+	height: 90lvh;
 	background-color: #000;
 	display: flex;
 }
 
-@media screen and (min-width: 2000px) {
+/* @media (min-width: 768px) {
+	#searchBySpiritsPageImageListContainer {
+		height: calc(100% - 45px);
+	}
+
+	#spiritsTabsContainer {
+		display: flex;
+	}
+} */
+
+@media screen and (min-width: 1600px) {
 	.drinkPageMainContainerHeader {
-		height: 800px;
+		/* height: 800px; */
 	}
 }
 
@@ -22,11 +32,14 @@
 }
 
 .drinkPageHeaderDetailsContainer h1 {
-	font-size: 4em;
-	margin: 0 0 20px 0;
-	padding-left: 10px;
 	color: #fff;
 	text-align: center;
+}
+
+@media screen and (min-width: 1800px) {
+	.drinkPageHeaderDetailsContainer h1 {
+		margin-bottom: 60px;
+	}
 }
 
 .drinkPageImageContainer img {
@@ -40,6 +53,19 @@
 	display: flex;
 	padding: 10px 0;
 	margin-bottom: 20px;
+	height: 80px;
+}
+
+@media screen and (min-width: 1800px) {
+	.mainPageBubble {
+		height: 120px;
+	}
+}
+
+@media screen and (min-width: 2000px) {
+	.mainPageBubble {
+		height: 160px;
+	}
 }
 
 .largeIngredientBubbleSection {
@@ -60,14 +86,22 @@
 }
 
 .largeViewBubbleTitle {
-	font-size: 16px;
 	padding: 2px;
 	color: darkgrey;
 }
 
 .largeViewBubbleText {
-	font-size: 18px;
 	color: aqua;
+}
+
+@media screen and (min-width: 1800px) {
+	.largeViewBubbleTitle {
+		font-size: 24px;
+	}
+	
+	.largeViewBubbleText {
+		font-size: 26px;
+	}
 }
 
 .drinkPageDrinkDetails {
