@@ -1,20 +1,17 @@
 import './styles.css'
-import React, {useCallback} from 'react'
-import {useState, useEffect} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {
 	updateSearchDrinks,
 	isFetchingSearchDrinkData,
 	isErrorFetchingSearchDrinksData,
 	updateIsKeywordSearch,
 	updateSearchKeyword,
-	updateUseSavedScrollTop,
-	updateClearHeaderSearchInputText
+	updateUseSavedScrollTop
 } from '../../store'
 import {useAppDispatch} from '../../store/hooks'
-import {primaryFont} from '../../fonts/fonts'
-import DropDown from '../DropDown/DropDown'
 import axios from 'axios'
 import {ActionCreatorWithPayload} from '@reduxjs/toolkit'
+import {motion, useReducedMotion} from 'framer-motion'
 
 interface Props {
 	isKeywordSearch: boolean
@@ -24,135 +21,93 @@ interface Props {
 	>
 }
 
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+
 const AlphtabetPicker = (props: Props): JSX.Element => {
-	const {isKeywordSearch} = props
+	const {isKeywordSearch, updateClearHeaderSearchInputText: clearHeaderSearchInputText} = props
 	const [searchLetter, setSearchLetter] = useState(
 		sessionStorage.getItem('savedAlphaPickerLetter') || 'A'
 	)
-	const [dropdownValue, setDropDownValue] = useState(
-		sessionStorage.getItem('savedAlphaPickerLetter') || 'A'
-	)
 	const dispatch = useAppDispatch()
+	const shouldReduceMotion = useReducedMotion()
 
-	const alphabet = [
-		'A',
-		'B',
-		'C',
-		'D',
-		'E',
-		'F',
-		'G',
-		'H',
-		'I',
-		'J',
-		'K',
-		'L',
-		'M',
-		'N',
-		'O',
-		'P',
-		'Q',
-		'R',
-		'S',
-		'T',
-		'U',
-		'V',
-		'W',
-		'X',
-		'Y',
-		'Z'
-	]
-
-	const fetchData = useCallback((searchLetter: string) => {
-		dispatch(isFetchingSearchDrinkData(true))
-		axios
-			.get(
-				`${process.env.REACT_APP_CK_DB_BASE_URL}${process.env.REACT_APP_CK_DB_KEY}/search.php?f=${searchLetter}`
-			)
-			.then((response) => {
-				dispatch(updateSearchDrinks(response.data))
-				dispatch(isFetchingSearchDrinkData(false))
-			})
-			.catch((error) => {
-				dispatch(isFetchingSearchDrinkData(false))
-				if (error) {
-					dispatch(isErrorFetchingSearchDrinksData(error))
-				}
-			})
-	}, [])
+	const fetchData = useCallback(
+		(letter: string) => {
+			dispatch(isFetchingSearchDrinkData(true))
+			axios
+				.get(
+					`${process.env.REACT_APP_CK_DB_BASE_URL}${process.env.REACT_APP_CK_DB_KEY}/search.php?f=${letter}`
+				)
+				.then((response) => {
+					dispatch(updateSearchDrinks(response.data))
+					dispatch(isFetchingSearchDrinkData(false))
+				})
+				.catch((error) => {
+					dispatch(isFetchingSearchDrinkData(false))
+					if (error) {
+						dispatch(isErrorFetchingSearchDrinksData(error))
+					}
+				})
+		},
+		[dispatch]
+	)
 
 	useEffect(() => {
 		if (!isKeywordSearch) {
 			const savedKeyword = sessionStorage.getItem('savedSearchKeyword')
 			if (savedKeyword) {
 				return
-			} else {
-				fetchData(searchLetter)
 			}
+			fetchData(searchLetter)
 		}
-	}, [isKeywordSearch, searchLetter])
+	}, [isKeywordSearch, searchLetter, fetchData])
 
-	const setSessionStorageState = (letter: string) => {
+	const handleLetterSelect = (letter: string) => {
+		setSearchLetter(letter)
 		sessionStorage.setItem('savedAlphaPickerLetter', letter)
 		dispatch(updateUseSavedScrollTop(false))
-	}
-
-	const handleClick = (event: MouseEvent | any) => {
-		const listItem = event.target as HTMLLIElement
-		const searchLetter = listItem?.dataset?.value
-		if (searchLetter) {
-			setSearchLetter(searchLetter)
-			setDropDownValue(searchLetter)
-			setSessionStorageState(searchLetter)
-		}
 		dispatch(updateIsKeywordSearch(false))
 		dispatch(updateSearchKeyword(''))
-		dispatch(updateClearHeaderSearchInputText(true))
-	}
-
-	const handleOnChange = (event: InputEvent | any) => {
-		const searchLetter = event.target.value
-		setSearchLetter(searchLetter)
-		setDropDownValue(searchLetter)
-		setSessionStorageState(searchLetter)
-		dispatch(updateIsKeywordSearch(false))
-		dispatch(updateSearchKeyword(''))
-		dispatch(updateClearHeaderSearchInputText(true))
+		dispatch(clearHeaderSearchInputText(true))
 	}
 
 	return (
-		<>
-			<div className="alphabetPickerContainer">
-				<ul>
-					{alphabet.map((letter) => {
+		<nav className="alphabet-picker" aria-label="Browse cocktails by letter">
+			<div className="alphabet-picker-header">
+				<p className="alphabet-picker-eyebrow">Browse by letter</p>
+				<span className="alphabet-picker-active-badge" aria-live="polite">
+					{isKeywordSearch ? 'Keyword search active' : `Showing: ${searchLetter}`}
+				</span>
+			</div>
+			<div className="alphabet-picker-track">
+				<ul className="alphabet-picker-list">
+					{ALPHABET.map((letter) => {
+						const isActive = searchLetter === letter && !isKeywordSearch
+
 						return (
-							<li
-								className={`letter-list-item ${
-									searchLetter === letter && !isKeywordSearch ? 'letter-active' : ''
-								}`}
-								key={letter}
-								onClick={handleClick}
-								data-value={letter}
-								style={{fontFamily: primaryFont}}
-							>
-								{letter}
+							<li key={letter} className="alphabet-picker-item">
+								<button
+									type="button"
+									className={`alphabet-picker-letter${isActive ? ' is-active' : ''}`}
+									onClick={() => handleLetterSelect(letter)}
+									aria-pressed={isActive}
+									aria-label={`Browse cocktails starting with ${letter}`}
+								>
+									{letter}
+									{isActive && !shouldReduceMotion && (
+										<motion.span
+											className="alphabet-picker-letter-glow"
+											layoutId="alphabet-picker-active"
+											transition={{type: 'spring', stiffness: 420, damping: 34}}
+										/>
+									)}
+								</button>
 							</li>
 						)
 					})}
 				</ul>
 			</div>
-
-			<div className="alphabetPickerDropdownContainer block md:hidden">
-				<DropDown
-					handleOnChange={handleOnChange}
-					dropdownValue={dropdownValue}
-					data={alphabet}
-					labelText="Select a letter:"
-					placeholderText="Select a letter..."
-					dropDownWidth="140px"
-				/>
-			</div>
-		</>
+		</nav>
 	)
 }
 

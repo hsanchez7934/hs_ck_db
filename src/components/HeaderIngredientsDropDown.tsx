@@ -7,41 +7,46 @@ import {
 import DropDown from './DropDown/DropDown'
 import {useAppDispatch} from '../store/hooks'
 
-const HeaderIngredientsDropDown = () => {
-	const [dropdownValue, setDropdownValue] = useState(sessionStorage.getItem('savedIngredientValue') || '151 proof rum')
+const HeaderIngredientsDropDown = (): JSX.Element => {
+	const [dropdownValue, setDropdownValue] = useState(
+		sessionStorage.getItem('savedIngredientValue') || '151 proof rum'
+	)
 	const {data} = useFetchIngredientsQuery('list')
 	const datum = useFetchDrinkByIngredientQuery(dropdownValue)
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
-		let data = []
+		let drinks = []
 		if (datum?.data?.drinks) {
-			data = datum.data.drinks
+			drinks = datum.data.drinks
 		}
-		dispatch(updateDrinksByIngredient(data))
+		dispatch(updateDrinksByIngredient(drinks))
 	}, [dropdownValue, dispatch, datum?.data?.drinks])
 
-	const handleOnChange = (event: any) => {
-		const {value} = event.target as HTMLSelectElement
+	const handleOnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		const {value} = event.target
 		setDropdownValue(value)
 		sessionStorage.setItem('savedIngredientValue', value)
 	}
 
-	let dropdownData = []
+	let dropdownData: string[] = []
 	if (data) {
-		const ingredientsList = data?.drinks.map((ingredient: {strIngredient1: string}) => ingredient.strIngredient1)
+		const ingredientsList = data?.drinks.map(
+			(ingredient: {strIngredient1: string}) => ingredient.strIngredient1
+		)
 		dropdownData = ingredientsList.sort()
 	}
 
 	return (
-		<div>
+		<div className="header-ingredients-dropdown">
 			<DropDown
+				id="header-ingredient-select"
+				variant="toolbar"
 				data={dropdownData}
 				handleOnChange={handleOnChange}
 				dropdownValue={dropdownValue}
-				labelText={'Ingredient:'}
-				placeholderText={'Select an ingredient...'}
-				dropDownWidth={window.innerWidth < 768 ? '140px' : '240px'}
+				labelText="Select ingredient"
+				placeholderText="Select an ingredient..."
 			/>
 		</div>
 	)

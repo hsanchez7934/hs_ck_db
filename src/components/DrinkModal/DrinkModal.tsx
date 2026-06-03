@@ -2,22 +2,18 @@ import './styles.css'
 import React from 'react'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
+import {motion, useReducedMotion} from 'framer-motion'
 import DrinkCard from '../DrinkCard/DrinkCard'
 import {useNavigate} from 'react-router-dom'
 import {useAppDispatch, useAppSelector} from '../../store/hooks'
 import {updateIsModalOpen, updateModalDrink} from '../../store'
-
-const style = {
-	position: 'absolute' as 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)'
-}
+import {modalContentVariants} from '../../theme/motion'
 
 const DrinkModal = (): JSX.Element => {
 	const dispatch = useAppDispatch()
 	const {isModalOpen, drink} = useAppSelector(({modalDrinkState}) => modalDrinkState)
 	const navigate = useNavigate()
+	const shouldReduceMotion = useReducedMotion()
 
 	const handleClose = () => {
 		dispatch(updateIsModalOpen(false))
@@ -25,17 +21,39 @@ const DrinkModal = (): JSX.Element => {
 		navigate(-1)
 	}
 
+	const modalContent = (
+		<Box className="drink-modal-content" id="drinkModalContainer">
+			<DrinkCard drink={drink} />
+		</Box>
+	)
+
 	return (
-		<div>
-			<Modal
-				open={isModalOpen}
-				onClose={handleClose}
-			>
-				<Box sx={style} id="drinkModalContainer">
-					<DrinkCard drink={drink} />
-				</Box>
-			</Modal>
-		</div>
+		<Modal
+			open={isModalOpen}
+			onClose={handleClose}
+			slotProps={{
+				backdrop: {
+					style: {backgroundColor: 'var(--overlay)'}
+				}
+			}}
+		>
+			<Box className="drink-modal-overlay">
+				{shouldReduceMotion ? (
+					<Box className="drink-modal-wrapper">{modalContent}</Box>
+				) : (
+					<Box
+						component={motion.div}
+						className="drink-modal-wrapper"
+						variants={modalContentVariants}
+						initial="hidden"
+						animate="visible"
+						exit="exit"
+					>
+						{modalContent}
+					</Box>
+				)}
+			</Box>
+		</Modal>
 	)
 }
 

@@ -1,10 +1,11 @@
-#searchByNamePageImageListContainer {
-	height: 100%;
-	overflow: hidden;
+#searchByNamePageContainer {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
 }
 
-@media (min-width: 768px) {
-	#searchByNamePageImageListContainer {
-		height: calc(100% - 40px);
-	}
+#searchByNamePageImageListContainer {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow: hidden;
 }

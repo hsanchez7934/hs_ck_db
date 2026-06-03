@@ -1,19 +1,27 @@
+#searchBySpiritsPage {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+
 #searchBySpiritsPageImageListContainer {
-	height: 100%;
+	flex: 1 1 auto;
+	min-height: 0;
 	overflow: hidden;
 }
 
 #spiritsTabsContainer {
 	display: none;
-	height: 45px;
 }
 
 @media (min-width: 768px) {
-	#searchBySpiritsPageImageListContainer {
-		height: calc(100% - 45px);
-	}
-
 	#spiritsTabsContainer {
 		display: flex;
+		flex-shrink: 0;
+		height: 52px;
+		border-bottom: 1px solid var(--border-subtle);
+		background: var(--glass-bg);
+		backdrop-filter: blur(16px) saturate(180%);
+		-webkit-backdrop-filter: blur(16px) saturate(180%);
 	}
 }

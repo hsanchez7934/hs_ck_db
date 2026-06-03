@@ -1,7 +1,9 @@
+import {themeTokens} from '../theme/tokens'
+
 export const [primary, secondary, third, fourth, active] = [
-	'#2C2C54',
-	'#474787',
-	'#AAABB8',
-	'#ECECEC',
-	'#07f2ea'
+	themeTokens.dark.bgSecondary,
+	themeTokens.dark.bgElevated,
+	themeTokens.dark.textMuted,
+	themeTokens.dark.textSecondary,
+	themeTokens.dark.accent
 ]

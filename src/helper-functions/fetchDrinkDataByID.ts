@@ -4,13 +4,17 @@ import {DrinkDataPoint} from '../types'
 const fetchDrinkDataByID = async (drink: DrinkDataPoint): Promise<DrinkDataPoint> => {
 	try {
 		const response = await axios.get(
-			`https://www.thecocktaildb.com/api/json/v2/${process.env.REACT_APP_CK_DB_KEY}/lookup.php?i=${drink.idDrink}`
+			`${process.env.REACT_APP_CK_DB_BASE_URL}${process.env.REACT_APP_CK_DB_KEY}/lookup.php`,
+			{params: {i: drink.idDrink}}
 		)
-		drink = response.data.drinks[0]
+		const nextDrink = response.data?.drinks?.[0]
+		if (!nextDrink) {
+			throw new Error('Drink not found')
+		}
+		return nextDrink
 	} catch (error) {
 		throw error
 	}
-	return drink
 }
 
 export default fetchDrinkDataByID

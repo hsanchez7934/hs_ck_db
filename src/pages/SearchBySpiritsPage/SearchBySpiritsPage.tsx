@@ -1,8 +1,9 @@
-import "./styles.css"
+import './styles.css'
 import React from 'react'
 import DrinksImageList from '../../components/DrinksImageList/DrinksImageList'
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
 import NoDrinkDataNotice from '../../components/NoDrinkData'
+import PageContainer from '../../components/layout/PageContainer'
 import SpiritTabs from '../../components/SpiritTabs/SpiritTabs'
 import {updateSelectedSpirit} from '../../store'
 import {useAppSelector, useAppDispatch} from '../../store/hooks'
@@ -54,15 +55,15 @@ const SearchBySpiritsPage = () => {
 		content = <NoDrinkDataNotice isErrorMessage={true} />
 	} else if (data && data?.drinks?.length > 0) {
 		content = <DrinksImageList drinksData={data.drinks} />
+	} else {
+		content = <NoDrinkDataNotice />
 	}
 
 	return (
-		<div style={{height: 'calc(100% - 64px)'}} id="searchBySpiritsPage">
+		<PageContainer id="searchBySpiritsPage">
 			<div id="spiritsTabsContainer">{renderedSpiritTabs}</div>
-			<div id="searchBySpiritsPageImageListContainer">
-				{content}
-			</div>
-		</div>
+			<div id="searchBySpiritsPageImageListContainer">{content}</div>
+		</PageContainer>
 	)
 }
 

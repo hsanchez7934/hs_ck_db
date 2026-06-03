@@ -1,42 +1,172 @@
-.letter-list-item {
-	color: white;
-	font-size: 17px;
+.alphabet-picker {
+	flex-shrink: 0;
+	padding: 12px 14px 14px;
+	border-bottom: 1px solid var(--border-subtle);
+	background: var(--glass-bg);
+	backdrop-filter: blur(16px) saturate(180%);
+	-webkit-backdrop-filter: blur(16px) saturate(180%);
 }
 
-.letter-list-item:hover {
+.alphabet-picker-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 10px;
+}
+
+.alphabet-picker-eyebrow {
+	margin: 0;
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--accent);
+}
+
+.alphabet-picker-active-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 6px 10px;
+	border-radius: 999px;
+	border: 1px solid var(--border-subtle);
+	background: var(--bg-elevated);
+	color: var(--text-secondary);
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: 0.75rem;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.alphabet-picker-track {
+	overflow-x: auto;
+	overflow-y: hidden;
+	scrollbar-width: thin;
+	scrollbar-color: var(--accent-muted) transparent;
+	-webkit-overflow-scrolling: touch;
+}
+
+.alphabet-picker-track::-webkit-scrollbar {
+	height: 4px;
+}
+
+.alphabet-picker-track::-webkit-scrollbar-thumb {
+	background: var(--accent-muted);
+	border-radius: 999px;
+}
+
+.alphabet-picker-list {
+	display: flex;
+	gap: 8px;
+	min-width: max-content;
+	margin: 0;
+	padding: 2px 2px 4px;
+	list-style: none;
+}
+
+.alphabet-picker-item {
+	flex-shrink: 0;
+}
+
+.alphabet-picker-letter {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 38px;
+	height: 38px;
+	padding: 0;
+	border: 1px solid var(--border-subtle);
+	border-radius: 12px;
+	background: var(--bg-surface);
+	color: var(--text-secondary);
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: 0.92rem;
+	font-weight: 700;
+	line-height: 1;
 	cursor: pointer;
-	color: #07f2ea;
+	overflow: hidden;
+	isolation: isolate;
+	transition:
+		color 0.2s ease,
+		border-color 0.2s ease,
+		background-color 0.2s ease,
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
 }
 
-.letter-active {
-	color: #07f2ea;
-	text-decoration: underline;
+.alphabet-picker-letter:hover {
+	border-color: var(--accent);
+	color: var(--accent);
+	background: var(--accent-muted);
+	transform: translateY(-1px);
 }
 
-.alphabetPickerDropdownContainer {
-	height: auto;
-	padding: 5px;
-	position: fixed;
-	z-index: 1000;
-	width: 100%;
-	background-color: #000;
+.alphabet-picker-letter:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
 }
 
-.alphabetPickerContainer {
-	height: 40px;
-	display: none;
+.alphabet-picker-letter.is-active {
+	border-color: var(--accent);
+	color: var(--accent);
+	background: var(--accent-muted);
+	box-shadow: var(--shadow-glow);
 }
 
-@media (min-width: 768px) {
-	.alphabetPickerContainer {
-		display: block;
+.alphabet-picker-letter-glow {
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	border: 1px solid var(--accent);
+	box-shadow: inset 0 0 0 1px var(--accent-muted);
+	pointer-events: none;
+	z-index: -1;
+}
+
+@media screen and (min-width: 768px) {
+	.alphabet-picker {
+		padding: 14px 18px 16px;
+	}
+
+	.alphabet-picker-list {
+		justify-content: space-between;
+		width: 100%;
+		min-width: 0;
+		flex-wrap: nowrap;
+		gap: 6px;
+	}
+
+	.alphabet-picker-item {
+		flex: 1 1 0;
+		max-width: 42px;
+	}
+
+	.alphabet-picker-letter {
+		width: 100%;
+		height: 40px;
+		border-radius: 11px;
+	}
+
+	.alphabet-picker-track {
+		overflow-x: visible;
 	}
 }
 
-.alphabetPickerContainer ul {
-	display: flex;
-	justify-content: space-evenly;
-	list-style-type: none;
-	padding: 0;
-	margin: 0;
+@media screen and (min-width: 1280px) {
+	.alphabet-picker-letter {
+		height: 42px;
+		font-size: 0.95rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.alphabet-picker-letter {
+		transition: none;
+	}
+
+	.alphabet-picker-letter:hover {
+		transform: none;
+	}
 }

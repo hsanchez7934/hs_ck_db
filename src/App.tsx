@@ -34,8 +34,8 @@ const App = (): JSX.Element => {
 					<Route path="/search/nonalcoholic" element={<NonAlcoholicDrinksPage />} />
 					<Route path="/saveddrinks" element={<SavedDrinksPage />} />
 					{/* <Route path="/create" element={<CreateDrinkPage />} /> */}
-					<Route path="*" element={<NoMatchPage />} />
 					<Route path="/profile" element={<UserProfile />} />
+					<Route path="*" element={<NoMatchPage />} />
 				</Route>
 			</Routes>
 			{state?.backgroundLocation && (

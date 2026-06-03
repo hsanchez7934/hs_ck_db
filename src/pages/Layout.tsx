@@ -7,21 +7,31 @@ import {updateUserSavedDrinks, updateGetFreshUpdate} from '../store'
 
 const Layout: React.FC = () => {
 	const {isAuthenticated, user} = useAuth0()
-	const {getFreshUpdate, userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
+	const {getFreshUpdate} = useAppSelector(({savedDrinkState}) => savedDrinkState)
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
-		if (isAuthenticated) {
-			if (getFreshUpdate) {
-				getUserSavedDrinksFromDB(user?.sub).then((savedDrinksList) => {
-					dispatch(updateUserSavedDrinks(savedDrinksList))
-					dispatch(updateGetFreshUpdate(false))
-				})
-			} else {
-				dispatch(updateUserSavedDrinks(userSavedDrinks))
-			}
+		if (!isAuthenticated || !getFreshUpdate || !user?.sub) {
+			return
 		}
-	}, [isAuthenticated, user, getFreshUpdate, userSavedDrinks, dispatch])
+
+		getUserSavedDrinksFromDB(user.sub)
+			.then((savedDrinksList) => {
+				dispatch(updateUserSavedDrinks(savedDrinksList))
+			})
+			.catch(() => {
+				// Keep existing Redux state if Firestore sync fails.
+			})
+			.finally(() => {
+				dispatch(updateGetFreshUpdate(false))
+			})
+	}, [isAuthenticated, user?.sub, getFreshUpdate, dispatch])
+
+	useEffect(() => {
+		if (!isAuthenticated) {
+			dispatch(updateUserSavedDrinks([]))
+		}
+	}, [isAuthenticated, dispatch])
 
 	return (
 		<div className="full layout">

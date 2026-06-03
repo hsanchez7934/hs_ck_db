@@ -2,6 +2,50 @@
 	display: none;
 }
 
+.toolbar-search-wrap {
+	flex: 1 1 auto;
+	min-width: 0;
+	max-width: 420px;
+	margin-right: 4px;
+}
+
+@media screen and (max-width: 639px) {
+	.toolbar-search-wrap {
+		max-width: none;
+		margin-right: 0;
+	}
+}
+
+.toolbar-dropdown-wrap {
+	flex: 1 1 auto;
+	min-width: 0;
+	max-width: 280px;
+	margin-right: 4px;
+}
+
+.header-spirits-dropdown,
+.header-ingredients-dropdown {
+	width: 100%;
+}
+
+/* Mobile header dropdowns — hidden when page tabs/controls take over at 768px+ */
+@media screen and (max-width: 767px) {
+	.toolbar-dropdown-wrap {
+		max-width: none;
+		margin-right: 0;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	.toolbar-dropdown-wrap {
+		max-width: 320px;
+	}
+
+	.header-spirits-dropdown {
+		display: none;
+	}
+}
+
 @media (min-width: 768px) {
 	#largeViewSearchResultsText {
 		display: block;
@@ -12,6 +56,41 @@
 	display: block;
 }
 
+.hidden {
+	display: none;
+}
+
+.drawer-panel {
+	height: 100%;
+	overflow: hidden;
+}
+
+.drawer-toolbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-inline: 16px;
+	min-height: var(--app-bar-height);
+}
+
+.drawer-brand {
+	font-family: 'Josefin Sans', sans-serif;
+	font-weight: 600;
+	color: var(--text-primary);
+	font-size: 1.1rem;
+}
+
 .nav_menu_close_icon {
 	cursor: pointer;
+	color: var(--text-primary);
+	transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.nav_menu_close_icon:hover {
+	color: var(--accent);
+	transform: scale(1.08);
+}
+
+.sidebar-search-results {
+	font-weight: 500;
 }

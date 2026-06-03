@@ -4,6 +4,7 @@ import AlphtabetPicker from '../../components/AlphabetPicker/AlphabetPicker'
 import DrinksImageList from '../../components/DrinksImageList/DrinksImageList'
 import NoDrinkDataNotice from '../../components/NoDrinkData'
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
+import PageContainer from '../../components/layout/PageContainer'
 import {updateIsKeywordSearch, updateSearchKeyword, updateClearHeaderSearchInputText} from '../../store'
 import {useAppSelector, useAppDispatch} from '../../store/hooks'
 
@@ -28,20 +29,25 @@ const SearchByNamePage = (): JSX.Element => {
 	if (isFetchingDrinks) {
 		content = <LoadingSpinner />
 	} else if (errorFetchingDrinks) {
-		return <NoDrinkDataNotice isErrorMessage={true} />
+		return (
+			<PageContainer id="searchByNamePageContainer">
+				<NoDrinkDataNotice isErrorMessage={true} />
+			</PageContainer>
+		)
+	} else if (drinks && drinks.length > 0) {
+		content = <DrinksImageList drinksData={drinks} />
 	} else {
-		if (drinks && drinks.length > 0) {
-			content = <DrinksImageList drinksData={drinks} />
-		} else {
-			content = <NoDrinkDataNotice />
-		}
+		content = <NoDrinkDataNotice />
 	}
 
 	return (
-		<div style={{height: 'calc(100% - 64px)', overflow: 'hidden'}} id="searchByNamePageContainer">
-			<AlphtabetPicker isKeywordSearch={isKeywordSearch} updateClearHeaderSearchInputText={updateClearHeaderSearchInputText} />
+		<PageContainer id="searchByNamePageContainer">
+			<AlphtabetPicker
+				isKeywordSearch={isKeywordSearch}
+				updateClearHeaderSearchInputText={updateClearHeaderSearchInputText}
+			/>
 			<div id="searchByNamePageImageListContainer">{content}</div>
-		</div>
+		</PageContainer>
 	)
 }
 

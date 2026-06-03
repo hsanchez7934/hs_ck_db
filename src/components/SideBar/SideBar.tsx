@@ -1,17 +1,14 @@
 import './styles.css'
-import {active} from '../../colors/colors'
 
 import * as React from 'react'
-import {Link, Outlet, useLocation} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import {useAppSelector, useAppDispatch} from '../../store/hooks'
 import {updateUseSavedScrollTop} from '../../store'
+import {useThemeMode} from '../../theme/AppThemeProvider'
 
 import {FaCaretDown, FaCaretLeft, FaX, FaMartiniGlassEmpty} from 'react-icons/fa6'
-// import {FaCirclePlus} from 'react-icons/fa6'
-import {primaryFont} from '../../fonts/fonts'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
-import CssBaseline from '@mui/material/CssBaseline'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
 import {Favorite} from '@mui/icons-material'
@@ -27,6 +24,8 @@ import SideBarListItem from '../SideBarListItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import UserMenu from '../UserMenu/UserMenu'
+import ThemeToggle from '../ThemeToggle/ThemeToggle'
+import AnimatedOutlet from '../layout/AnimatedOutlet'
 
 import {TiCoffee, TiSortAlphabetically} from 'react-icons/ti'
 import {MdBlender} from 'react-icons/md'
@@ -34,18 +33,21 @@ import {GiBeerBottle} from 'react-icons/gi'
 
 const SideBar: React.FC = () => {
 	const dispatch = useAppDispatch()
+	const {tokens} = useThemeMode()
 	const {searchKeyword, isKeywordSearch} = useAppSelector(
 		({searchDrinksState}) => searchDrinksState
 	)
 	const [navBarOpen, setNavBarOpen] = React.useState(false)
-	const [currentPath, setCurrentPath] = React.useState('')
 	const [showSearchLinks, setShowSearchLinks] = React.useState(false)
 
-	const drawerWidth = 240
+	const drawerWidth = 260
+	const location = useLocation()
+	const currentPath = location.pathname
+
 	const linkIconStyles = (path: string, isSecondary: boolean) => ({
 		margin: '0px 4px 4px 0px',
 		fontSize: isSecondary ? '15px' : '22px',
-		color: currentPath.split(' ')[0] === path ? active : '#FFF'
+		color: currentPath === path ? tokens.accent : tokens.textPrimary
 	})
 
 	const paths = [
@@ -55,8 +57,7 @@ const SideBar: React.FC = () => {
 			path: '/saveddrinks',
 			text: 'Saved Drinks',
 			icon: <Favorite sx={linkIconStyles('/saveddrinks', false)} />
-		},
-		// {path: '/create', text: 'Create', icon: <FaCirclePlus style={linkIconStyles('/create', false)} />}
+		}
 	]
 
 	const searchPaths = [
@@ -87,17 +88,15 @@ const SideBar: React.FC = () => {
 		}
 	]
 
+	React.useEffect(() => {
+		if (currentPath.includes('search')) {
+			setShowSearchLinks(true)
+		}
+	}, [currentPath])
+
 	const handleSearchLinks = () => {
 		setShowSearchLinks(!showSearchLinks)
 	}
-
-	const location = useLocation()
-	React.useEffect(() => {
-		setCurrentPath(location.pathname)
-		if (currentPath.split(' ')[0].includes('search')) {
-			setShowSearchLinks(true)
-		}
-	}, [location, currentPath])
 
 	const handleDrawerToggle = () => {
 		setNavBarOpen(!navBarOpen)
@@ -106,12 +105,13 @@ const SideBar: React.FC = () => {
 	const handleResetUseSavedScrollTop = () => dispatch(updateUseSavedScrollTop(false))
 
 	const renderedSearchPaths = searchPaths.map((link) => {
-		const isActivePath = currentPath.split(' ')[0] === link.path ? active : '#FFF'
+		const isActivePath = currentPath === link.path ? tokens.accent : tokens.textSecondary
 		return (
 			<Link to={link.path} key={link.text} style={{textDecoration: 'none', color: isActivePath}}>
 				<SideBarListItem
 					link={link}
 					linkIcon={link.icon}
+					isActive={currentPath === link.path}
 					onClick={() => handleResetUseSavedScrollTop()}
 				/>
 			</Link>
@@ -119,13 +119,13 @@ const SideBar: React.FC = () => {
 	})
 
 	const renderedNavLinks = paths.map((link) => {
-		const caretStyles = {fontSize: '23px', color: '#fff'}
+		const caretStyles = {fontSize: '23px', color: tokens.textPrimary}
 		if (link.text === 'Search') {
 			return (
 				<div key={link.path}>
 					<SideBarListItem
 						link={link}
-						addedStyles={{color: '#fff'}}
+						addedStyles={{color: tokens.textPrimary}}
 						caretIcons={
 							showSearchLinks ? (
 								<FaCaretDown style={caretStyles} />
@@ -135,6 +135,7 @@ const SideBar: React.FC = () => {
 						}
 						onClick={handleSearchLinks}
 						linkIcon={link.icon}
+						isActive={currentPath.includes('/search')}
 					/>
 					<div style={{paddingLeft: '20px'}} className={showSearchLinks ? 'visible' : 'hidden'}>
 						{renderedSearchPaths}
@@ -142,12 +143,13 @@ const SideBar: React.FC = () => {
 				</div>
 			)
 		}
-		const isActivePath = currentPath.split(' ')[0] === link.path ? active : '#FFF'
+		const isActivePath = currentPath === link.path ? tokens.accent : tokens.textSecondary
 		return (
 			<Link to={link.path} key={link.text} style={{color: isActivePath, textDecoration: 'none'}}>
 				<SideBarListItem
 					link={link}
 					linkIcon={link.icon}
+					isActive={currentPath === link.path}
 					onClick={() => handleResetUseSavedScrollTop()}
 				/>
 			</Link>
@@ -155,117 +157,98 @@ const SideBar: React.FC = () => {
 	})
 
 	const drawer = (
-		<div
-			style={{
-				backgroundImage: 'linear-gradient(to top, #434343 0%, black 100%)',
-				backgroundPosition: 'center',
-				backgroundSize: 'cover',
-				backgroundRepeat: 'no-repeat',
-				height: '100%',
-				overflow: 'hidden'
-			}}
-		>
-			<Toolbar
-				sx={{
-					backgroundColor: '#000',
-					display: 'flex',
-					justifyContent: 'end',
-					alignItems: 'center',
-					fontSize: '18px',
-					color: 'white'
-				}}
-			>
+		<div className="drawer-panel">
+			<Toolbar className="drawer-toolbar">
+				<Typography className="drawer-brand">Cocktail Explorer</Typography>
 				<FaX onClick={() => setNavBarOpen(false)} className="nav_menu_close_icon" />
 			</Toolbar>
 			<Divider />
-			<List sx={{overflow: 'auto'}}>{renderedNavLinks}</List>
+			<List sx={{overflow: 'auto', px: 1, py: 1}}>{renderedNavLinks}</List>
 		</div>
 	)
 
 	const renderSearchText = isKeywordSearch && searchKeyword
 	const searchResultsText = renderSearchText && (
-		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}} id="largeViewSearchResultsText">
+		<Typography className="app-toolbar-title sidebar-search-results" id="largeViewSearchResultsText">
 			Displaying search results for: "{searchKeyword}"
 		</Typography>
 	)
 
-	const isUserProfilePath = currentPath.split(' ')[0] === '/profile'
-	const isSearchByNamePath = currentPath.split(' ')[0] === '/search/byname'
-	const isSearcByIngredientPath = currentPath.split(' ')[0] === '/search/byingredient'
-	const isSearchBySpiritsPath = currentPath.split(' ')[0] === '/search/byspirit'
-	const isRootPath = currentPath.split(' ')[0] === '/'
-	const renderSpiritsHeaderDropdown = isSearchBySpiritsPath
-	const renderMobileHomePageHeader = isRootPath
-	const renderSavedDrinksHeader = currentPath.split(' ')[0] === '/saveddrinks'
-	const renderPopularDrinksHeader = currentPath.split(' ')[0] === '/search/popularcocktails'
-	const renderNonAlcoholicDrinksHeader = currentPath.split(' ')[0] === '/search/nonalcoholic'
+	const isUserProfilePath = currentPath === '/profile'
+	const isSearchByNamePath = currentPath === '/search/byname'
+	const isSearcByIngredientPath = currentPath === '/search/byingredient'
+	const isSearchBySpiritsPath = currentPath === '/search/byspirit'
+	const isRootPath = currentPath === '/'
+	const renderSavedDrinksHeader = currentPath === '/saveddrinks'
+	const renderPopularDrinksHeader = currentPath === '/search/popularcocktails'
+	const renderNonAlcoholicDrinksHeader = currentPath === '/search/nonalcoholic'
 
 	const renderHeaderText = (textToRender: string): React.ReactElement => (
-		<Typography sx={{fontFamily: primaryFont, marginLeft: '10px'}}>{textToRender}</Typography>
+		<Typography className="app-toolbar-title">{textToRender}</Typography>
 	)
 
 	return (
 		<Box sx={{display: 'flex', height: '100vh'}}>
-			<CssBaseline />
-			<AppBar position="fixed">
-				<Toolbar
-					sx={{
-						backgroundColor: '#000',
-						height: '100%'
-					}}
-				>
+			<AppBar position="fixed" elevation={0}>
+				<Toolbar className="app-toolbar">
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
 						edge="start"
 						onClick={handleDrawerToggle}
-						sx={{mr: 2}}
+						sx={{
+							mr: 1,
+							color: 'var(--text-primary)',
+							border: '1px solid var(--border-subtle)',
+							backgroundColor: 'var(--accent-muted)'
+						}}
 					>
 						<MenuIcon />
 					</IconButton>
-					{isSearchByNamePath && <HeaderSearchInput isKeywordSearch={isKeywordSearch} />}
+					{isSearchByNamePath && (
+						<div className="toolbar-search-wrap">
+							<HeaderSearchInput isKeywordSearch={isKeywordSearch} />
+						</div>
+					)}
 					{isSearchByNamePath && searchResultsText}
-					{isSearcByIngredientPath && <HeaderIngredientsDropDown />}
-					{renderSpiritsHeaderDropdown && <HeaderSpiritsDropDown />}
+					{isSearcByIngredientPath && (
+						<div className="toolbar-dropdown-wrap">
+							<HeaderIngredientsDropDown />
+						</div>
+					)}
+					{isSearchBySpiritsPath && (
+						<div className="toolbar-dropdown-wrap">
+							<HeaderSpiritsDropDown />
+						</div>
+					)}
 					{isUserProfilePath && renderHeaderText('Profile')}
-					{renderMobileHomePageHeader && renderHeaderText('Cocktail Explorer')}
+					{isRootPath && renderHeaderText('Cocktail Explorer')}
 					{renderSavedDrinksHeader && renderHeaderText('Saved Drinks')}
 					{renderPopularDrinksHeader && renderHeaderText('Popular Cocktails')}
 					{renderNonAlcoholicDrinksHeader && renderHeaderText('Non-Alcoholic')}
+					<Box sx={{flexGrow: 1}} />
+					<ThemeToggle />
 					<UserMenu />
 				</Toolbar>
 			</AppBar>
 			{navBarOpen && (
-				<React.Fragment>
-					<Drawer
-						open={navBarOpen}
-						onClose={handleDrawerToggle}
-						anchor="left"
-						ModalProps={{
-							keepMounted: true // Better open performance on mobile.
-						}}
-						sx={{
-							'& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth}
-						}}
-					>
-						{drawer}
-					</Drawer>
-				</React.Fragment>
+				<Drawer
+					open={navBarOpen}
+					onClose={handleDrawerToggle}
+					anchor="left"
+					ModalProps={{
+						keepMounted: true
+					}}
+					sx={{
+						'& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth}
+					}}
+				>
+					{drawer}
+				</Drawer>
 			)}
-			<Box
-				component="main"
-				sx={{
-					flexGrow: 1,
-					width: '100%',
-					height: '100%',
-					padding: '0px',
-					margin: '0px',
-					overflow: 'hidden'
-				}}
-				className='bg-black md:bg-gradient-to-t from-[#434343] to-black md:bg-center md:bg-cover md:bg-no-repeat'
-			>
+			<Box component="main" className="app-main">
 				<Toolbar />
-				<Outlet />
+				<AnimatedOutlet />
 			</Box>
 		</Box>
 	)

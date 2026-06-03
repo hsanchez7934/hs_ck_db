@@ -1,17 +1,23 @@
 import React from 'react'
-import {primaryFont} from '../../fonts/fonts'
 import './styles.css'
 
-const SpiritTabs = (props: any) => {
-	const {spirit, isActiveTab, setActiveTab} = props
+type Props = {
+	spirit: string
+	isActiveTab: boolean
+	setActiveTab: (spirit: string) => void
+}
 
+const SpiritTabs = ({spirit, isActiveTab, setActiveTab}: Props): JSX.Element => {
 	return (
-		<div
-			className={`spirit-tab ${isActiveTab ? 'spirit-tab-active' : ''}`}
+		<button
+			type="button"
+			className={`spirit-tab${isActiveTab ? ' spirit-tab-active' : ''}`}
 			onClick={() => setActiveTab(spirit)}
+			aria-pressed={isActiveTab}
+			aria-label={`Browse ${spirit} cocktails`}
 		>
-			<p style={{fontFamily: primaryFont}}>{spirit}</p>
-		</div>
+			{spirit}
+		</button>
 	)
 }
 

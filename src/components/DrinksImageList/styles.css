@@ -1,56 +1,18 @@
-.mobile-overlay-photo-top {
-	height: auto;
-	width: 100%;
-	background: linear-gradient(
-		to bottom,
-		rgba(0, 0, 0, 0.9) 0%,
-		rgba(10, 10, 10, 0.6) 50%,
-		rgba(20, 20, 20, 0.01) 100%
-	);
-	position: absolute;
-	top: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border-top-left-radius: 12px;
-	border-top-right-radius: 12px;
-}
-
-.mobile-overylay-photo-title {
-	color: white;
-	text-align: center;
-	margin: 0;
-	width: 100%;
-	height: 80%;
-	white-space: nowrap;
+#imageScrollContainer .MuiImageListItem-root {
+	border-radius: 18px;
 	overflow: hidden;
-	text-overflow: ellipsis;
-	padding: 10px;
-	font-size: 2em;
-	text-align: left;
 }
 
-.mobile-drink-card-image {
-	border-top-left-radius: 12px;
-	border-top-right-radius: 12px;
+@media screen and (max-width: 640px) {
+	#imageScrollContainer .MuiImageList-root {
+		row-gap: 24px !important;
+	}
+
+	#imageScrollContainer .MuiImageListItem-root {
+		margin-bottom: 4px;
+	}
 }
 
-.mobile-drink-card-bottom {
-	height: auto;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 12px 0;
-	border-bottom-left-radius: 12px;
-	border-bottom-right-radius: 12px;
-	background-color: #1f1f1f;
-}
-
-.mobile-overlay-action-container {
-	height: 80%;
-	padding: 5px 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+#imageScrollContainer .mobile-drink-card {
+	height: 100%;
 }

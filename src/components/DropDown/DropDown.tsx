@@ -1,45 +1,70 @@
 import React from 'react'
-import {primaryFont} from '../../fonts/fonts'
+import {FaChevronDown} from 'react-icons/fa6'
 import './styles.css'
 
 type Props = {
-	handleOnChange: (event: any) => void
+	handleOnChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
 	dropdownValue: string | number
 	data: string[]
 	labelText: string
-	placeholderText: string
+	placeholderText?: string
 	dropDownWidth?: string
+	variant?: 'default' | 'toolbar'
+	className?: string
+	id?: string
 }
 
-const DropDown = (props: Props) => {
-	const {handleOnChange, dropdownValue, data, labelText, placeholderText, dropDownWidth} = props
+const DropDown = (props: Props): JSX.Element => {
+	const {
+		handleOnChange,
+		dropdownValue,
+		data,
+		labelText,
+		placeholderText,
+		dropDownWidth,
+		variant = 'default',
+		className = '',
+		id
+	} = props
 
-	const renderedData = data.map((item: string) => {
-		return (
-			<option key={item} value={item}>
-				{item}
-			</option>
-		)
-	})
+	const selectId = id || `dropdown-${labelText.replace(/\s+/g, '-').toLowerCase()}`
+	const isToolbar = variant === 'toolbar'
+
+	const renderedData = data.map((item: string) => (
+		<option key={item} value={item}>
+			{item}
+		</option>
+	))
 
 	return (
-		<div className="dropdown-container">
+		<div
+			className={`dropdown-container dropdown-container--${variant} ${className}`.trim()}
+			style={dropDownWidth && !isToolbar ? {['--dropdown-width' as string]: dropDownWidth} : undefined}
+		>
 			<label
-				className="truncate"
+				className={isToolbar ? 'dropdown-label dropdown-label--sr-only' : 'dropdown-label'}
+				htmlFor={selectId}
 				title={labelText}
-				style={{fontFamily: primaryFont, color: '#fff'}}
 			>
 				{labelText}
 			</label>
-			<select
-				style={{fontFamily: primaryFont, width: dropDownWidth || 'auto'}}
-				// @ts-expect-error generic
-				placeholder={placeholderText || ''}
-				onChange={handleOnChange}
-				value={dropdownValue}
-			>
-				{renderedData}
-			</select>
+			<div className="dropdown-select-wrap">
+				<select
+					id={selectId}
+					className="dropdown-select"
+					onChange={handleOnChange}
+					value={dropdownValue}
+					aria-label={isToolbar ? labelText : undefined}
+				>
+					{placeholderText && data.length === 0 && (
+						<option value="" disabled>
+							{placeholderText}
+						</option>
+					)}
+					{renderedData}
+				</select>
+				<FaChevronDown className="dropdown-chevron" aria-hidden="true" />
+			</div>
 		</div>
 	)
 }

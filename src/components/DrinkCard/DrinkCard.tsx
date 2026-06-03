@@ -1,31 +1,15 @@
 import './styles.css'
-import React from 'react'
-import {useState, useEffect} from 'react'
-import Button from '@mui/material/Button'
-import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
-import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
-import Divider from '@mui/material/Divider'
+import React, {useEffect, useMemo, useState} from 'react'
 import {DrinkDataPoint} from '../../types'
 import DrinkTags from '../DrinkTags'
 import SimpleDialog from '../SimpleDialog/SimpleDialog'
-import Typography from '@mui/material/Typography'
+import DrinkCardActionButton from './DrinkCardActionButton'
 import fetchDrinkDataByID from '../../helper-functions/fetchDrinkDataByID'
-import generateUUID from '../../uuid'
 import {generatePath} from 'react-router-dom'
-import {primaryFont} from '../../fonts/fonts'
 import {useAppSelector, useAppDispatch} from '../../store/hooks'
-import {useAuth0} from '@auth0/auth0-react'
-
-import {saveUserDrinkInDB} from '../../firebase/firebase-user-drink-storage'
-import {
-	updateModalDrink,
-	updateTriggerRender,
-	updateUserSavedDrinks,
-	updateGetFreshUpdate
-} from '../../store'
-
+import useSaveDrink from '../../hooks/useSaveDrink'
+import {updateModalDrink} from '../../store'
+import {GiMartini} from 'react-icons/gi'
 import {
 	FaVideo,
 	FaShare,
@@ -37,110 +21,91 @@ import {
 } from 'react-icons/fa6'
 
 type Props = {drink: DrinkDataPoint | null}
-// const buttonStyles = {
-// 	margin: 0,
-// 	border: 'none'
-// }
-// const buttonClasses = ''
-const iconStyles = {
-	fontSize: '25px'
+
+type IngredientRow = {
+	id: string
+	name: string
+	amount: string
 }
 
-const DrinkCard = (props: Props) => {
-	const {isAuthenticated, user} = useAuth0()
-
-	const {drink} = props
-	const [dialogText, setDialogText] = useState('')
-	const [dialogTextColor, setDialogTextColor] = useState('')
-	const [openSavedStatedDialog, setOpenSavedStateDialog] = useState(false)
+const DrinkCard = ({drink}: Props): JSX.Element | null => {
+	const [shareDialogOpen, setShareDialogOpen] = useState(false)
+	const [shareDialogColor, setShareDialogColor] = useState('')
+	const [shareDialogText, setShareDialogText] = useState('')
 	const [toggleSaved, setToggleSaved] = useState(false)
-
-	const [toggleLoginDialog, setToggleLoginDialog] = useState(false)
 
 	const dispatch = useAppDispatch()
 	const {drinkPagerMap} = useAppSelector(({drinkPagerMapState}) => drinkPagerMapState)
-	const {userSavedDrinks} = useAppSelector(({savedDrinkState}) => savedDrinkState)
-
-	const isDrinkSaved = (drinkID: string | null | undefined) => {
-		if (drinkID) {
-			const found = userSavedDrinks?.find((drink: any) => drink.idDrink === drinkID)
-			return found
-		}
-		return false
-	}
+	const {
+		dialogState,
+		isDrinkSaved,
+		toggleSaveDrink,
+		toggleLoginDialog,
+		setToggleLoginDialog
+	} = useSaveDrink()
 
 	useEffect(() => {
-		if (isDrinkSaved(drink?.idDrink)) {
-			setToggleSaved(true)
-		} else {
-			setToggleSaved(false)
-		}
-	}, [drink?.idDrink, drinkPagerMap, isAuthenticated, user])
+		setToggleSaved(Boolean(isDrinkSaved(drink?.idDrink)))
+	}, [drink?.idDrink, drinkPagerMap, isDrinkSaved])
 
-	let counter = 1
-	const ingredients = []
-	if (drink) {
-		while (drink[`strIngredient${counter}`] as keyof DrinkDataPoint) {
-			ingredients.push({
-				name: drink[`strIngredient${counter}` as keyof DrinkDataPoint],
-				amount: drink[`strMeasure${counter}` as keyof DrinkDataPoint],
-				id: generateUUID()
+	const ingredients = useMemo((): IngredientRow[] => {
+		if (!drink) {
+			return []
+		}
+
+		const rows: IngredientRow[] = []
+		let counter = 1
+
+		while (drink[`strIngredient${counter}` as keyof DrinkDataPoint]) {
+			rows.push({
+				id: `${drink.idDrink}-${counter}`,
+				name: String(drink[`strIngredient${counter}` as keyof DrinkDataPoint] || ''),
+				amount: String(drink[`strMeasure${counter}` as keyof DrinkDataPoint] || '')
 			})
-			counter = counter + 1
+			counter += 1
 		}
-	}
 
-	const renderedIngredients = ingredients.map(({name, amount, id}) => {
-		return (
-			<div
-				style={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					marginBottom: '2px'
-				}}
-				key={id}
-			>
-				<Typography sx={{fontFamily: primaryFont, color: '#fff'}} className="drinkCardDescText">
-					{name}
-				</Typography>
-				<Typography
-					className="drinkCardDescText"
-					sx={{marginRight: '5px', fontFamily: primaryFont, color: '#fff'}}
-				>
-					{amount}
-				</Typography>
-			</div>
-		)
-	})
+		return rows
+	}, [drink])
 
-	const toggleDialog = (color: string, text: string) => {
-		setDialogTextColor(color)
-		setDialogText(text)
-		setOpenSavedStateDialog(true)
+	const tags = useMemo(() => {
+		if (!drink?.strTags) {
+			return []
+		}
+		return drink.strTags.split(',').map((tag) => tag.trim()).filter(Boolean)
+	}, [drink?.strTags])
+
+	const toggleShareDialog = (color: string, text: string) => {
+		setShareDialogColor(color)
+		setShareDialogText(text)
+		setShareDialogOpen(true)
 		setTimeout(() => {
-			setOpenSavedStateDialog(false)
+			setShareDialogOpen(false)
 		}, 1500)
 	}
 
-	const handleOpenDetailedView = (drinkID: string | any): void => {
-		let path
-		if (process.env.NODE_ENV === 'production') {
-			path = generatePath('/drink/:id', {id: drinkID})
-		} else {
-			path = generatePath(`localhost:3000/drink/:id`, {id: drinkID})
+	const handleOpenDetailedView = (drinkID: string | null | undefined) => {
+		if (!drinkID) {
+			return
 		}
+
+		const path =
+			process.env.NODE_ENV === 'production'
+				? generatePath('/drink/:id', {id: drinkID})
+				: generatePath(`localhost:3000/drink/:id`, {id: drinkID})
+
 		window.open(path, '_blank')
 	}
 
 	const handleShareOnClick = async (drinkID: string | null): Promise<void> => {
+		if (!drinkID) {
+			return
+		}
+
 		const path = generatePath(`${window.location.origin}/drink/:id`, {id: drinkID})
 		window.navigator.clipboard.writeText(path).then(
-			() => {
-				toggleDialog('green', 'Link copied to clipboard!')
-			},
-			() => {
-				toggleDialog('red', 'Oops, something went wrong! Please try again.')
-			}
+			() => toggleShareDialog('green', 'Link copied to clipboard!'),
+			() => toggleShareDialog('red', 'Oops, something went wrong! Please try again.')
 		)
 	}
 
@@ -150,247 +115,206 @@ const DrinkCard = (props: Props) => {
 		}
 	}
 
-	const handleSaveOnClick = (drink: any) => {
-		if (isAuthenticated) {
-			dispatch(updateTriggerRender(true))
-			setToggleSaved(!toggleSaved)
-			if (!toggleSaved) {
-				const drinks = [...userSavedDrinks]
-				drinks.push(drink)
-				saveUserDrinkInDB(user?.sub, drinks).then(() => {
-					toggleDialog('green', 'Saved to favorites!')
-					dispatch(updateUserSavedDrinks(drinks))
-					dispatch(updateGetFreshUpdate(true))
-				})
-			} else {
-				const filtered = userSavedDrinks.filter(
-					(savedDrink: any) => savedDrink.idDrink !== drink.idDrink
-				)
-				saveUserDrinkInDB(user?.sub, filtered).then(() => {
-					dispatch(updateUserSavedDrinks(filtered))
-					dispatch(updateGetFreshUpdate(true))
-					toggleDialog('red', 'Removed from favorites!')
-				})
-			}
-		} else {
-			setToggleLoginDialog(true)
+	const handleSaveOnClick = (selectedDrink: DrinkDataPoint | null) => {
+		if (!selectedDrink) {
+			return
 		}
+
+		toggleSaveDrink(selectedDrink, {
+			isCurrentlySaved: toggleSaved,
+			onSavedChange: setToggleSaved
+		})
 	}
 
-	const handlePager = async (drink: DrinkDataPoint, direction: string) => {
-		const {drinkMapID} = drink
-		let data = null
-
-		if (drinkMapID !== undefined) {
-			if (direction === 'left') {
-				data = drinkPagerMap[drinkMapID].previous
-			} else if (direction === 'right') {
-				data = drinkPagerMap[drinkMapID].next
-			}
+	const handlePager = async (selectedDrink: DrinkDataPoint, direction: 'left' | 'right') => {
+		const {drinkMapID} = selectedDrink
+		if (drinkMapID === undefined) {
+			return
 		}
 
-		if (data) {
-			if (!data.strInstructions) {
-				const response = await fetchDrinkDataByID(data)
-				const {drinkMapID} = data
-				data = {...response, drinkMapID}
-			}
-			dispatch(updateModalDrink(data))
-			const currentUrl = window.location.href
-			const split = currentUrl.split('/')
-			split[split.length - 1] = data.idDrink
-			const updatedURL = split.join('/')
-			window.history.replaceState(null, '', updatedURL)
+		const node = drinkPagerMap[drinkMapID]
+		const data = direction === 'left' ? node?.previous : node?.next
+
+		if (!data) {
+			return
 		}
+
+		let nextDrink = data
+		if (!nextDrink.strInstructions) {
+			const response = await fetchDrinkDataByID(nextDrink)
+			nextDrink = {...response, drinkMapID: nextDrink.drinkMapID}
+		}
+
+		dispatch(updateModalDrink(nextDrink))
+
+		const currentUrl = window.location.href
+		const split = currentUrl.split('/')
+		split[split.length - 1] = nextDrink.idDrink
+		window.history.replaceState(null, '', split.join('/'))
 	}
 
-	const renderedGlassType = drink?.strDrink && (
-		<Typography
-			color="text.secondary"
-			sx={{marginTop: '10px', fontFamily: primaryFont, color: '#fff'}}
-			className="drinkCardSecondaryTitle"
-		>
-			{drink?.strGlass}
-		</Typography>
-	)
-
-	const renderedTags =
-		drink?.strTags && drink?.strTags.length > 0 ? (
-			<DrinkTags tags={drink?.strTags.split(',')} />
-		) : (
-			<></>
-		)
-
-	const hasPrevious: boolean =
-		drinkPagerMap &&
+	const hasPrevious = Boolean(
 		drink?.drinkMapID &&
-		drinkPagerMap[drink.drinkMapID] &&
-		drinkPagerMap[drink.drinkMapID].previous !== null
-	const hasNext: boolean =
-		drinkPagerMap &&
+			drinkPagerMap[drink.drinkMapID] &&
+			drinkPagerMap[drink.drinkMapID].previous !== null
+	)
+	const hasNext = Boolean(
 		drink?.drinkMapID &&
-		drinkPagerMap[drink.drinkMapID] &&
-		drinkPagerMap[drink.drinkMapID].next !== null
-
-	const renderedPagerPrevious = (
-		<Button
-			size="small"
-			onClick={() => {
-				if (drink && hasPrevious) handlePager(drink, 'left')
-			}}
-			// sx={buttonStyles}
-			disabled={hasPrevious ? false : true}
-			className="btn_disabled"
-			title="Previous Drink"
-		>
-			<FaCircleArrowLeft
-				color={hasPrevious ? 'white' : 'gray'}
-				className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11"
-			/>
-		</Button>
+			drinkPagerMap[drink.drinkMapID] &&
+			drinkPagerMap[drink.drinkMapID].next !== null
 	)
 
-	const renderedPagerNext = (
-		<Button
-			size="small"
-			onClick={() => {
-				if (drink && hasNext) handlePager(drink, 'right')
-			}}
-			// sx={buttonStyles}
-			disabled={hasNext ? false : true}
-			className="btn_disabled"
-			title="Next Drink"
-		>
-			<FaCircleArrowRight
-				color={hasNext ? 'white' : 'gray'}
-				className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11"
-			/>
-		</Button>
-	)
-
-	const renderedSaveIcon = toggleSaved ? (
-		<FaHeartCirclePlus
-			title="Add/Remove from favorites"
-			color="red"
-			className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11"
-		/>
-	) : (
-		<FaHeartCircleMinus
-			title="Add/Remove from favorites"
-			color="white"
-			className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11"
-		/>
-	)
-
-	const renderedDetailedViewIcon = (
-		<Button
-			title="Open drink detailed view in new browser tab"
-			onClick={() => handleOpenDetailedView(drink?.idDrink)}
-		>
-			<FaEye color="white" className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11" />
-		</Button>
-	)
-
-	const renderedVideoIcon = drink?.strVideo && (
-		<Button
-			title="Open drink instruction video."
-			size="small"
-			onClick={() => handleViewOnClick(drink.strVideo)}
-			// sx={buttonStyles}
-		>
-			<FaVideo color="white" className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11" />
-		</Button>
-	)
+	if (!drink) {
+		return null
+	}
 
 	return (
-		<Card
-			sx={{
-				width: '100%',
-				display: 'flex',
-				height: '100%',
-				padding: '15px 15px 15px 10px',
-				backgroundColor: '#000',
-				border: '1px solid #fff',
-				borderRadius: '0px'
-			}}
-		>
-			<CardContent sx={{width: '60%'}}>
-				<Typography
-					gutterBottom
-					component="div"
-					sx={{fontFamily: primaryFont, margin: '0', color: '#fff'}}
-					className="truncate"
-					title={`${drink?.strDrink}`}
-					id="drinkCardTitle"
-				>
-					{drink?.strDrink}
-				</Typography>
-				{renderedGlassType}
-				<Divider sx={{backgroundColor: '#fff'}} />
-				<CardContent sx={{overflow: 'auto', height: '70%', padding: '7px 3px 0px 0px'}}>
-					<Typography
-						sx={{margin: '0', fontFamily: primaryFont, color: '#fff'}}
-						className="drinkCardSecondaryTitle"
-					>
-						Ingredients
-					</Typography>
-					<div style={{marginBottom: '20px'}}>{renderedIngredients}</div>
-					<Divider sx={{backgroundColor: '#fff'}} />
-					<Typography
-						sx={{fontFamily: primaryFont, marginTop: '10px', color: '#fff'}}
-						className="drinkCardSecondaryTitle"
-					>
-						Instructions
-					</Typography>
-					<Typography className="drinkCardDescText" sx={{fontFamily: primaryFont, color: '#fff'}}>
-						{drink?.strInstructions}
-					</Typography>
-					{renderedTags}
-				</CardContent>
-				<CardContent sx={{padding: '5px 0px'}} className='flex'>
-					<CardActions sx={{padding: '5px 0px'}} className='flex w-[95%]'>
-						{renderedPagerPrevious}
-						{renderedPagerNext}
-						<Button
-							size="small"
-							onClick={() => handleSaveOnClick(drink)}
-							// sx={buttonStyles}
-						>
-							{renderedSaveIcon}
-						</Button>
-						<Button
-							title="Copy shareable link to clipboard"
-							size="small"
-							onClick={() => {
-								if (drink?.idDrink) handleShareOnClick(drink.idDrink)
-							}}
-							// sx={buttonStyles}
-						>
-							<FaShare
-								color="white"
-								className="xl:mr-10 2xl:mr-12 h-7 w-7 lg:h-8 lg:w-8 xl:w-9 xl:h-9 2xl:h-11 2xl:w-11"
-							/>
-						</Button>
-						{renderedDetailedViewIcon}
-						{renderedVideoIcon}
-						<SimpleDialog
-							open={openSavedStatedDialog}
-							dialogTextColor={dialogTextColor}
-							dialogText={dialogText}
-							isLoginDialog={false}
+		<article className="drink-card">
+			<div className="drink-card-layout">
+				<div className="drink-card-media-panel">
+					{drink.strDrinkThumb ? (
+						<img
+							className="drink-card-media"
+							src={drink.strDrinkThumb}
+							alt={drink.strDrink || 'Cocktail image'}
+							loading="lazy"
 						/>
-						{toggleLoginDialog && (
-							<SimpleDialog
-								open={toggleLoginDialog}
-								isLoginDialog={true}
-								onLoginDialogClose={() => setToggleLoginDialog(false)}
-							/>
+					) : (
+						<div className="drink-card-media-fallback" aria-hidden="true">
+							<GiMartini />
+						</div>
+					)}
+					<div className="drink-card-media-gradient" aria-hidden="true" />
+				</div>
+
+				<div className="drink-card-content">
+					<header className="drink-card-header">
+						<div className="drink-card-heading">
+							<p className="drink-card-eyebrow">Cocktail Details</p>
+							<h2 className="drink-card-title" id="drinkCardTitle" title={drink.strDrink || ''}>
+								{drink.strDrink}
+							</h2>
+						</div>
+						{drink.strGlass && (
+							<span className="drink-card-glass-badge">
+								<GiMartini className="drink-card-glass-icon" aria-hidden="true" />
+								{drink.strGlass}
+							</span>
 						)}
-					</CardActions>
-				</CardContent>
-			</CardContent>
-			<CardMedia sx={{height: '100%', width: '40%'}} image={drink?.strDrinkThumb || undefined} />
-		</Card>
+					</header>
+
+					<div className="drink-card-scroll">
+						<div className="drink-card-sections">
+							<section className="drink-card-section" aria-labelledby="drink-card-ingredients-heading">
+								<h3 className="drink-card-section-title" id="drink-card-ingredients-heading">
+									Ingredients
+								</h3>
+								<ul className="drink-card-ingredient-list">
+									{ingredients.map(({id, name, amount}) => (
+										<li key={id} className="drink-card-ingredient-row">
+											<span className="drink-card-ingredient-name">{name}</span>
+											<span className="drink-card-ingredient-amount">{amount || '—'}</span>
+										</li>
+									))}
+								</ul>
+							</section>
+
+							<section className="drink-card-section" aria-labelledby="drink-card-instructions-heading">
+								<h3 className="drink-card-section-title" id="drink-card-instructions-heading">
+									Instructions
+								</h3>
+								<p className="drink-card-instructions">{drink.strInstructions}</p>
+								{tags.length > 0 && (
+									<div className="drink-card-tags">
+										<DrinkTags tags={tags} />
+									</div>
+								)}
+							</section>
+						</div>
+					</div>
+
+					<footer className="drink-card-actions">
+						<div className="drink-card-actions-group" aria-label="Drink navigation">
+							<DrinkCardActionButton
+								label="Previous drink"
+								disabled={!hasPrevious}
+								onClick={() => {
+									if (hasPrevious) {
+										handlePager(drink, 'left')
+									}
+								}}
+							>
+								<FaCircleArrowLeft className="drink-card-action-icon" />
+							</DrinkCardActionButton>
+							<DrinkCardActionButton
+								label="Next drink"
+								disabled={!hasNext}
+								onClick={() => {
+									if (hasNext) {
+										handlePager(drink, 'right')
+									}
+								}}
+							>
+								<FaCircleArrowRight className="drink-card-action-icon" />
+							</DrinkCardActionButton>
+						</div>
+						<div className="drink-card-actions-group" aria-label="Drink actions">
+							<DrinkCardActionButton
+								label={toggleSaved ? 'Remove from favorites' : 'Save to favorites'}
+								active={toggleSaved}
+								onClick={() => handleSaveOnClick(drink)}
+							>
+								{toggleSaved ? (
+									<FaHeartCirclePlus className="drink-card-action-icon drink-card-action-icon--saved" />
+								) : (
+									<FaHeartCircleMinus className="drink-card-action-icon" />
+								)}
+							</DrinkCardActionButton>
+							<DrinkCardActionButton
+								label="Copy shareable link to clipboard"
+								onClick={() => handleShareOnClick(drink.idDrink)}
+							>
+								<FaShare className="drink-card-action-icon" />
+							</DrinkCardActionButton>
+							<DrinkCardActionButton
+								label="Open drink detailed view in new browser tab"
+								onClick={() => handleOpenDetailedView(drink.idDrink)}
+							>
+								<FaEye className="drink-card-action-icon" />
+							</DrinkCardActionButton>
+							{drink.strVideo && (
+								<DrinkCardActionButton
+									label="Open drink instruction video"
+									onClick={() => handleViewOnClick(drink.strVideo)}
+								>
+									<FaVideo className="drink-card-action-icon" />
+								</DrinkCardActionButton>
+							)}
+						</div>
+					</footer>
+				</div>
+			</div>
+
+			<SimpleDialog
+				open={dialogState.open}
+				dialogTextColor={dialogState.color}
+				dialogText={dialogState.text}
+				isLoginDialog={false}
+			/>
+			<SimpleDialog
+				open={shareDialogOpen}
+				dialogTextColor={shareDialogColor}
+				dialogText={shareDialogText}
+				isLoginDialog={false}
+			/>
+			{toggleLoginDialog && (
+				<SimpleDialog
+					open={toggleLoginDialog}
+					isLoginDialog={true}
+					onLoginDialogClose={() => setToggleLoginDialog(false)}
+				/>
+			)}
+		</article>
 	)
 }
 

@@ -1,25 +1,27 @@
 import React from 'react'
+import {motion} from 'framer-motion'
 import {primaryFont} from '../fonts/fonts'
 import {Link} from 'react-router-dom'
+import PageContainer from '../components/layout/PageContainer'
+import {fadeInUp} from '../theme/motion'
 
 const NoMatchPage = () => {
 	return (
-		<div
-			style={{
-				display: 'flex',
-				justifyContent: 'center',
-				flexDirection: 'column',
-				alignItems: 'center',
-				overflow: 'auto',
-				height: 'calc(100% - 64px)',
-				fontFamily: primaryFont
-			}}
-		>
-			<p style={{color: '#fff', fontSize: '2em', margin: '3px'}}>Page not found.</p>
-			<Link to={'/'} style={{textDecoration: 'underline', color: 'white', fontSize: '1.5em'}}>
-				<p style={{margin: 0}}>Click here to return to home page.</p>
-			</Link>
-		</div>
+		<PageContainer>
+			<motion.div
+				className="empty-state"
+				variants={fadeInUp}
+				initial="hidden"
+				animate="visible"
+				transition={{duration: 0.4, ease: [0.22, 1, 0.36, 1]}}
+				style={{flexDirection: 'column', fontFamily: primaryFont}}
+			>
+				<p className="empty-state-text">Page not found.</p>
+				<Link to={'/'} style={{textDecoration: 'none', color: 'var(--accent)', fontSize: '1.25rem'}}>
+					Return to home
+				</Link>
+			</motion.div>
+		</PageContainer>
 	)
 }
 

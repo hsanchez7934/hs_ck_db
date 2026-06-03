@@ -1,8 +1,9 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import axios from 'axios'
 import DrinksImageList from '../components/DrinksImageList/DrinksImageList'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
 import NoDrinkDataNotice from '../components/NoDrinkData'
+import PageContainer from '../components/layout/PageContainer'
 import {debounce} from 'lodash'
 import {useLocation} from 'react-router-dom'
 
@@ -32,9 +33,9 @@ const HomePage = () => {
 				sessionStorage.setItem('homePageDrinks', JSON.stringify(data))
 				return data
 			})
-		} catch (error) {
+		} catch (fetchError) {
 			// @ts-expect-error generic
-			setError(error)
+			setError(fetchError)
 		}
 	}, [])
 
@@ -53,7 +54,7 @@ const HomePage = () => {
 		)
 	}
 
-	return <div style={{overflow: 'hidden', height: 'calc(100% - 64px)'}}>{content}</div>
+	return <PageContainer>{content}</PageContainer>
 }
 
 export default HomePage

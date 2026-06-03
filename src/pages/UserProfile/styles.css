@@ -4,17 +4,19 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	background-color: #000;
+	background: transparent;
+	padding: 24px;
 }
 
-#profileMainContainer img {
+.profile-avatar {
 	height: 150px;
 	width: 150px;
 	border-radius: 50%;
+	border: 3px solid var(--accent);
+	box-shadow: var(--shadow-glow);
 }
 
 #profileMainContainer h1 {
-	color: #fff;
 	font-size: 1em;
 }
 
@@ -25,11 +27,11 @@
 }
 
 @media screen and (min-width: 750px) {
-	#profileMainContainer img {
-		height: 250px;
-		width: 250px;
-		border-radius: 50%;
+	.profile-avatar {
+		height: 220px;
+		width: 220px;
 	}
+
 	#profileMainContainer h1 {
 		font-size: 2em;
 	}
