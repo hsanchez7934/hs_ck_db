@@ -1,0 +1,24 @@
+.section-heading {
+	display: flex;
+	align-items: stretch;
+	gap: 12px;
+	padding: 0 4px;
+}
+
+.section-heading-accent {
+	flex-shrink: 0;
+	width: 4px;
+	border-radius: 999px;
+	background: linear-gradient(180deg, var(--accent) 0%, var(--accent-hover) 100%);
+	box-shadow: 0 0 12px var(--accent-muted);
+}
+
+.section-heading-title {
+	margin: 0;
+	align-self: center;
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+	font-weight: 700;
+	color: var(--text-primary);
+	letter-spacing: 0.02em;
+}

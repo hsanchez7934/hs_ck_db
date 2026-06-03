@@ -1,201 +1,276 @@
-.drinkPageMainContainer {
-	height: 100%;
+.large-drink-page {
+	min-height: 100%;
+	background-color: var(--bg-primary);
+	color: var(--text-primary);
 }
 
-.drinkPageMainContainerHeader {
-	height: 90lvh;
-	background-color: #000;
-	display: flex;
-}
-
-/* @media (min-width: 768px) {
-	#searchBySpiritsPageImageListContainer {
-		height: calc(100% - 45px);
-	}
-
-	#spiritsTabsContainer {
-		display: flex;
-	}
-} */
-
-/* @media screen and (min-height: 1200px) { */
-	/* .drinkPageMainContainerHeader { */
-		/* height: 800px; */
-	/* } */
-/* } */
-
-.drinkPageHeaderDetailsContainer {
-	display: flex;
-	justify-content: center;
+.large-drink-page-hero {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 24px;
+	padding: 24px 20px;
 	align-items: center;
-	padding: 30px;
 }
 
-.drinkPageHeaderDetailsContainer h1 {
-	color: #fff;
+.large-drink-page-hero-copy {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	min-width: 0;
+}
+
+.large-drink-page-title-wrap {
+	display: flex;
+	align-items: stretch;
+	gap: 14px;
+}
+
+.large-drink-page-title-accent {
+	flex-shrink: 0;
+	width: 5px;
+	border-radius: 999px;
+	background: linear-gradient(180deg, var(--accent) 0%, var(--accent-hover) 100%);
+	box-shadow: 0 0 14px var(--accent-muted);
+}
+
+.large-drink-page-title {
+	margin: 0;
+	flex: 1 1 auto;
+	min-width: 0;
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: clamp(2rem, 4.5vw, 3rem);
+	font-weight: 700;
+	line-height: 1.12;
+	color: var(--text-primary);
+}
+
+.large-drink-page-meta {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	border-radius: 16px;
+	overflow: hidden;
+}
+
+.large-drink-page-meta-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 16px 12px;
 	text-align: center;
 }
 
-@media screen and (min-width: 1800px) {
-	.drinkPageHeaderDetailsContainer h1 {
-		margin-bottom: 60px;
-	}
+.large-drink-page-meta-item:not(:last-child) {
+	border-right: 1px solid var(--border-subtle);
 }
 
-.drinkPageImageContainer img {
+.large-drink-page-meta-label {
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--text-muted);
+}
+
+.large-drink-page-meta-value {
+	width: 100%;
+	font-size: 0.95rem;
+	font-weight: 600;
+	color: var(--accent);
+	line-height: 1.3;
+}
+
+.large-drink-page-tags {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.large-drink-page-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.large-drink-page-action-icon {
+	font-size: 1.15rem;
+	color: var(--text-secondary);
+}
+
+.large-drink-page-action-icon--saved {
+	color: var(--error);
+}
+
+.large-drink-page-hero-media {
+	width: 100%;
+	min-width: 0;
+	border-radius: 20px;
+	overflow: hidden;
+	aspect-ratio: 4 / 5;
+	max-height: min(72vh, 640px);
+}
+
+.large-drink-page-hero-image {
+	display: block;
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
 }
 
-.mainPageBubble {
-	width: 100%;
-	display: flex;
-	padding: 10px 0;
-	margin-bottom: 20px;
-	height: 80px;
-}
-
-@media screen and (min-width: 1800px) {
-	.mainPageBubble {
-		height: 120px;
-	}
-}
-
-@media screen and (min-width: 2000px) {
-	.mainPageBubble {
-		height: 160px;
-	}
-}
-
-.largeIngredientBubbleSection {
-	width: 34.333333333333333%;
-	height: 100%;
-	padding: 5px;
+.large-drink-page-content {
+	padding: 8px 20px 40px;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	gap: 36px;
+	max-width: 1280px;
+	margin: 0 auto;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.large-drink-page-block {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.large-drink-page-ingredient-grid {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 12px;
+}
+
+.large-drink-page-ingredient-card {
+	display: flex;
 	align-items: center;
+	gap: 14px;
+	padding: 14px 16px;
+	border-radius: 14px;
 }
 
-.largeIngredientBubbleSection p {
-	text-align: center;
-	margin: 0;
-	height: 50%;
-	width: 95%;
+.large-drink-page-ingredient-thumb {
+	flex-shrink: 0;
+	width: 56px;
+	height: 56px;
+	border-radius: 12px;
+	overflow: hidden;
+	background: var(--bg-secondary);
+	border: 1px solid var(--border-subtle);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.largeViewBubbleTitle {
-	padding: 2px;
-	color: darkgrey;
-}
-
-.largeViewBubbleText {
-	color: aqua;
-}
-
-@media screen and (min-width: 1800px) {
-	.largeViewBubbleTitle {
-		font-size: 24px;
-	}
-	
-	.largeViewBubbleText {
-		font-size: 26px;
-	}
-}
-
-.drinkPageDrinkDetails {
-	height: 100%;
-	overflow-y: scroll;
-	padding: 0px 25px;
-}
-
-.drinkPageDrinkTitle {
-	margin: 5px 0px 20px 0px;
+.large-drink-page-ingredient-thumb img {
 	width: 100%;
-	text-align: center;
-	font-size: 40px;
-	color: #fff;
-	border-bottom: 1px solid #fff;
-}
-
-.drinkDetailHeader {
-	display: flex;
-}
-
-.drinkDetailHeaderLabel {
-	width: 50%;
-	margin: 0;
-	font-size: 20px;
-	color: #fff;
-}
-
-.drinkDetailHeaderValue {
-	width: 50%;
-	margin: 0;
-	color: #fff;
-	text-align: right;
-	font-size: 20px;
-}
-
-.drinkPageDrinkTagsContainer {
-	text-align: center;
-	margin: 30px 0px;
-}
-
-.drinkPageIngredientsHeader,
-.drinkPageInstructionsHeader {
-	color: #fff;
-	margin: 20px 0px 20px 0px;
-	border-bottom: 1px solid #fff;
-	text-align: center;
-	padding-bottom: 10px;
-}
-
-.drinkPageIngredientsContainer {
-	height: auto;
-	padding: 20px 0px 0px 15px;
-	display: flex;
-	justify-content: space-between;
-	flex-wrap: wrap;
-}
-
-.drinksPageIngredientCard {
-	margin: 0px 0px 20px 0px;
-	position: relative;
-}
-
-.drinksPageIngredientCardFull {
-	height: 200px;
-	width: 200px;
-}
-
-.drinksPageIngredientCardMobile {
-	height: 140px;
-	width: 140px;
-}
-
-.drinksPageIngredientImage {
 	height: 100%;
+	object-fit: contain;
 }
 
-.drinksPageIngredientsCardTextContainer {
+.large-drink-page-ingredient-copy {
+	flex: 1;
+	min-width: 0;
 	display: flex;
-	color: #fff;
 	flex-direction: column;
-	position: absolute;
-	top: 0px;
-	border-radius: 20px;
-	padding: 5px 10px;
-	backdrop-filter: blur(16px) saturate(180%);
-	-webkit-backdrop-filter: blur(16px) saturate(180%);
-	background-color: rgba(17, 25, 40, 0.25);
-	border: 1px solid rgba(255, 255, 255, 0.125);
-	filter: drop-shadow(0 30px 10px rgba(0, 0, 0, 0.125));
+	gap: 4px;
 }
 
-.drinkPageInstructionsText {
-	color: #fff;
-	margin: 10px 0px 25px 0px;
-	padding: 0px 0px 30px;
+.large-drink-page-ingredient-name {
+	margin: 0;
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: 1.05rem;
+	font-weight: 600;
+	color: var(--text-primary);
+	line-height: 1.25;
+}
+
+.large-drink-page-ingredient-amount {
+	margin: 0;
+	font-size: 0.9rem;
+	color: var(--text-secondary);
+	line-height: 1.4;
+}
+
+.large-drink-page-instructions {
+	border-radius: 16px;
+	padding: 20px 24px;
+	border-left: 4px solid var(--accent);
+}
+
+.large-drink-page-instructions-text {
+	margin: 0;
+	font-size: 1rem;
+	line-height: 1.7;
+	color: var(--text-secondary);
+	white-space: pre-wrap;
+}
+
+@media (min-width: 768px) {
+	.large-drink-page-hero {
+		padding: 28px 28px 32px;
+		gap: 32px;
+	}
+
+	.large-drink-page-ingredient-grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 14px;
+	}
+
+	.large-drink-page-content {
+		padding: 12px 28px 48px;
+	}
+}
+
+@media (min-width: 960px) {
+	.large-drink-page-hero {
+		grid-template-columns: 1fr 1fr;
+		align-items: stretch;
+		width: 100%;
+		max-width: 1800px;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 32px 36px 36px;
+		gap: 40px;
+		box-sizing: border-box;
+	}
+
+	.large-drink-page-hero-copy {
+		justify-content: center;
+	}
+
+	.large-drink-page-hero-media {
+		width: 100%;
+		max-width: 100%;
+		align-self: stretch;
+		aspect-ratio: auto;
+		max-height: min(78vh, 820px);
+		height: 100%;
+		min-height: 320px;
+	}
+
+	.large-drink-page-hero-image {
+		width: 100%;
+		height: 100%;
+		min-height: 100%;
+		object-fit: cover;
+		object-position: center;
+	}
+}
+
+@media (min-width: 1100px) {
+	.large-drink-page-ingredient-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.large-drink-page-content {
+		padding: 16px 40px 56px;
+		gap: 40px;
+	}
+
+	.large-drink-page-instructions-text {
+		font-size: 1.05rem;
+	}
 }

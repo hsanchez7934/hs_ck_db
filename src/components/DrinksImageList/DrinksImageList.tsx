@@ -14,13 +14,10 @@ import {updateIsModalOpen, updateModalDrink, updateDrinkMap} from '../../store'
 import {useEffect, useState} from 'react'
 import {useAppDispatch, useAppSelector} from '../../store/hooks'
 import {Link, useLocation, generatePath} from 'react-router-dom'
-import {DebouncedFunc} from 'lodash'
 import {listItemVariants} from '../../theme/motion'
 
 interface Props {
 	drinksData: DrinkDataPoint[]
-	fetchData?: DebouncedFunc<(fetchSessionStorage: boolean) => Promise<void>>
-	isHomePage?: boolean
 }
 
 const removeSavedMapIDs = (drinksList: DrinkDataPoint[]) => {
@@ -36,7 +33,7 @@ const removeSavedMapIDs = (drinksList: DrinkDataPoint[]) => {
 }
 
 const DrinksImageList = (props: Props) => {
-	const {drinksData, fetchData, isHomePage} = props
+	const {drinksData} = props
 	const infiniteScrollContainer = useRef(null)
 	const location = useLocation()
 	const shouldReduceMotion = useReducedMotion()
@@ -45,7 +42,6 @@ const DrinksImageList = (props: Props) => {
 	const [shareDialogOpen, setShareDialogOpen] = useState(false)
 	const [shareDialogColor, setShareDialogColor] = useState('')
 	const [shareDialogText, setShareDialogText] = useState('')
-	const [observerTarget, setObserverTarget] = useState(null)
 	const [gridColumnsNum, setGridColumnsNum] = useState(4)
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
@@ -72,9 +68,6 @@ const DrinksImageList = (props: Props) => {
 					: null
 
 				drinks.push(data)
-				if (index === drinksDataToRender.length - 6) {
-					setObserverTarget(data.drinkMapID)
-				}
 				const node = {
 					data,
 					previous,
@@ -96,35 +89,6 @@ const DrinksImageList = (props: Props) => {
 	}, [drinksData, userSavedDrinks])
 
 	useEffect(() => {
-		if (isHomePage && observerTarget) {
-			const options = {
-				root: document.querySelector('#imageScrollContainer'),
-				rootMargin: '0px',
-				threshold: 1.0
-			}
-
-			// @ts-expect-error generic
-			const callback = (entries) => {
-				// @ts-expect-error generic
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						if (fetchData) {
-							fetchData(false)
-						}
-					}
-				})
-			}
-
-			const observer = new IntersectionObserver(callback, options)
-			if (observerTarget) {
-				// @ts-expect-error generic
-				observer.observe(document.getElementById(observerTarget))
-			}
-			return () => observer.disconnect()
-		}
-	}, [observerTarget])
-
-	useEffect(() => {
 		if (window.innerWidth <= 640) {
 			const copy = infiniteScrollContainer?.current
 			const handleScroll = (scroll: number) => {
@@ -144,12 +108,12 @@ const DrinksImageList = (props: Props) => {
 
 	useEffect(() => {
 		const copy = infiniteScrollContainer?.current
-		if (window.innerWidth <= 640 && useSavedScrollTop && observerTarget) {
+		if (window.innerWidth <= 640 && useSavedScrollTop) {
 			const savedScrollTop = sessionStorage.getItem('savedScrollTop')
 			// @ts-expect-error generic
 			copy.scrollTo(0, Number(savedScrollTop))
 		}
-	}, [observerTarget, useSavedScrollTop])
+	}, [useSavedScrollTop])
 
 	useEffect(() => {
 		const setGridColumns = (width: number) => {

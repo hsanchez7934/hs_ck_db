@@ -113,14 +113,15 @@ body {
 	filter: drop-shadow(0 0px 1px rgba(80, 80, 80, 0.125));
 }
 
+/* Image grid hover: fixed dark scrim + light text (same in light and dark app theme) */
 .overlay-photo {
 	height: 100%;
 	width: 100%;
-	background-color: var(--overlay);
+	background-color: rgba(0, 0, 0, 0.72);
 	position: absolute;
 	top: 0;
 	opacity: 0;
-	transition: 0.35s ease;
+	transition: opacity 0.35s ease;
 }
 
 .overlay-photo:hover {
@@ -129,7 +130,7 @@ body {
 }
 
 .overlay-photo-text {
-	color: var(--text-primary);
+	color: #f3f4f6;
 	position: absolute;
 	top: 45%;
 	left: 50%;
@@ -137,7 +138,9 @@ body {
 	text-align: center;
 	font-family: 'Josefin Sans', sans-serif;
 	font-size: 1.5em;
+	font-weight: 600;
 	padding: 5px;
+	text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
 }
 
 .empty-state {

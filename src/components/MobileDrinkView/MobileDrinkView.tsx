@@ -1,12 +1,11 @@
 import './styles.css'
 import React, {ReactElement} from 'react'
-import Button from '@mui/material/Button'
 import {DrinkDataPoint} from '../../types'
 import {Link} from 'react-router-dom'
 import generateUUID from '../../uuid'
-import {primaryFont} from '../../fonts/fonts'
 import {useAppDispatch} from '../../store/hooks'
 import {updateUseSavedScrollTop} from '../../store'
+import SectionHeading from '../SectionHeading/SectionHeading'
 import {FaVideo, FaShare, FaHeartCircleMinus, FaHeartCirclePlus, FaAngleLeft} from 'react-icons/fa6'
 
 interface MobileDrinkViewProps {
@@ -17,21 +16,6 @@ interface MobileDrinkViewProps {
 	handleShareOnClick: (drink: any) => void
 	handleViewOnClick: (drink: any) => void
 	toggleSaved: boolean
-}
-
-const buttonStyles = {
-	margin: 0,
-	borderRadius: '36px',
-	backgroundColor: 'black',
-	minHeight: '50px',
-	minWidth: '50px',
-	maxHeight: '40px',
-	maxWidth: '40px',
-	opacity: '0.8'
-}
-
-const iconStyles = {
-	fontSize: '25px'
 }
 
 const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
@@ -46,152 +30,123 @@ const MobileDrinkView = (props: MobileDrinkViewProps): ReactElement => {
 	} = props
 
 	const dispatch = useAppDispatch()
+	const backPath = prevPath || '/'
 
-	const renderedBubble = (title: string, text: string | null, cssStyling: any) => {
-		return (
-			<div className="mobileIngredientBubbleSection" style={cssStyling}>
-				<p style={{fontFamily: primaryFont}} className="bubbleTitle">
-					{title}
-				</p>
-				<p style={{fontFamily: primaryFont}} className="bubbleText truncate" title={text || ''}>
-					{text}
-				</p>
-			</div>
-		)
-	}
-
-	const renderedSaveIcon = toggleSaved ? (
-		<FaHeartCirclePlus title="Add/Remove from favorites" color="red" style={iconStyles} />
-	) : (
-		<FaHeartCircleMinus title="Add/Remove from favorites" color="white" style={iconStyles} />
-	)
-
-	const renderedVideoIcon = (videoUrl: string | null | undefined) => {
-		if (videoUrl) {
-			return (
-				<Button
-					title="Open drink instruction video."
-					size="small"
-					onClick={() => handleViewOnClick(videoUrl)}
-					sx={buttonStyles}
-				>
-					<FaVideo color="white" style={iconStyles} />
-				</Button>
-			)
-		}
-	}
-
-	const fetchFromStorageSession = prevPath === '/'
 	const handleUpdateUseSavedScrollTop = () => {
 		dispatch(updateUseSavedScrollTop(true))
 	}
 
+	const metaItems = [
+		{label: 'Type', value: drink?.strAlcoholic},
+		{label: 'Glass', value: drink?.strGlass},
+		{label: 'Category', value: drink?.strCategory}
+	]
+
 	return (
-		<div>
-			<div
-				style={{
-					backgroundImage: `url(${drink?.strDrinkThumb})`,
-					backgroundSize: 'cover',
-					backgroundPosition: 'center',
-					backgroundRepeat: 'no-repeat',
-					position: 'relative'
-				}}
-				id="mobileDrinkPageImageContainer"
-			>
-				<div className="mobileDrinkPageActionLeft">
-					<Link to={prevPath} state={{fetchFromStorageSession}}>
-						<Button
-							title="Navigate back to previous page."
-							size="small"
-							sx={buttonStyles}
-							onClick={() => handleUpdateUseSavedScrollTop()}
-						>
-							<FaAngleLeft color="white" style={iconStyles} />
-						</Button>
+		<div className="mobile-drink-page">
+			<header className="mobile-drink-page-hero">
+				<img
+					className="mobile-drink-page-hero-image"
+					src={drink?.strDrinkThumb || ''}
+					alt={drink?.strDrink || 'Cocktail'}
+				/>
+				<div className="mobile-drink-page-hero-scrim" aria-hidden="true" />
+
+				<div className="mobile-drink-page-hero-actions">
+					<Link
+						to={backPath}
+						className="mobile-drink-page-action-btn"
+						aria-label="Go back"
+						onClick={handleUpdateUseSavedScrollTop}
+					>
+						<FaAngleLeft className="mobile-drink-page-action-icon" />
 					</Link>
+					<div className="mobile-drink-page-hero-actions-right">
+						<button
+							type="button"
+							className="mobile-drink-page-action-btn"
+							aria-label={toggleSaved ? 'Remove from saved drinks' : 'Save drink'}
+							onClick={() => handleSaveOnClick(drink)}
+						>
+							{toggleSaved ? (
+								<FaHeartCircleMinus className="mobile-drink-page-action-icon mobile-drink-page-action-icon--saved" />
+							) : (
+								<FaHeartCirclePlus className="mobile-drink-page-action-icon" />
+							)}
+						</button>
+						<button
+							type="button"
+							className="mobile-drink-page-action-btn"
+							aria-label="Copy shareable link"
+							onClick={() => drink && handleShareOnClick(drink.idDrink)}
+						>
+							<FaShare className="mobile-drink-page-action-icon" />
+						</button>
+						{drink?.strVideo && (
+							<button
+								type="button"
+								className="mobile-drink-page-action-btn"
+								aria-label="Watch instruction video"
+								onClick={() => handleViewOnClick(drink.strVideo)}
+							>
+								<FaVideo className="mobile-drink-page-action-icon" />
+							</button>
+						)}
+					</div>
 				</div>
 
-				<div className="mobileDrinkPageActionRight">
-					<Button
-						size="small"
-						onClick={() => handleSaveOnClick(drink)}
-						sx={{...buttonStyles, marginBottom: '10px'}}
-					>
-						{renderedSaveIcon}
-					</Button>
-					<Button
-						size="small"
-						onClick={() => {
-							if (drink) handleShareOnClick(drink.idDrink)
-						}}
-						sx={{...buttonStyles, marginBottom: '10px'}}
-					>
-						<FaShare color="white" style={iconStyles} />
-					</Button>
-					{renderedVideoIcon(drink?.strVideo)}
+				<div className="mobile-drink-page-hero-title">
+					<div className="mobile-drink-page-title-wrap">
+						<span className="mobile-drink-page-title-accent" aria-hidden="true" />
+						<h1 className="mobile-drink-page-title">{drink?.strDrink}</h1>
+					</div>
 				</div>
-				<div className="mobileDrinkPageTitleContainer">
-					<h1 style={{fontFamily: primaryFont}} className="mobileDrinkPageTitle">
-						{drink?.strDrink}
-					</h1>
+			</header>
+
+			<section className="mobile-drink-page-body">
+				<div className="mobile-drink-page-meta glass-panel">
+					{metaItems.map((item) => (
+						<div key={item.label} className="mobile-drink-page-meta-item">
+							<span className="mobile-drink-page-meta-label">{item.label}</span>
+							<span className="mobile-drink-page-meta-value truncate" title={item.value || ''}>
+								{item.value || '—'}
+							</span>
+						</div>
+					))}
 				</div>
-			</div>
-			<div className="mobileDrinkPageBubbleTextContainer">
-				<div className="mobileIngredientBubble ingredientsBubbleGradientFilter">
-					{renderedBubble('Type', drink?.strAlcoholic || '', {})}
-					{renderedBubble('Glass', drink?.strGlass || '', {borderLeft: '1px solid darkgrey'})}
-					{renderedBubble('Category', drink?.strCategory || '', {borderLeft: '1px solid darkgrey'})}
-				</div>
-			</div>
-			<div className="mobileDrinkPageIngredientsContainer">
-				<h2 style={{fontFamily: primaryFont}} className="mobileDrinkPageIngredientsHeader">
-					Ingredients
-				</h2>
-				<div className="mobileDrinkPageIngredientsListContainer">
-					{ingredients.map((ingredient: {amount: string; name: string}) => {
-						return (
-							<div
-								className="mobileDrinkPageIngredientCard ingredientsBubbleGradientFilter"
-								key={generateUUID()}
-							>
-								<div className="mobileDrinkPageIngredientImgContainer">
+
+				<section className="mobile-drink-page-block">
+					<SectionHeading title="Ingredients" />
+					<ul className="mobile-drink-page-ingredient-list">
+						{ingredients.map((ingredient) => (
+							<li key={generateUUID()} className="mobile-drink-page-ingredient-card glass-panel">
+								<div className="mobile-drink-page-ingredient-thumb">
 									<img
 										src={`https://www.thecocktaildb.com/images/ingredients/${ingredient.name}-small.png`}
+										alt=""
+										loading="lazy"
 									/>
 								</div>
-								<div className="mobileDrinkPageIngredientTextContainer">
-									<p style={{fontFamily: primaryFont, color: 'darkgray'}}>Ingredient</p>
-									<p
-										style={{fontFamily: primaryFont, color: 'aqua'}}
-									>{`${ingredient.name || ''}`}</p>
-								</div>
-								<div
-									className="mobileDrinkPageIngredientTextContainer"
-									style={{borderLeft: 'none'}}
-								>
-									<p style={{fontFamily: primaryFont, color: 'darkgray', textAlign: 'right'}}>
-										Amount
+								<div className="mobile-drink-page-ingredient-copy">
+									<p className="mobile-drink-page-ingredient-name">{ingredient.name || '—'}</p>
+									<p className="mobile-drink-page-ingredient-amount">
+										{ingredient.amount || 'To your liking'}
 									</p>
-									<p
-										style={{fontFamily: primaryFont, textAlign: 'right', color: 'aqua'}}
-									>{`${ingredient.amount || 'To your liking'}`}</p>
 								</div>
-							</div>
-						)
-					})}
-				</div>
-				<h2 style={{fontFamily: primaryFont}} className="mobileDrinkPageIngredientsHeader">
-					Instructions
-				</h2>
-				<div style={{padding: '5px 20px'}}>
-					<p
-						className="mobileDrinkPageInstructionsText ingredientsBubbleGradientFilter"
-						style={{fontFamily: primaryFont, color: 'white'}}
-					>
-						{drink?.strInstructions}
-					</p>
-				</div>
-			</div>
+							</li>
+						))}
+					</ul>
+				</section>
+
+				{drink?.strInstructions && (
+					<section className="mobile-drink-page-block mobile-drink-page-block--last">
+						<SectionHeading title="Instructions" />
+						<div className="mobile-drink-page-instructions glass-panel">
+							<p className="mobile-drink-page-instructions-text">{drink.strInstructions}</p>
+						</div>
+					</section>
+				)}
+			</section>
 		</div>
 	)
 }
