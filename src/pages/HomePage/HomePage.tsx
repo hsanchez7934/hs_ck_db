@@ -5,6 +5,7 @@ import {motion, useReducedMotion} from 'framer-motion'
 import PageContainer from '../../components/layout/PageContainer'
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
 import fetchRandomDrink from '../../helper-functions/fetchRandomDrink'
+import {generatePath} from 'react-router-dom'
 import {DrinkDataPoint} from '../../types'
 import {fadeInUp, pageTransition} from '../../theme/motion'
 import {
@@ -94,6 +95,19 @@ const HomePage = (): JSX.Element => {
 		[featuredDrink]
 	)
 
+	const handleViewFullRecipeClick = (drinkID: string) => {
+		if (!drinkID) {
+			return
+		}
+
+		const path =
+			process.env.NODE_ENV === 'production'
+				? generatePath('/drink/:id', {id: drinkID})
+				: generatePath(`localhost:3000/drink/:id`, {id: drinkID})
+
+		window.open(path, '_blank')
+	}
+
 	const MotionSection = shouldReduceMotion ? 'section' : motion.section
 
 	return (
@@ -115,7 +129,8 @@ const HomePage = (): JSX.Element => {
 						<h1 className="landing-title">Discover, search, and save your next favorite drink</h1>
 						<p className="landing-lead">
 							A modern cocktail companion backed by a rich recipe database. Explore classics and
-							hidden gems, filter by spirit or ingredient, and keep a personal shelf of saved drinks.
+							hidden gems, filter by spirit or ingredient, and keep a personal shelf of saved
+							drinks.
 						</p>
 						<div className="landing-hero-actions">
 							<Link to="/search/popularcocktails" className="landing-btn landing-btn--primary">
@@ -256,14 +271,13 @@ const HomePage = (): JSX.Element => {
 											))}
 										</ul>
 									)}
-									<Link
-										to={`/drink/${featuredDrink.idDrink}`}
-										state={{backgroundLocation: location}}
+									<button
+										onClick={() => handleViewFullRecipeClick(featuredDrink.idDrink || '')}
 										className="landing-btn landing-btn--primary landing-featured-cta"
 									>
 										View full recipe
 										<FaArrowRight aria-hidden="true" />
-									</Link>
+									</button>
 								</div>
 							</div>
 						)}
