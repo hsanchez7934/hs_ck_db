@@ -17,10 +17,11 @@ import {
 	FaHeartCirclePlus,
 	FaCircleArrowLeft,
 	FaCircleArrowRight,
-	FaEye
+	FaEye,
+	FaXmark
 } from 'react-icons/fa6'
 
-type Props = {drink: DrinkDataPoint | null}
+type Props = {drink: DrinkDataPoint | null, handleClose: () => void}
 
 type IngredientRow = {
 	id: string
@@ -28,7 +29,7 @@ type IngredientRow = {
 	amount: string
 }
 
-const DrinkCard = ({drink}: Props): JSX.Element | null => {
+const DrinkCard = ({drink, handleClose}: Props): JSX.Element | null => {
 	const [shareDialogOpen, setShareDialogOpen] = useState(false)
 	const [shareDialogColor, setShareDialogColor] = useState('')
 	const [shareDialogText, setShareDialogText] = useState('')

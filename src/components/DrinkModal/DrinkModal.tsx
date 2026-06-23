@@ -15,15 +15,15 @@ const DrinkModal = (): JSX.Element => {
 	const navigate = useNavigate()
 	const shouldReduceMotion = useReducedMotion()
 
-	const handleClose = () => {
+	const handleClose = React.useCallback(() => {
 		dispatch(updateIsModalOpen(false))
 		dispatch(updateModalDrink(null))
 		navigate(-1)
-	}
+	}, [dispatch, navigate])
 
 	const modalContent = (
 		<Box className="drink-modal-content" id="drinkModalContainer">
-			<DrinkCard drink={drink} />
+			<DrinkCard drink={drink} handleClose={handleClose} />
 		</Box>
 	)
 
