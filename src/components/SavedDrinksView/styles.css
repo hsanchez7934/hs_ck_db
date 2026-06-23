@@ -1,5 +1,5 @@
 .saved-drinks-view {
-	max-width: 1200px;
+	max-width: 1700px;
 	margin: 0 auto;
 	padding: 20px 16px 40px;
 	display: flex;
@@ -485,7 +485,7 @@
 
 @media screen and (min-width: 1280px) {
 	.saved-drinks-view {
-		max-width: 1320px;
+		max-width: 1700px;
 	}
 }
 

@@ -2,4 +2,6 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
+	max-width: 1700px;
+	margin: 0 auto;
 }
