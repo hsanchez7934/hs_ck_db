@@ -104,7 +104,7 @@ const SavedDrinksView = ({
 					</span>
 					<div className="saved-drinks-status-copy">
 						<span className="saved-drinks-status-label">Account status</span>
-						<span className="saved-drinks-status-value">
+						<span className="saved-drinks-status-value" style={{wordBreak: 'break-all'}}>
 							{isAuthenticated
 								? userName
 									? `Signed in as ${userName}`
