@@ -1,0 +1,156 @@
+.no-drink-data {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	padding: 24px 16px;
+}
+
+.no-drink-data-panel {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	width: min(100%, 520px);
+	padding: 36px 24px;
+	border-radius: 20px;
+	border: 1px solid var(--border-subtle);
+	background: var(--bg-elevated);
+	box-shadow: var(--shadow);
+}
+
+.no-drink-data-panel--accent {
+	border-color: var(--border-subtle);
+}
+
+.no-drink-data-panel--error {
+	border-color: rgba(248, 113, 113, 0.28);
+	box-shadow: 0 12px 40px rgba(248, 113, 113, 0.12);
+}
+
+.no-drink-data-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 64px;
+	height: 64px;
+	margin-bottom: 18px;
+	border-radius: 50%;
+	font-size: 1.6rem;
+}
+
+.no-drink-data-panel--accent .no-drink-data-icon {
+	color: var(--accent);
+	background: var(--accent-muted);
+}
+
+.no-drink-data-panel--error .no-drink-data-icon {
+	color: var(--error);
+	background: rgba(248, 113, 113, 0.14);
+}
+
+.no-drink-data-title {
+	margin: 0 0 12px;
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: clamp(1.35rem, 3vw, 1.75rem);
+	font-weight: 700;
+	line-height: 1.2;
+	color: var(--text-primary);
+}
+
+.no-drink-data-text {
+	margin: 0;
+	max-width: 46ch;
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: 1rem;
+	line-height: 1.65;
+	color: var(--text-secondary);
+}
+
+.no-drink-data-actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 10px;
+	margin-top: 22px;
+	width: 100%;
+}
+
+.no-drink-data-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 12px 24px;
+	border-radius: 999px;
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: 0.95rem;
+	font-weight: 600;
+	text-decoration: none;
+	cursor: pointer;
+	transition:
+		background-color 0.2s ease,
+		color 0.2s ease,
+		transform 0.2s ease,
+		box-shadow 0.2s ease,
+		border-color 0.2s ease;
+}
+
+.no-drink-data-btn svg {
+	font-size: 0.9rem;
+	flex-shrink: 0;
+}
+
+.no-drink-data-btn--primary {
+	border: none;
+	background: var(--accent);
+	color: var(--bg-primary);
+	box-shadow: var(--shadow-glow);
+}
+
+.no-drink-data-btn--primary:hover {
+	background: var(--accent-hover);
+	transform: translateY(-1px);
+}
+
+.no-drink-data-btn--secondary {
+	border: 1px solid var(--border);
+	background: var(--bg-surface);
+	color: var(--text-primary);
+}
+
+.no-drink-data-btn--secondary:hover {
+	border-color: var(--accent);
+	color: var(--accent);
+	background: var(--accent-muted);
+	transform: translateY(-1px);
+}
+
+.no-drink-data-btn:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+}
+
+@media screen and (min-width: 640px) {
+	.no-drink-data {
+		padding: 32px 24px;
+	}
+
+	.no-drink-data-panel {
+		padding: 40px 32px;
+	}
+}
+
+@media (max-width: 639px) {
+	.no-drink-data {
+		align-items: flex-start;
+		padding-top: 3rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.no-drink-data-btn:hover {
+		transform: none;
+	}
+}
