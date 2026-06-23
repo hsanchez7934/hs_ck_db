@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link, useLocation} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {motion, useReducedMotion} from 'framer-motion'
 import {GiMartini} from 'react-icons/gi'
 import {FaArrowRight} from 'react-icons/fa6'
@@ -13,7 +13,6 @@ type Props = {
 }
 
 const SavedDrinkListItem = ({drink, index, onSelect}: Props): JSX.Element => {
-	const location = useLocation()
 	const shouldReduceMotion = useReducedMotion()
 
 	const card = (
@@ -61,7 +60,7 @@ const SavedDrinkListItem = ({drink, index, onSelect}: Props): JSX.Element => {
 	return (
 		<Link
 			to={`/drink/${drink.idDrink}`}
-			state={{backgroundLocation: location}}
+			state={{savedDrinkViewPrevPath: '/saveddrinks'}}
 			className="saved-drink-card-link"
 			onClick={() => onSelect(drink)}
 		>

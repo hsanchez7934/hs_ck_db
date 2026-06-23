@@ -101,7 +101,7 @@ const DrinkPage = (): JSX.Element => {
 			<MobileDrinkView
 				ingredients={ingredients}
 				drink={drinkDataToRender}
-				prevPath={location.state?.mobileStatePrevPath}
+				prevPath={location.state?.savedDrinkViewPrevPath || location.state?.mobileStatePrevPath || '/'}
 				handleSaveOnClick={handleSaveOnClick}
 				handleShareOnClick={handleShareOnClick}
 				handleViewOnClick={handleViewOnClick}
