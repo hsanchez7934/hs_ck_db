@@ -1,7 +1,7 @@
-#drinkModalContainer {
+/* #drinkModalContainer {
 	width: 100%;
 	height: min(92vh, 720px);
-}
+} */
 
 .drink-modal-overlay {
 	position: fixed;
@@ -15,8 +15,6 @@
 }
 
 .drink-modal-wrapper {
-	width: 100%;
-	max-width: 1500px;
 	pointer-events: auto;
 }
 
@@ -28,32 +26,9 @@
 	box-shadow: var(--shadow-glow);
 }
 
-@media screen and (min-width: 768px) {
-	#drinkModalContainer {
+@media screen and (min-width: 640px) {
+	.drink-modal-wrapper {
 		height: min(80vh, 730px);
-	}
-}
-
-@media screen and (min-width: 1024px) {
-	#drinkModalContainer {
-		height: 580px;
-	}
-}
-
-@media screen and (min-width: 1280px) {
-	#drinkModalContainer {
-		height: 630px;
-	}
-}
-
-@media screen and (min-width: 1536px) {
-	#drinkModalContainer {
-		height: 680px;
-	}
-}
-
-@media screen and (min-width: 1850px) and (min-height: 500px) {
-	#drinkModalContainer {
-		height: 730px;
+		width: min(85vw, 1720px);
 	}
 }
